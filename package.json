@@ -1,0 +1,23 @@
+{
+  "name": "associations",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:be": "nodemon --watch ./be-src/views/index.ts --exec ts-node ./be-src/views/index.ts",
+    "build:be": "tsc",
+    "start": "node ./be-dist/index.js"
+  },
+  "dependencies": {
+    "@vaadin/router": "^1.7.4",
+    "cloudinary": "^1.27.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "live-server": "^1.2.1",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.9.0"
+  }
+}
