@@ -1,6 +1,27 @@
-// import { User } from "../models/user";
+import { Auth } from "../models/Auth";
+import { User } from "../models/User";
+import { Mascot } from "../models/Mascot";
 
-// User.sequelize.sync({ force: true}).then((res) => {
+Auth.sequelize.sync({ force: true })
+.then((res) => {
+    console.log(res);
+})
+.catch((err) => {
+    console.log(err);
+});
 
-//     console.log(res);
-// });
+User.sequelize.sync({ force: true })
+.then((res) => {
+    console.log(res);
+})
+.catch((err) => {
+    console.log(err);
+});
+
+Mascot.sequelize.sync({ force: true })
+.then((res) => {
+    console.log(res);
+})
+.catch((err) => {
+    console.log(err);
+});

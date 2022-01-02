@@ -1,21 +1,30 @@
 {
-  "name": "associations",
+  "name": "dwf-m7",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev:be": "nodemon --watch ./be-src/views/index.ts --exec ts-node ./be-src/views/index.ts",
-    "build:be": "tsc",
-    "start": "node ./be-dist/index.js"
+    "dev:front": "parcel serve ./fe-src/index.html",
+    "dev:be": "nodemon --watch ./be-src/views/index.ts --exec ts-node ./be-src/dev.ts",
+    "build:front": "parcel build ./fe-src/index.html",
+    "build:be": "tsc ./be-src/dev.ts",
+    "build": "yarn build:front && yarn build:be",
+    "start": "node ./be-src/dev.js"
   },
   "dependencies": {
+    "@parcel/transformer-image": "^2.0.1",
+    "@sendgrid/mail": "^7.6.0",
     "@vaadin/router": "^1.7.4",
+    "algoliasearch": "^4.11.0",
     "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "dropzone": "5.7.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "live-server": "^1.2.1",
+    "mapbox": "^1.0.0-beta10",
+    "mapbox-gl": "^2.6.1",
     "nodemon": "^2.0.15",
+    "parcel": "^2.0.0-rc.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.9.0"

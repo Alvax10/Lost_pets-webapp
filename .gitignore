@@ -1,2 +1,5 @@
 node_modules
 be-dist
+.env
+.parcel-cache
+dist
