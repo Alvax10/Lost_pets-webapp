@@ -5,7 +5,7 @@ import * as cors from "cors";
 import * as path from "path";
 import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
-const sgMail = require('@sendgrid/mail');
+import * as sgMail from "@sendgrid/mail";
 
 const app = express();
 const port = process.env.PORT || 3010;
@@ -17,7 +17,7 @@ app.use(cors());
 app.post("/send-email-to-user", async(req, res) => {
     const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario} = req.body;
 
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    await sgMail.setApiKey(process.env.API_KEY_SENDGRIND);
     const msg = {
         to: OtherUserEmail,
         from: userEmail,
@@ -25,12 +25,12 @@ app.post("/send-email-to-user", async(req, res) => {
         text: `Tu mascota fue vista en ${newLocation}`,
         html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
     }
-    sgMail.send(msg)
+    const enviarMail = await sgMail.send(msg)
     .then(() => {
-        console.log('Email sent')
+        console.log('El email fue enviado correctamente');
     })
     .catch((error) => {
-        console.error(error)
+        console.error("Este es el error al mandar el mail: ",error)
     });
     res.json(msg);
     return msg;
