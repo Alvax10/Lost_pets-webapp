@@ -1,2 +1,2 @@
-import "dotenv/config";
-import "./views/index.ts";
+require("dotenv/config");
+require("./views/index.ts");
