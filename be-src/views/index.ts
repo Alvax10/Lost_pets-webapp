@@ -5,12 +5,36 @@ import * as cors from "cors";
 import * as path from "path";
 import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
+const sgMail = require('@sendgrid/mail');
 
 const app = express();
 const port = process.env.PORT || 3010;
 
 app.use(express.json({ limit: "100mb" }));
 app.use(cors());
+
+// Send an email to other user
+app.post("/send-email-to-user", async(req, res) => {
+    const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario} = req.body;
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+        to: OtherUserEmail,
+        from: userEmail,
+        subject: `Informacion reportada sobre ${petName}`,
+        text: `Tu mascota fue vista en ${newLocation}`,
+        html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
+    }
+    sgMail.send(msg)
+    .then(() => {
+        console.log('Email sent')
+    })
+    .catch((error) => {
+        console.error(error)
+    });
+    res.json(msg);
+    return msg;
+});
 
 // Get pet around the raidus
 app.get("/mascots-close-from", async (req, res) => {

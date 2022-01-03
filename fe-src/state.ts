@@ -1,7 +1,5 @@
-import "dotenv/config";
 const API_BASE_URL = "http://localhost:3010";
 // const API_BASE_URL = "";
-const sgMail = require('@sendgrid/mail');
 
 const state = {
     data: {
@@ -30,21 +28,17 @@ const state = {
         return this.data;
     },
     async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario) {
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        const msg = {
-            to: OtherUserEmail,
-            from: userEmail,
-            subject: `Informacion reportada sobre ${petName}`,
-            text: `Tu mascota fue vista en ${newLocation}`,
-            html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
-        }
-        sgMail.send(msg)
-        .then(() => {
-            console.log('Email sent')
+        const sendEmailToUser = await fetch(API_BASE_URL + "/report/mascot", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario }),
         })
-        .catch((error) => {
-            console.error(error)
+        .then((res) => { return res.json(); })
+        .then((data) => { 
+            console.log("Esta es la data de enviar el email: ", data);
         });
     },
     async mascotCloseFrom() {
@@ -80,7 +74,6 @@ const state = {
             currentState["myReportedPets"] = currentState["myReportedPets"] + currentState["myReportedPets"].push(data);
             state.setState(currentState);
         });
-
     },
     async allReportedPetsByAUser() {
         const currentState = this.getState();
