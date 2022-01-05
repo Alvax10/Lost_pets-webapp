@@ -2,7 +2,7 @@ import { Auth } from "../models/Auth";
 import { User } from "../models/User";
 import { Mascot } from "../models/Mascot";
 
-Auth.sequelize.sync({ force: true })
+Auth.sequelize.sync({ alter: true })
 .then((res) => {
     console.log(res);
 })
@@ -10,7 +10,7 @@ Auth.sequelize.sync({ force: true })
     console.log(err);
 });
 
-User.sequelize.sync({ force: true })
+User.sequelize.sync({ alter: true })
 .then((res) => {
     console.log(res);
 })
@@ -18,7 +18,7 @@ User.sequelize.sync({ force: true })
     console.log(err);
 });
 
-Mascot.sequelize.sync({ force: true })
+Mascot.sequelize.sync({ alter: true })
 .then((res) => {
     console.log(res);
 })

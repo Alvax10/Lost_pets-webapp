@@ -53,7 +53,7 @@ class Home extends HTMLElement {
             }
             .sesion {
                 display: flex;
-                padding-top: 47%;
+                padding-top: 40%;
                 flex-direction: column;
                 justify-content: center;
             }

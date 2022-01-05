@@ -10,7 +10,7 @@ import * as sgMail from "@sendgrid/mail";
 const app = express();
 const port = process.env.PORT || 3010;
 
-app.use(express.json({ limit: "100mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 
 // Send an email to other user
@@ -200,8 +200,9 @@ app.post("/test", async(req, res) => {
     });
 });
 
+
 const relativeRoute = path.resolve(__dirname + "../../../dist");
-app.use("*", express.static(relativeRoute));
+app.get("*", app.use(express.static(relativeRoute)));
 
 app.get("*", (req, res) => {
     res.sendFile(relativeRoute + "/index.html");

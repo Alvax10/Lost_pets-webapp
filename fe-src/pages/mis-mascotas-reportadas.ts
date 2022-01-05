@@ -164,7 +164,7 @@ class myReportedMascots extends HTMLElement {
             }
             .sesion {
                 display: flex;
-                padding-top: 47%;
+                padding-top: 40%;
                 flex-direction: column;
                 justify-content: center;
             }
@@ -488,10 +488,10 @@ class myReportedMascots extends HTMLElement {
 
         const reportedMascots = this.shadow.querySelector(".reported-mascots");
         const reportedMascotsStyle = document.createElement("style");
-        state.allReportedPetsByAUser();
+        state.allReportedPetsByAUser(() => {
 
             if (currentState["myReportedPets"].length == 0) {
-
+    
                 reportedMascots.innerHTML = `
     
                     <h2 class="title-mascots"> No tienes mascotas reportadas </h2>
@@ -515,16 +515,27 @@ class myReportedMascots extends HTMLElement {
                         background-color: #FF9DF5;
                     }
                 `;
+                const reportButton = this.shadow.querySelector(".button");
+                reportButton.addEventListener('click', (e) => {
+                    e.preventDefault();
 
+                    if (currentState["email"] == '') {
+                        Router.go("/login-1");
+
+                    } else {
+                        Router.go("/reportar-mascota")
+                    }
+                })
+    
             } else {
-
+    
                 reportedMascots.innerHTML = `  
                     ${currentState["myReportedPets"].map((pet) => 
                     
                     `<lost-pet-card class="pet" pet-location-name=${pet["location"]["name"]} pet-photo="${pet["imageDataURL"]}" pet-name=${pet["name"]}></lost-pet-card>`
                     
                 ).join("")}`;
-
+    
                 reportedMascotsStyle.innerHTML = `
                     .reported-mascots {
                         display: flex;
@@ -579,6 +590,7 @@ class myReportedMascots extends HTMLElement {
                     }
                 `;
             }
+        });
 
         this.shadow.appendChild(reportedMascotsStyle);
         this.listeners();

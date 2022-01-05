@@ -3,7 +3,8 @@ import { state } from "../state";
 import * as Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
 const MapboxClient = require("mapbox");
-const mapboxClient = new MapboxClient("sk.eyJ1IjoiYWx2YXJvYmFzdGlhIiwiYSI6ImNreTBzN3JobTA0N2Iyb253NnVha2N2b2oifQ._J7dQzZL4gsUhelCDjFU_A");
+const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
+// console.log(process.env.MAPBOX_TOKEN);
 
 const logo = require("url:../img/logo-pata.png");
 const burgerMenuImg = require("url:../img/burger-menu.png");
@@ -56,7 +57,7 @@ class reportMascot extends HTMLElement {
             }
             .sesion {
                 display: flex;
-                padding-top: 47%;
+                padding-top: 40%;
                 flex-direction: column;
                 justify-content: center;
             }

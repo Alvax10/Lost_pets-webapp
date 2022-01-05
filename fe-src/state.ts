@@ -50,9 +50,8 @@ const state = {
         .then((res) => { return res.json(); })
         .then((data) => {
             console.log("Esta es la data de mascotas cerca de: ", data["hits"]);
-            currentState["lostPetsAround"] = data["hits"];
+            currentState["lostPetsAround"] = currentState["lostPetsAround"] + data["hits"];
             this.setState(currentState);
-            return data["hits"];
         });
     },
     async reportLostPet(imageDataURL, petName) {
@@ -71,11 +70,11 @@ const state = {
         .then((res) => { return res.json(); })
         .then((data) => { 
             console.log("Esta es la data de reportar mascota perdida: ", data);
-            currentState["myReportedPets"] = currentState["myReportedPets"] + currentState["myReportedPets"].push(data);
+            currentState["myReportedPets"] = currentState["myReportedPets"] + data;
             state.setState(currentState);
         });
     },
-    async allReportedPetsByAUser() {
+    async allReportedPetsByAUser(callback) {
         const currentState = this.getState();
         const email = currentState['email'];
 
@@ -88,9 +87,11 @@ const state = {
             .then((data) => {
 
                 console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
-                // currentState["myReportedPets"] = currentState["myReportedPets"] + currentState["myReportedPets"].push(data);
-                // state.setState(currentState);
+                currentState["myReportedPets"] = currentState["myReportedPets"] + data;
+                state.setState(currentState);
             });
+            callback();
+            if (callback) callback();
 
         } else {
             console.error('Falta el email');
