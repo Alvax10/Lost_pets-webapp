@@ -132,6 +132,63 @@ class Home extends HTMLElement {
                         e.preventDefault();
                         Router.go("/login-1");
                     });
+
+                } else {
+
+                    burgerMenu.addEventListener('click', (e) => {
+                        e.preventDefault();
+        
+                        menuStyle.innerHTML = `
+                            .menu-open {
+                                display: inherit;
+                            }
+                        `;
+                    });
+            
+                    const myData = this.shadow.querySelector('.mis-datos');
+                    myData.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        if (currentState["email"] == '') {
+            
+                            const location = currentState['locationBefore'] = "/mis-datos";
+                            console.log(location);
+                            console.error('Necesitas loguearte para acceder a los datos');
+                        } else {
+            
+                            Router.go("/mis-datos");
+                        }
+                    });
+            
+                    const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
+                    myMascotsReported.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        if (currentState["email"] == '') {
+            
+                            const location = currentState['locationBefore'] = "/mis-mascotas-reportadas";
+                            console.log(location);
+                            console.error('Necesitas loguearte para acceder a tus mascotas');
+                        } else {
+            
+                            Router.go("/mis-mascotas-reportadas");
+                        }
+                    });
+            
+                    const reportMascot = this.shadow.querySelector('.reportar-mascotas');
+                    reportMascot.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        if (currentState["email"] == '') {
+            
+                            currentState['locationBefore'] = "/reportar-mascota";
+                            console.error('Necesitas loguearte para acceder a tus mascotas');
+                        } else {
+                            
+                            console.log(currentState["email"]);
+                            Router.go("/reportar-mascota");
+                        }
+                    });
                 }
             });
     

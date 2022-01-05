@@ -1,5 +1,5 @@
-// const API_BASE_URL = "http://localhost:3010";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "http://localhost:3010";
+// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
@@ -50,7 +50,7 @@ const state = {
         .then((res) => { return res.json(); })
         .then((data) => {
             console.log("Esta es la data de mascotas cerca de: ", data["hits"]);
-            currentState["lostPetsAround"] = currentState["lostPetsAround"] + currentState["lostPetsAround"].push(data["hits"]);
+            currentState["lostPetsAround"] = data["hits"];
             this.setState(currentState);
             return data["hits"];
         });

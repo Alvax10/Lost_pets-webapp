@@ -3,7 +3,7 @@ import { state } from "../state";
 import * as Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
 const MapboxClient = require("mapbox");
-const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
+const mapboxClient = new MapboxClient("sk.eyJ1IjoiYWx2YXJvYmFzdGlhIiwiYSI6ImNreTBzN3JobTA0N2Iyb253NnVha2N2b2oifQ._J7dQzZL4gsUhelCDjFU_A");
 
 const logo = require("url:../img/logo-pata.png");
 const burgerMenuImg = require("url:../img/burger-menu.png");
@@ -343,7 +343,6 @@ class reportMascot extends HTMLElement {
 
         if (currentState["email"] == '') {
             currentState["locationBefore"] = "/reportar-mascota";
-            state.setState(currentState);
             Router.go("/login-1");
 
         } else {
@@ -374,7 +373,6 @@ class reportMascot extends HTMLElement {
                         if (!err) callback(data.features);
                         }
                     );
-                    
                 });
             }
     

@@ -201,7 +201,7 @@ app.post("/test", async(req, res) => {
 });
 
 const relativeRoute = path.resolve(__dirname + "../../../dist");
-app.get("*", app.use(express.static(relativeRoute)));
+app.use("*", express.static(relativeRoute));
 
 app.get("*", (req, res) => {
     res.sendFile(relativeRoute + "/index.html");
