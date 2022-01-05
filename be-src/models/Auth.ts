@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "./database";
 
+
 export class Auth extends Model {}
 
 Auth.init({

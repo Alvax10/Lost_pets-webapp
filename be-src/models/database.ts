@@ -16,4 +16,5 @@ export const sequelize = new Sequelize({
             rejectUnauthorized: false,
         },
     },
+    
 });
