@@ -4,6 +4,6 @@
         "module": "CommonJS",
         "moduleResolution": "Node",
         "resolveJsonModule": true,
-        "outDir": "be-dist"
+        "outDir": "be-src"
     },
 }
