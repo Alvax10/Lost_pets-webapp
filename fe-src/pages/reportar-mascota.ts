@@ -2,7 +2,7 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 import * as Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
-import "../components/header";
+require("../components/header");
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
 // console.log(process.env.MAPBOX_TOKEN);

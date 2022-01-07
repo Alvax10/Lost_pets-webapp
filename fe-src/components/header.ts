@@ -1,129 +1,29 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-require("../components/header");
 
 const logo = require("url:../img/logo-pata.png");
-const burgerMenuImg = require("url:../img/burger-menu.png");
+const burgerMenu = require("url:../img/burger-menu.png");
 const xButton = require("url:../img/Vector.png");
 
-class Login extends HTMLElement {
+export class Header extends HTMLElement {
 
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
     }
-    render() {
+    listeners() {
 
         const currentState = state.getState();
-        const divEl = document.createElement('div');
-        divEl.className = 'general-container';
-        const style = document.createElement('style');
-
-        style.innerHTML = `
-        .header {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            background-color: #FF6868;
-            justify-content: space-between;
-        }
-        .menu {
-            width: 40px;
-        }
-        .img {
-            padding: 0 30px;
-        }
-        .main-body {
-            display: flex;
-            flex-direction: column;
-        }
-        .title {
-            font-size: 40px;
-            align-self: center;
-        }
-        .form {
-            display: flex;
-            align-self: center;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .email-zone {
-            align-self: center;
-            justify-content: center;
-        }
-        .email {
-            margin-left: 5px;
-        }
-        .input-email {
-            width: 335px;
-            height: 50px;
-            padding-left: 10px;
-            border-radius: 4px;
-            border: 1px solid #000000;
-        }
-        .button {
-            width: 335px;
-            height: 50px;
-            font-size: 18px;
-            margin-top: 10px;
-            border-radius: 4px;
-            border-style: none;
-            align-self: center;
-            background-color: #FF9DF5;
-        }
-
-        `;
-
-        divEl.innerHTML = `
-            <header class="header">
-                <img class="img" src="${logo}" alt="logo">
-                <img class="img menu" src="${burgerMenuImg}" alt="menu" >
-            </header>
-            <div class="main-body">
-                <h2 class="title"> Ingresar </h2>
-                <form class="form">
-                    <label class="email-zone">
-                        <p class="email"> Email </p>
-                        <input class="input-email" type="text" placeholder=" Email" />
-                    </label>
-                    <button class="button"> Siguiente </button>
-                </form>
-            </div>
-        `;
-
-        this.shadow.appendChild(divEl);
-        this.shadow.appendChild(style);
-
-        const formEl = this.shadow.querySelector('.form');
-        formEl.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const emailInput = (this.shadow.querySelector('.input-email') as HTMLInputElement);
-            currentState["email"] = emailInput.value;
-
-            state.checkIfUserExists(() => {
-                
-                if (currentState['userExists'] == true) {
-                    Router.go("/login-2");
-                    
-                } else {
-                    Router.go("/mis-datos");
-                }
-                state.setState(currentState);
-            });
-        });
-
         const burgerMenu = this.shadow.querySelector(".menu");
         burgerMenu.addEventListener('click', () => {
-
+    
             const menuDiv = document.createElement('div');
             menuDiv.className = 'menu-open';
-
+    
             const menuStyle = document.createElement('style');
             menuStyle.innerHTML = `
             .menu-open {
@@ -140,7 +40,7 @@ class Login extends HTMLElement {
                 width: 30px;
                 height: 30px;
                 padding: 20px;
-                align-self  : flex-end;
+                align-self: flex-end;
             }
             .opciones {
                 align-self: center;
@@ -154,7 +54,7 @@ class Login extends HTMLElement {
             }
             .sesion {
                 display: flex;
-                padding-top: 47%;
+                padding-top: 40%;
                 flex-direction: column;
                 justify-content: center;
             }
@@ -170,7 +70,7 @@ class Login extends HTMLElement {
                 text-decoration-line: underline;
             }
             `;
-
+    
             menuDiv.innerHTML = `
             <img class="close-button" src="${xButton}" alt="x-button">
             <div class="opciones">
@@ -183,14 +83,14 @@ class Login extends HTMLElement {
                 <p class="cerrar-sesion"> Cerrar sesión </p>
             </div>
             `;
-
+    
             this.shadow.appendChild(menuDiv);
             this.shadow.appendChild(menuStyle);
-
+    
             const menuOpen = this.shadow.querySelector('.menu-open');
             menuOpen.addEventListener('click', (e) => {
                 e.preventDefault();
-
+    
                 if (currentState["email"] == '') {
 
                     const divNotification = document.createElement('div');
@@ -219,32 +119,51 @@ class Login extends HTMLElement {
                         border-radius: 4px;
                         background-color: #FF9DF5;
                     }
-                    `;
-                    divNotification.innerHTML = `
-                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                        <button class="login-button"> Ok </button>
-                    `;
+                `;
 
+                divNotification.innerHTML = `
+                    <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
+                    <button class="login-button"> Loguearme </button>
+                `;  
+    
                     this.shadow.appendChild(divNotification);
                     this.shadow.appendChild(notificationStyle);
-
+    
                     const loginButton = this.shadow.querySelector('.login-button');
                     loginButton.addEventListener('click', (e) => {
                         e.preventDefault();
-                        
-                        notificationStyle.innerHTML = `
-                        .notification {
-                            display: none;
-                        }
-                        `;
+                        Router.go("/login-1");
+                    });
+
+                } else {
+            
+                    const myData = this.shadow.querySelector('.mis-datos');
+                    myData.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        Router.go("/mis-datos");
+                    });
+            
+                    const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
+                    myMascotsReported.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        Router.go("/mis-mascotas-reportadas");
+                    });
+            
+                    const reportMascot = this.shadow.querySelector('.reportar-mascotas');
+                    reportMascot.addEventListener('click',(e) => {
+                        e.preventDefault();
+            
+                        Router.go("/reportar-mascota");
                     });
                 }
             });
-            
+    
             const closeButton = this.shadow.querySelector('.close-button');
             closeButton.addEventListener('click',(e) => {
                 e.preventDefault();
-
+    
                 menuStyle.innerHTML = `
                     .menu-open {
                         display: none;
@@ -253,6 +172,39 @@ class Login extends HTMLElement {
             });
         });
     }
+    render() {
+
+        const divEl = document.createElement('div');
+        const style = document.createElement('style');
+
+        style.innerHTML = `
+        .header {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            background-color: #FF6868;
+            justify-content: space-between;
+        }
+        .menu {
+            width: 40px;
+        }
+        .img {
+            padding: 0 30px;
+        }
+        `;
+
+        divEl.innerHTML = `
+            <header class="header">
+                <img class="img" src="${logo}" alt="logo">
+                <img class="img menu" src="${burgerMenu}" alt="menu" >
+            </header>
+        `;
+
+        this.shadow.appendChild(divEl);
+        this.shadow.appendChild(style);
+        this.listeners();
+    }
 }
 
-customElements.define('login1-page', Login);
+customElements.define('header-component', Header);

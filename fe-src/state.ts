@@ -1,5 +1,5 @@
-// const API_BASE_URL = "http://localhost:3010";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "http://localhost:3010";
+// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
@@ -62,7 +62,7 @@ const state = {
         });
         callback();
     },
-    async reportLostPet(imageDataURL, petName, callback) {
+    async reportLostPet(ImageDataURL, petName, callback) {
 
         const currentState = this.getState();
         const _geoloc = currentState["location"];
@@ -73,7 +73,7 @@ const state = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ petName, _geoloc, imageDataURL, email }),
+            body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
         })
         .then((res) => { return res.json(); })
         .then((data) => { 

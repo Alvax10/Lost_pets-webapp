@@ -56,10 +56,10 @@ export async function reportLostPet(petName, _geoloc, imageDataURL, email) {
             width: 200,
             hegiht: 100,
         })
-        // .catch((err) => {
-        //     console.log("Esto contiene imagen: ", imagen);
-        //     console.log("Esto contiene el error: ", err)
-        // });
+        .catch((err) => {
+            console.log("Esto contiene imagen: ", imagen);
+            console.log("Esto contiene el error: ", err)
+        });
 
         const mascotData = {
             petName: petName,
@@ -74,10 +74,13 @@ export async function reportLostPet(petName, _geoloc, imageDataURL, email) {
 
         const mascotDataComplete = await Mascot.create({
             default: {
-                mascotData,
+                petName,
+                _geoloc,
+                ImageDataURL: imagen["secure_url"],
+                userId: userFounded["id"],
             }
         });
-        return mascotData;
+        return mascotDataComplete;
 
     } else {
         console.error('La imageDataURL no se está pasando bien');
