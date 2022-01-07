@@ -19,199 +19,25 @@ class reportMascot extends HTMLElement {
     }
     connectedCallback() {
         this.render();
+    }
+    listeners() {
 
         const currentState = state.getState();
-        const burgerMenu = this.shadow.querySelector(".menu");
-        burgerMenu.addEventListener('click', () => {
+        let imageDataURL;
+        const reportPetForm = this.shadow.querySelector(".form");
+        reportPetForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const target = e.target as any;
 
-            const menuDiv = document.createElement('div');
-            menuDiv.className = 'menu-open';
+            const petName = (target["pet-name-input"] as HTMLInputElement);
+            const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
+            const petPhoto = imageDataURL;
+            currentState["location"]["name"] = petLocation.value;
+            
+            state.reportLostPet(petPhoto, petName.value, () => {
 
-            const menuStyle = document.createElement('style');
-            menuStyle.innerHTML = `
-            .menu-open {
-                top: 0%;
-                left: 0%;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                position: absolute;
-                flex-direction: column;
-                background-color: #8AF1FF;
-            }
-            .close-button {
-                width: 30px;
-                height: 30px;
-                padding: 20px;
-                align-self  : flex-end;
-            }
-            .opciones {
-                align-self: center;
-                justify-content: center;
-            }
-            .mis-datos {
-                padding-left: 62px;
-            }
-            .reportar-mascotas {
-                padding-left: 30px;
-            }
-            .sesion {
-                display: flex;
-                padding-top: 40%;
-                flex-direction: column;
-                justify-content: center;
-            }
-            .email {
-                margin: 0px;
-                align-self: center;
-                justify-content: center;
-            }
-            .cerrar-sesion {
-                color: #C6558B;
-                align-self: center;
-                justify-content: center;
-                text-decoration-line: underline;
-            }
-            `;
-
-            menuDiv.innerHTML = `
-            <img class="close-button" src="${xButton}" alt="x-button">
-            <div class="opciones">
-                <h3 class="mis-datos"> Mis Datos </h3>
-                <h3 class="mis-mascotas-reportadas"> Mis mascotas reportadas </h3>
-                <h3 class="reportar-mascotas"> Reportar mascotas </h3>
-            </div>
-            <div class="sesion">
-                <p class="email"> ${currentState["email"]} </p>
-                <p class="cerrar-sesion"> Cerrar sesión </p>
-            </div>
-            `;
-
-            this.shadow.appendChild(menuDiv);
-            this.shadow.appendChild(menuStyle);
-
-            const menuOpen = this.shadow.querySelector('.menu-open');
-            menuOpen.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                if (currentState["email"] == '') {
-
-                    const divNotification = document.createElement('div');
-                    divNotification.className = 'notification';
-                    const notificationStyle = document.createElement('style');
-    
-                    notificationStyle.innerHTML = `
-                    .notification {
-                        top: 30%;
-                        left: 15%;
-                        width: 250px;
-                        height: 115px;
-                        border-radius: 4px;
-                        padding: 10px 10px;
-                        position: absolute;
-                        background-color: #FF6868;
-                    }
-                    .alert {
-                        font-size: 24px;
-                    }
-                    .login-button {
-                        width: 270px;
-                        height: 50px;
-                        margin: -5px -10px;
-                        border-style: none;
-                        border-radius: 4px;
-                        background-color: #FF9DF5;
-                    }
-                    `;
-                    divNotification.innerHTML = `
-                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                        <button class="login-button"> Ok </button>
-                    `;
-
-                    this.shadow.appendChild(divNotification);
-                    this.shadow.appendChild(notificationStyle);
-
-                    const loginButton = this.shadow.querySelector('.login-button');
-                    loginButton.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        
-                        notificationStyle.innerHTML = `
-                        .notification {
-                            display: none;
-                        }
-                        `;
-                        Router.go("/login-1");
-                    });
-                } else {
-                    // console.log(currentState["email"]);
-
-                    burgerMenu.addEventListener('click', (e) => {
-                        e.preventDefault();
-        
-                        menuStyle.innerHTML = `
-                            .menu-open {
-                                display: inherit;
-                            }
-                        `;
-                    });
-            
-                    const myData = this.shadow.querySelector('.mis-datos');
-                    myData.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
-                        if (currentState["email"] == '') {
-            
-                            const location = currentState['locationBefore'] = "/mis-datos";
-                            console.log(location);
-                            console.error('Necesitas loguearte para acceder a los datos');
-                        } else {
-            
-                            Router.go("/mis-datos");
-                        }
-                    });
-            
-                    const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
-                    myMascotsReported.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
-                        if (currentState["email"] == '') {
-            
-                            const location = currentState['locationBefore'] = "/mis-mascotas-reportadas";
-                            console.log(location);
-                            console.error('Necesitas loguearte para acceder a tus mascotas');
-                        } else {
-            
-                            Router.go("/mis-mascotas-reportadas");
-                        }
-                    });
-            
-                    const reportMascot = this.shadow.querySelector('.reportar-mascotas');
-                    reportMascot.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
-                        if (currentState["email"] == '') {
-            
-                            currentState['locationBefore'] = "/reportar-mascota";
-                            console.error('Necesitas loguearte para acceder a tus mascotas');
-                        } else {
-                            
-                            console.log(currentState["email"]);
-                            Router.go("/reportar-mascota");
-                        }
-                    });
-                }
+                Router.go("/home");
             });
-            
-            const closeButton = this.shadow.querySelector('.close-button');
-            closeButton.addEventListener('click',(e) => {
-                e.preventDefault();
-
-                menuStyle.innerHTML = `
-                    .menu-open {
-                        display: none;
-                    }
-                `;
-            });            
         });
     }
     render() {
@@ -222,20 +48,6 @@ class reportMascot extends HTMLElement {
         const style = document.createElement('style');
 
         style.innerHTML = `
-        .header {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            background-color: #FF6868;
-            justify-content: space-between;
-        }
-        .menu {
-            width: 40px;
-        }
-        .img {
-            padding: 0 30px;
-        }
         .main-body {
             display: flex;
             flex-direction: column;
@@ -247,16 +59,12 @@ class reportMascot extends HTMLElement {
         `;
 
         divEl.innerHTML = `
-            <header class="header">
-                <img class="img" src="${logo}" alt="logo">
-                <img class="img menu" src="${burgerMenuImg}" alt="menu" >
-            </header>
+            <header-component></header-component>
             <div class="main-body">
                 <h2 class="title"> Mis mascotas reportadas </h2>
                 <div class="reported-mascots"></div>
             </div>
         `;
-
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
 
@@ -364,7 +172,7 @@ class reportMascot extends HTMLElement {
                     e.preventDefault();
     
                     mapboxClient.geocodeForward(
-                        e.target['q'].value,
+                        e["target"]['q'].value,
                         {
                         autocomplete: true,
                         language: "es",
@@ -402,20 +210,8 @@ class reportMascot extends HTMLElement {
                 imageDataURL = file.dataURL;
                 // console.log(file.dataURL);
             });
-    
-            reportPetForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-                const target = e.target as any;
-    
-                const petName = (target["pet-name-input"] as HTMLInputElement).value;
-                const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement).value;
-                const petPhoto = imageDataURL;
-                currentState["location"]["name"] = petLocation;
-                state.setState(currentState);
-                
-                state.reportLostPet(petPhoto, petName);
-            });
         }
+        this.listeners();
     }
 }
 

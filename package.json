@@ -4,11 +4,11 @@
   "license": "MIT",
   "scripts": {
     "dev:front": "parcel serve ./fe-src/index.html",
-    "dev:be": "nodemon --watch ./be-src/views/index.ts --exec ts-node ./be-src/dev.ts",
+    "dev:be": "nodemon --watch ./be-src/views/index.ts --exec ts-node ./be-src/views/index.ts",
     "build:front": "parcel build ./fe-src/index.html",
-    "build:be": "tsc ./be-src/dev.ts",
+    "build:be": "tsc",
     "build": "yarn build:front && yarn build:be",
-    "start": "node ./be-src/dev.js"
+    "start": "node ./be-dist/views/index.js"
   },
   "dependencies": {
     "@parcel/transformer-image": "^2.0.1",

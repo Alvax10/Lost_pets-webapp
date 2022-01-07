@@ -102,8 +102,8 @@ class Login extends HTMLElement {
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const emailInput = (this.shadow.querySelector('.input-email') as HTMLInputElement).value.toString();
-            currentState["email"] = emailInput;
+            const emailInput = (this.shadow.querySelector('.input-email') as HTMLInputElement);
+            currentState["email"] = emailInput.value;
 
             state.checkIfUserExists(() => {
                 

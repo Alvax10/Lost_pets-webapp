@@ -10,7 +10,7 @@ import * as sgMail from "@sendgrid/mail";
 const app = express();
 const port = process.env.PORT || 3010;
 
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(cors());
 
 // Send an email to other user
@@ -75,9 +75,7 @@ app.post("/report/mascot", async(req, res) => {
 
     if ( petName && _geoloc && imageDataURL && email) {
         const reportedPet = await reportLostPet(petName, _geoloc, imageDataURL, email);
-        await res.json( reportedPet );
-
-        return reportedPet;
+        await res.json({ reportedPet });
 
     } else {
         res.status(400).json({ message: 'Faltan datos en el body o el userId no existe'});
@@ -86,10 +84,10 @@ app.post("/report/mascot", async(req, res) => {
 
 // Update user data
 app.patch("/user/data", async(req, res) => {
-    const { password } = req.body;
+    const { email, newPassword } = req.body;
 
-    if (password) {
-        await updateUserData(password);
+    if (email && newPassword) {
+        await updateUserData(email, newPassword);
         await res.json({ message: 'updated succesfully' });
 
     } else {
@@ -130,8 +128,8 @@ app.post("/auth/token", async(req, res) => {
 
     if (req.body) {
 
-        await authenticateUser(email, password);
-        await res.json({ message: 'User loged in' });
+        const response = await authenticateUser(email, password);
+        await res.json(response);
 
     } else {
         res.status(404).json({ message: 'falta el email o la contraseña' });
@@ -140,12 +138,11 @@ app.post("/auth/token", async(req, res) => {
 
 // Sign Up
 app.post("/auth", async (req, res) => {
-    
     const { email, password } = req.body;
     
     if (req.body) {
-        await findOrCreateUser(email, password);
-        await res.json({ message: 'User created' });
+        const response = await findOrCreateUser(email, password);
+        await res.json( response );
 
     } else {
         res.json({ message: 'el body tiene que tener email y password'});
@@ -186,6 +183,7 @@ app.get("/me", verifyAuth , async (req, res) => {
             email: userData['email'],
             user_name: userData['user_name']
         });
+
     } else {
         res.status(404).json({
             message: 'Faltan datos o los datos no coinciden',

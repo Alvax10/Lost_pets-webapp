@@ -1,9 +1,11 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "CommonJS",
-        "moduleResolution": "Node",
-        "resolveJsonModule": true,
-        "outDir": "be-src"
-    },
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "outDir": "be-dist"
+  },
+  "include": ["be-src/**/*"],
+  "exclude": ["fe-src/*"]
 }

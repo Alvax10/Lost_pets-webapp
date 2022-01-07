@@ -106,12 +106,13 @@ class Login extends HTMLElement {
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
 
+        currentState['locationBefore'] = "/home";
         const formEl = this.shadow.querySelector('.form');
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const passwordInput = (this.shadow.querySelector('.input-password') as HTMLInputElement).value.toString();
-            state.signInUser(passwordInput, () => {
+            const passwordInput = (this.shadow.querySelector('.input-password') as HTMLInputElement);
+            state.signInUser(passwordInput.value, () => {
 
                 Router.go(`${currentState['locationBefore']}`);
             });

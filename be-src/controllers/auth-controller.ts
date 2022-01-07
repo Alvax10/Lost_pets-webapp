@@ -10,14 +10,14 @@ export function getSHA256ofString(text: string) {
 }
 
 // Update User Data
-export async function updateUserData(password) {
+export async function updateUserData(email, newPassword) {
 
-    if (password) {
+    if (email) {
 
         const findUser = await Auth.findOne({
-            where: { password: password }
+            where: { email: email }
         });
-        await findUser.update({ password });
+        await findUser.update({ newPassword });
     }
 }
 
@@ -60,7 +60,8 @@ export async function findOrCreateUser(email, password ) {
             }
             // se recomienda no mostrar el de auth ya que allí está la contraseña encriptada :D
         });
-        console.log(user, authCreated);
+        console.log(user, auth);
+        return authCreated;
 
     } else {
         console.error('Faltan datos en el body');
@@ -78,6 +79,7 @@ export async function authenticateUser(email, password) {
                 password: getSHA256ofString(password)
             },
         });
+        console.log(auth);
         const token = await jwt.sign({ id: auth['userId'] }, process.env.SECRET_PHRASE);
 
         return true && token;
@@ -120,4 +122,5 @@ export async function verifyAuth (req, res, next) {
     } catch {
         res.status(401).json({ "Error": "User unauthorize" });
     }
+    return token;
 };

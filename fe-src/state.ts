@@ -1,5 +1,5 @@
-const API_BASE_URL = "http://localhost:3010";
-// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+// const API_BASE_URL = "http://localhost:3010";
+const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
@@ -27,7 +27,7 @@ const state = {
     getState() {
         return this.data;
     },
-    async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario) {
+    async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario, callback) {
 
         const sendEmailToUser = await fetch(API_BASE_URL + "/report/mascot", {
             method: 'POST',
@@ -40,8 +40,9 @@ const state = {
         .then((data) => { 
             console.log("Esta es la data de enviar el email: ", data);
         });
+        callback();
     },
-    async mascotCloseFrom() {
+    async mascotCloseFrom(callback) {
         const currentState = this.getState();
         const lat = currentState["location"]["lat"];
         const lng = currentState["location"]["lng"];
@@ -49,12 +50,19 @@ const state = {
         const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng)
         .then((res) => { return res.json(); })
         .then((data) => {
-            console.log("Esta es la data de mascotas cerca de: ", data["hits"]);
-            currentState["lostPetsAround"] = currentState["lostPetsAround"] + data["hits"];
-            this.setState(currentState);
+
+            if (data) {
+                console.log("Esta es la data de mascotas cerca de: ", data);
+                currentState["lostPetsAround"] = data;
+                this.setState(currentState);
+                
+            } else {
+                console.log("No hay mascotas cerca");
+            }
         });
+        callback();
     },
-    async reportLostPet(imageDataURL, petName) {
+    async reportLostPet(imageDataURL, petName, callback) {
 
         const currentState = this.getState();
         const _geoloc = currentState["location"];
@@ -69,10 +77,17 @@ const state = {
         })
         .then((res) => { return res.json(); })
         .then((data) => { 
-            console.log("Esta es la data de reportar mascota perdida: ", data);
-            currentState["myReportedPets"] = currentState["myReportedPets"] + data;
-            state.setState(currentState);
+
+            if (data) {
+                console.log("Esta es la data de reportar mascota perdida: ", data);
+                currentState["myReportedPets"] = data;
+                state.setState(currentState);
+                
+            } else {
+                console.log("No hay data");
+            }
         });
+        callback();
     },
     async allReportedPetsByAUser(callback) {
         const currentState = this.getState();
@@ -86,9 +101,15 @@ const state = {
             .then((res) => { return res.json(); })
             .then((data) => {
 
-                console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
-                currentState["myReportedPets"] = currentState["myReportedPets"] + data;
-                state.setState(currentState);
+                if (data) {
+                    console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
+                    currentState["myReportedPets"] = data;
+                    state.setState(currentState);
+                    
+                } else {
+                    console.log("No reportaste mascotas");
+                }
+                return data;
             });
             callback();
             if (callback) callback();
@@ -115,7 +136,8 @@ const state = {
         });
     },
     async signUpUser(password) {
-        const email = this.data.email;
+        const currentState = this.getState();
+        const email = currentState["email"];
 
         if (!email) {
             console.error('falta el email!');
@@ -128,12 +150,6 @@ const state = {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-            })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log("Esta es la data: " + data);
             });
         }
     },
@@ -158,12 +174,8 @@ const state = {
                 // console.log("User exists: ", data);
                 currentState['userExists'] = data;
             });
-            callback();
-
-        } else {
-            if (callback) console.error('falta el email');
         }
-
+        callback();
     },
     async signInUser(password, callback?) {
         const currentState = this.getState();

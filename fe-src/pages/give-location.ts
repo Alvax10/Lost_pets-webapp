@@ -88,10 +88,7 @@ class giveLocation extends HTMLElement {
         `;
 
         divEl.innerHTML = `
-            <header class="header">
-                <img class="img" src="${logo}" alt="logo">
-                <img class="img menu" src="${burgerMenu}" alt="menu" >
-            </header>
+            <header-component></header-component>
             <div class="main-body">
                 <h2 class="title"> Mascotas perdidas cerca tuyo </h2>
 

@@ -11,8 +11,8 @@ export async function mascotsCloseFrom(lat, lng) {
             aroundRadius: 10000,
         });
 
-        console.log(hits);
-        return hits;
+        console.log("Estos son los hits: ",hits["hits"]);
+        return hits["hits"];
 
     } else {
         console.error("Falta lat, lng o ambos!");
@@ -57,30 +57,28 @@ export async function reportLostPet(petName, _geoloc, imageDataURL, email) {
             width: 200,
             hegiht: 100,
         })
-        .catch((err) => {
-            console.log("Esto contiene imagen: ", imagen);
-            console.log("Esto contiene el error: ", err)
-        });
+        // .catch((err) => {
+        //     console.log("Esto contiene imagen: ", imagen);
+        //     console.log("Esto contiene el error: ", err)
+        // });
 
-        const mascotDataComplete = {
-            name: petName,
+        const mascotData = {
+            petName: petName,
             _geoloc: _geoloc,
             ImageDataURL: imagen["secure_url"],
             userId: userFounded["id"],
         };
         
-        const mascotCreated = await index.saveObject(mascotDataComplete, {
+        const mascotCreated = await index.saveObject(mascotData, {
             autoGenerateObjectIDIfNotExist: true,
         });
 
-        await Mascot.create({
+        const mascotDataComplete = await Mascot.create({
             default: {
-                mascotDataComplete,
+                mascotData,
             }
         });
-        
-        console.log(mascotDataComplete);
-        return mascotDataComplete;
+        return mascotData;
 
     } else {
         console.error('La imageDataURL no se está pasando bien');
@@ -113,7 +111,7 @@ export async function updateProfile(mascotId, updateData) {
 
         const mascotUpdated = await index.partialUpdateObject(updateDataComplete);
 
-        await Mascot.update(updateDataComplete,
+        const petUpdated = await Mascot.update(updateDataComplete,
         {
             where: {
                 id: mascotId,

@@ -3,8 +3,8 @@ import { sequelize } from "./database";
 
 export class Mascot extends Model {}
 Mascot.init({
-    name: DataTypes.STRING,
-    _geoloc: DataTypes.JSON,
+    petName: DataTypes.STRING,
+    _geoloc: DataTypes.JSONB,
     imageDataURL: DataTypes.STRING,
     userId: DataTypes.INTEGER,
   }, { sequelize, modelName: 'mascot' }
