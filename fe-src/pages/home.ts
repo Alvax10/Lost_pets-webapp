@@ -1,5 +1,7 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
+import "../components/header";
+import "../components/lost-pet-card";
 const xButton = require("url:../img/Vector.png");
 
 class Home extends HTMLElement {

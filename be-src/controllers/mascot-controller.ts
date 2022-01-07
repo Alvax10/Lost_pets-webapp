@@ -11,7 +11,6 @@ export async function mascotsCloseFrom(lat, lng) {
             aroundRadius: 10000,
         });
 
-        console.log("Estos son los hits: ",hits["hits"]);
         return hits["hits"];
 
     } else {

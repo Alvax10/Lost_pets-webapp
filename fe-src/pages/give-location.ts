@@ -1,7 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-const logo = require("url:../img/logo-pata.png");
-const burgerMenu = require("url:../img/burger-menu.png");
+import "../components/header";
 
 class giveLocation extends HTMLElement {
     shadow: ShadowRoot;

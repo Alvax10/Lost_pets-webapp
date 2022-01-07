@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-const xButton = require("url:../img/Vector.png");
+import "../components/header";
 
 class myData extends HTMLElement {
 
