@@ -5,11 +5,6 @@ import * as mapboxgl from "mapbox-gl";
 require("../components/header");
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
-// console.log(process.env.MAPBOX_TOKEN);
-
-const logo = require("url:../img/logo-pata.png");
-const burgerMenuImg = require("url:../img/burger-menu.png");
-const xButton = require("url:../img/Vector.png");
 
 class reportMascot extends HTMLElement {
 

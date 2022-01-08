@@ -1,11 +1,11 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./database";
 
 export class Mascot extends Model {}
 Mascot.init({
-    petName: DataTypes.STRING,
-    _geoloc: DataTypes.JSON,
-    ImageDataURL: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-  }, { sequelize, modelName: 'mascot' }
-);
+  petName: DataTypes.STRING,
+  _geoloc: DataTypes.JSON,
+  ImageDataURL: DataTypes.STRING,
+  userId: DataTypes.INTEGER,
+}, 
+{ sequelize, modelName: 'mascot' });

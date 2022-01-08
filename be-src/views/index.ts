@@ -1,5 +1,5 @@
-import { User } from "../models/user-mascot"
-import { Mascot } from "../models/user-mascot"
+import { User } from "../models/user-mascot";
+import { Mascot } from "../models/user-mascot";
 import * as express from "express";
 import * as cors from "cors";
 import * as path from "path";
@@ -10,7 +10,7 @@ import * as sgMail from "@sendgrid/mail";
 const app = express();
 const port = process.env.PORT || 3010;
 
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(cors());
 
 // Send an email to other user
@@ -74,8 +74,11 @@ app.post("/report/mascot", async(req, res) => {
     const { petName, _geoloc, ImageDataURL, email } = req.body;
 
     if ( petName && _geoloc && ImageDataURL && email) {
-        const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
-        await res.json( reportedPet );
+
+        const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email)
+            
+        await res.json(reportedPet);
+        return reportedPet;
 
     } else {
         res.status(400).json({ message: 'Faltan datos en el body o el userId no existe'});

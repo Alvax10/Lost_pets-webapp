@@ -1,7 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-require("../components/header");
-require("../components/lost-pet-card");
 const xButton = require("url:../img/Vector.png");
 
 class Home extends HTMLElement {
@@ -89,7 +87,7 @@ class Home extends HTMLElement {
                     ${currentState["lostPetsAround"].map((pet) => 
                 
                     `<lost-pet-card class="pet" pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></lost-pet-card>`
-                                    
+
                     ).join("")}`;
         
                 lostPetsStyle.innerHTML = `
@@ -153,40 +151,44 @@ class Home extends HTMLElement {
             }
         });
 
+        this.shadow.appendChild(lostPets);
         this.shadow.appendChild(lostPetsStyle);
-        
-        this.shadow.querySelectorAll(".pet").forEach((petSeen) => {
 
-            petSeen.addEventListener("report", (e) => {
-    
+        const reportedMascotsEl = this.shadow.querySelectorAll(".lost-pet");
+        reportedMascotsEl.forEach((reportedMascot) => {
+            console.log(reportedMascot);
+
+            const petSeenReported = reportedMascot.querySelector(".pet-seen");
+            petSeenReported.addEventListener('reportPet', (e) => {
+                
                 const reportNotification = document.createElement("div");
                 reportNotification.className = "notification-pet-seen"
                 const reportNotificationStyle = document.createElement("style");
-                            
+
                 reportNotification.innerHTML = `
-    
-                    <img src="${xButton}" class="close-button" alt="cierre-menu" />
+                
+                    <img src=${xButton} class="close-button" alt="cierre-menu" />
                     <h2 class="title"> Reportar info de ${e["detail"]["petName"]}</h2>
                     <form class="form">
-        
-                        <label class="user-name">
-                            <p> Tu Email </p>
-                            <input class="input__user-email" type="text" />
-                        </label>
-                                    
-                        <label class="user-phone">
-                            <p> Tu Teléfono </p>
-                            <input class="input__user-phone" type="number" />
-                        </label>
-                        <label class="user-info">
-                            <p> ¿Donde lo viste? </p>
-                            <textarea class="input__user-info"> Depositar calle o barrio </textarea>
-                        </label>
-                            <button class="button"> Enviar </button>
-                        </form>
-                    `;
-    
-                    reportNotificationStyle.innerHTML = `
+
+                    <label class="user-name">
+                        <p> Tu Email </p>
+                        <input class="input__user-email" type="text" />
+                    </label>
+
+                    <label class="user-phone">
+                        <p> Tu Teléfono </p>
+                        <input class="input__user-phone" type="number" />
+                    </label>
+                    <label class="user-info">
+                        <p> ¿Donde lo viste? </p>
+                        <textarea class="input__user-info"> Depositar calle o barrio </textarea>
+                    </label>
+                        <button class="button"> Enviar </button>
+                    </form>
+                `;
+                
+                reportNotificationStyle.innerHTML = `
                     .general-container {
                         background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
                     }
@@ -217,7 +219,7 @@ class Home extends HTMLElement {
                         margin-left: 10px; 
                         flex-direction: column;
                     }
-                    .input__user-name {
+                    .input__user-email {
                         width: 280px;
                         height: 30px;
                         border-radius: 4px;
@@ -245,10 +247,10 @@ class Home extends HTMLElement {
                         background-color: #FF9DF5;
                     }
                 `;
-        
+                            
                 this.shadow.appendChild(reportNotification);
                 this.shadow.appendChild(reportNotificationStyle);
-        
+                    
                 const closeButton = this.shadow.querySelector(".close-button");
                 closeButton.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -259,14 +261,14 @@ class Home extends HTMLElement {
                     }
                     `;
                 });
-
+            
                 const currentState = state.getState();
                 const userEmail = currentState["email"];
                 const OtherUserEmail = (this.shadow.querySelector(".input__user-email") as HTMLInputElement);
                 const numeroDelUsuario = (this.shadow.querySelector(".input__user-phone") as HTMLInputElement);
                 const newLocation = (this.shadow.querySelector(".input__user-info") as HTMLInputElement);
                 const sendPetSeenInfo = this.shadow.querySelector(".button");
-
+            
                 sendPetSeenInfo.addEventListener('submit', (event) => {
                     event.preventDefault();
 

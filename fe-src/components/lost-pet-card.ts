@@ -17,6 +17,31 @@ export class Card extends HTMLElement {
     connectedCallback() {
         this.render();
     }
+    listeners() {
+
+        const currentState = state.getState();
+        const reportedMascots = this.shadow.querySelectorAll(".lost-pet");
+        reportedMascots.forEach((reportedMascot) => {
+            
+            const petSeenReported = reportedMascot.querySelector(".pet-seen");
+            petSeenReported.addEventListener('click', () => {
+                this.dispatchEvent(
+                new CustomEvent('reportPet', {
+                    detail: {
+                        petName: this.petName,
+                        petPhoto: this.petPhoto,
+                        petLocationName: this.petLocationName,
+                        email: currentState["email"],
+                    },
+                    bubbles: true
+                    // esto hace que el evento pueda
+                    // ser escuchado desde un elemento
+                    // que está más "arriba" en el arbol
+                }),
+                );
+            });
+        });
+    }
     render() {
 
         const divEl = document.createElement("div");
@@ -84,28 +109,7 @@ export class Card extends HTMLElement {
 
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(divStyle);
-        
-        const currentState = state.getState();
-        this.shadow.querySelectorAll(".pet-seen").forEach((petSeen) => {
-
-            petSeen.addEventListener("click", () => {
-                this.dispatchEvent(
-                new CustomEvent("report", {
-                    detail: {
-                        petName: this.petName,
-                        petPhoto: this.petPhoto,
-                        petLocationName: this.petLocationName,
-                        email: currentState["email"],
-                    },
-                bubbles: true
-                // esto hace que el evento pueda
-                // ser escuchado desde un elemento
-                // que está más "arriba" en el arbol
-              }),
-            );
-          });
-        });
+        this.listeners();
     }
 }
-
 customElements.define("lost-pet-card", Card);

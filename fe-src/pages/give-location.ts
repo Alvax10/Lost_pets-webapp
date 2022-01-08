@@ -1,6 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-require("../components/header");
 
 class giveLocation extends HTMLElement {
     shadow: ShadowRoot;

@@ -6,3 +6,5 @@ import "./pages/login2";
 import "./pages/mis-datos";
 import "./pages/mis-mascotas-reportadas";
 import "./pages/reportar-mascota";
+require("./components/header");
+require("./components/lost-pet-card");

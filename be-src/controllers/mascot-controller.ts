@@ -41,15 +41,15 @@ export async function allReportedPetsByAUser(email) {
 }
 
 // Report a lost pet
-export async function reportLostPet(petName, _geoloc, imageDataURL, email) {
+export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 
-    if (imageDataURL && email) {
+    if (ImageDataURL && email) {
         
         const userFounded = await User.findOne({
             where: { email: email },
         });
 
-        const imagen = await cloudinary.uploader.upload(imageDataURL, {
+        const imagen = await cloudinary.uploader.upload(ImageDataURL, {
 
             resource_type: 'image',
             discard_original_filename: true,
@@ -60,27 +60,29 @@ export async function reportLostPet(petName, _geoloc, imageDataURL, email) {
             console.log("Esto contiene imagen: ", imagen);
             console.log("Esto contiene el error: ", err)
         });
-
-        const mascotData = {
+        
+        const mascotCreatedInAlgolia = await index.saveObject({
             petName: petName,
             _geoloc: _geoloc,
             ImageDataURL: imagen["secure_url"],
             userId: userFounded["id"],
-        };
-        
-        const mascotCreated = await index.saveObject(mascotData, {
+        }, {
             autoGenerateObjectIDIfNotExist: true,
         });
 
-        const mascotDataComplete = await Mascot.create({
-            default: {
-                petName,
-                _geoloc,
+        const [ mascotFounded, mascotCreated ] = await Mascot.findOrCreate({
+            where: { petName: petName, userId: userFounded["id"] },
+            defaults: {
+                petName: petName,
+                _geoloc: _geoloc,
                 ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
             }
         });
-        return mascotDataComplete;
+
+        // console.log("Esta es la creación de una Mascota: ", mascotCreated);
+        console.log("Este es el encuentro de una Mascota: ", mascotFounded);
+        return mascotFounded;
 
     } else {
         console.error('La imageDataURL no se está pasando bien');
@@ -118,9 +120,6 @@ export async function updateProfile(mascotId, updateData) {
             where: {
                 id: mascotId,
             }
-        }
-        ).catch((e) => {
-            console.log(e);
         });
 
         return updateDataComplete;

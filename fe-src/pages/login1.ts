@@ -1,6 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-require("../components/header");
 
 const logo = require("url:../img/logo-pata.png");
 const burgerMenuImg = require("url:../img/burger-menu.png");
