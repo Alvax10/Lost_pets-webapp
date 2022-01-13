@@ -6,10 +6,10 @@ import * as path from "path";
 import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
 import * as sgMail from "@sendgrid/mail";
-// export NODE_OPTIONS="--max-old-space-size=4096"
+process.env.NODE_OPTIONS="--max-old-space-size=4096"
 
 const app = express();
-const port = process.env.PORT || 3010;
+const port = process.env.PORT || 3011;
 
 app.use(express.json({ limit: "50mb" }));
 app.use(cors());
@@ -84,13 +84,15 @@ app.get("/user/reported-mascots", async(req, res) => {
 app.post("/report/mascot", async(req, res) => {
     const { petName, _geoloc, ImageDataURL, email } = req.body;
 
+    console.log(req.body);
+
     if ( petName && _geoloc && ImageDataURL && email) {
 
         const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email)
         .catch((err) => {
-            console.log("Error endpoint report-mascot: ", err);
+            console.log("El error de report mascot endpoint: ", err);
         });
-        
+
         await res.json(reportedPet);
         return reportedPet;
 

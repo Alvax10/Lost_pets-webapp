@@ -1,4 +1,4 @@
-// const API_BASE_URL = "http://localhost:3010";
+// const API_BASE_URL = "http://localhost:3011";
 const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
@@ -62,13 +62,12 @@ const state = {
         });
         callback();
     },
-    async reportLostPet(ImageDataURL, petName, _geoloc, callback) {
+    async reportLostPet(petName, ImageDataURL, _geoloc, callback) {
         const currentState = this.getState();
         const email = currentState["email"];
 
         await fetch(API_BASE_URL + "/report/mascot", {
            method: 'POST',
-           mode: 'cors',
            headers: {
             'Content-Type': 'application/json',
            },
