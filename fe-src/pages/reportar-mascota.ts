@@ -16,26 +16,6 @@ class reportMascot extends HTMLElement {
     connectedCallback() {
         this.render();
     }
-    listeners() {
-
-        const currentState = state.getState();
-        let imageDataURL;
-        const reportPetForm = this.shadow.querySelector(".form");
-        reportPetForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const target = e.target as any;
-
-            const petName = (target["pet-name-input"] as HTMLInputElement);
-            const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
-            const petPhoto = imageDataURL;
-            currentState["location"]["name"] = petLocation.value;
-            
-            state.reportLostPet(petPhoto, petName.value, () => {
-
-                Router.go("/home");
-            });
-        });
-    }
     render() {
 
         const currentState = state.getState();
@@ -152,8 +132,23 @@ class reportMascot extends HTMLElement {
 
         } else {
 
+            let ImageDataURL;
             const map = this.shadow.getElementById('map');
             const reportPetForm = this.shadow.querySelector(".form");
+            const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
+
+            const dropzoneEl = this.shadow.getElementById('dropzone');
+            const myDropzone = new Dropzone(dropzoneEl, {
+                url: "/falsa",
+                clickeable: true,
+                autoProcessQueue: false,
+            });
+
+            myDropzone.on("thumbnail", function (file) {
+                // usando este evento pueden acceder al dataURL directamente
+                ImageDataURL = file;
+                // console.log(file.dataURL);
+            });
     
             function initMap() {
                 mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
@@ -180,7 +175,7 @@ class reportMascot extends HTMLElement {
                     );
                 });
             }
-    
+
             (function () {
                 const map = initMap();
                 initSearchForm(function (results) {
@@ -190,24 +185,29 @@ class reportMascot extends HTMLElement {
                         .addTo(map);
                     map.setCenter(firstResult.geometry.coordinates);
                     map.setZoom(14);
+
+                    const mascotLocation = {
+                        name: petLocation.value,
+                        lat: firstResult.geometry.coordinates[1],
+                        lng: firstResult.geometry.coordinates[0],
+                    }
+                    // console.log(mascotLocation);
+
+                    reportPetForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const target = e.target as any;
+                        const petPhoto = ImageDataURL.dataURL;
+                        const petName = (target["pet-name-input"] as HTMLInputElement);
+                        
+                        console.log("Clickeaste en reportar mascota");
+                        state.reportLostPet(petName.value, petPhoto, mascotLocation, () => {
+        
+                            console.log("Reportaste la mascota");
+                        });
+                    });
                 });
             })();
-    
-            const dropzoneEl = this.shadow.getElementById('dropzone');
-            let imageDataURL;
-            const myDropzone = new Dropzone(dropzoneEl, {
-                url: "/falsa",
-                clickeable: true,
-                autoProcessQueue: false,
-            });
-    
-            myDropzone.on("thumbnail", function (file) {
-                // usando este evento pueden acceder al dataURL directamente
-                imageDataURL = file.dataURL;
-                // console.log(file.dataURL);
-            });
         }
-        this.listeners();
     }
 }
 

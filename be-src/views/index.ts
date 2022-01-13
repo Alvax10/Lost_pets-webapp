@@ -6,34 +6,41 @@ import * as path from "path";
 import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
 import * as sgMail from "@sendgrid/mail";
+// export NODE_OPTIONS="--max-old-space-size=4096"
 
 const app = express();
 const port = process.env.PORT || 3010;
 
-app.use(express.json({ limit: "100mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 
 // Send an email to other user
 app.post("/send-email-to-user", async(req, res) => {
-    const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario} = req.body;
+    const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario } = req.body;
 
-    await sgMail.setApiKey(process.env.API_KEY_SENDGRIND);
-    const msg = {
-        to: OtherUserEmail,
-        from: userEmail,
-        subject: `Informacion reportada sobre ${petName}`,
-        text: `Tu mascota fue vista en ${newLocation}`,
-        html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
+    if (OtherUserEmail && userEmail && petName && newLocation && numeroDelUsuario) {
+
+        await sgMail.setApiKey(process.env.API_KEY_SENDGRIND);
+        const msg = {
+            to: OtherUserEmail,
+            from: userEmail,
+            subject: `Informacion reportada sobre ${petName}`,
+            text: `Tu mascota fue vista en ${newLocation}`,
+            html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
+        }
+        const enviarMail = await sgMail.send(msg)
+        .then(() => {
+            console.log('El email fue enviado correctamente');
+        })
+        .catch((error) => {
+            console.error("Este es el error al mandar el mail: ",error)
+        });
+        res.json(msg);
+        return msg;
+
+    } else {
+        res.status(400).json({ message: "Faltan datos en el body!" })
     }
-    const enviarMail = await sgMail.send(msg)
-    .then(() => {
-        console.log('El email fue enviado correctamente');
-    })
-    .catch((error) => {
-        console.error("Este es el error al mandar el mail: ",error)
-    });
-    res.json(msg);
-    return msg;
 });
 
 // Get pet around the raidus
@@ -42,12 +49,16 @@ app.get("/mascots-close-from", async (req, res) => {
 
     if (lat && lng) {
 
-        const hits = await mascotsCloseFrom(lat, lng);
+        const hits = await mascotsCloseFrom(lat, lng)
+        .catch((err) => {
+            console.log("Este es el error de mascots close from: ", err);
+        });
+        
         res.json(hits);
         return hits;
 
     } else {
-        console.error("Faltan datos en el query!");
+        res.status(400).json({ message: "Faltan datos en el query!" });
     }
 });
 
@@ -76,7 +87,10 @@ app.post("/report/mascot", async(req, res) => {
     if ( petName && _geoloc && ImageDataURL && email) {
 
         const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email)
-            
+        .catch((err) => {
+            console.log("Error endpoint report-mascot: ", err);
+        });
+        
         await res.json(reportedPet);
         return reportedPet;
 

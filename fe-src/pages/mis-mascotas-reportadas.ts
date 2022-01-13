@@ -1,5 +1,5 @@
-import { Router } from "@vaadin/router";
 import { state } from "../state";
+import { Router } from "@vaadin/router";
 const xButton = require("url:../img/Vector.png");
 
 class myReportedMascots extends HTMLElement {
@@ -29,7 +29,6 @@ class myReportedMascots extends HTMLElement {
             align-self: center;
         }
         `;
-
 
         divEl.innerHTML = `
             <header-component></header-component>
@@ -143,137 +142,12 @@ class myReportedMascots extends HTMLElement {
                         text-decoration: underline;
                     }
                 `;
+                // this.listeners();
             }
         });
 
         this.shadow.appendChild(reportedMascots);
         this.shadow.appendChild(reportedMascotsStyle);
-
-        const reportedMascotsEl = this.shadow.querySelectorAll(".lost-pet");
-        reportedMascotsEl.forEach((reportedMascot) => {
-            console.log(reportedMascot);
-
-            const petSeenReported = reportedMascot.querySelector(".pet-seen");
-            petSeenReported.addEventListener('reportPet', (e) => {
-                
-                const reportNotification = document.createElement("div");
-                reportNotification.className = "notification-pet-seen"
-                const reportNotificationStyle = document.createElement("style");
-
-                reportNotification.innerHTML = `
-                
-                    <img src=${xButton} class="close-button" alt="cierre-menu" />
-                    <h2 class="title"> Reportar info de ${e["detail"]["petName"]}</h2>
-                    <form class="form">
-
-                    <label class="user-name">
-                        <p> Tu Email </p>
-                        <input class="input__user-email" type="text" />
-                    </label>
-
-                    <label class="user-phone">
-                        <p> Tu Teléfono </p>
-                        <input class="input__user-phone" type="number" />
-                    </label>
-                    <label class="user-info">
-                        <p> ¿Donde lo viste? </p>
-                        <textarea class="input__user-info"> Depositar calle o barrio </textarea>
-                    </label>
-                        <button class="button"> Enviar </button>
-                    </form>
-                `;
-                
-                reportNotificationStyle.innerHTML = `
-                    .general-container {
-                        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-                    }
-                    .pets-reported {
-                        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-                    }
-                    .notification-pet-seen {
-                        top: 20%;
-                        left: 30%;
-                        width: 314px;
-                        height: 603px;
-                        display: inherit;
-                        position: absolute;
-                        border-radius: 4px;
-                        background: #FFFFFF;
-                    }
-                    .close-button {
-                        width: 30px;
-                        height: 30px;
-                        padding: 20px;
-                        margin-left: 77%;
-                    }
-                    .title {
-                        text-align: center;
-                    }
-                    .form {
-                        display: flex;
-                        margin-left: 10px; 
-                        flex-direction: column;
-                    }
-                    .input__user-email {
-                        width: 280px;
-                        height: 30px;
-                        border-radius: 4px;
-                        border: 2px solid #000000;
-                    }
-                    .input__user-phone {
-                        width: 280px;
-                        height: 30px;
-                        border-radius: 4px;
-                        border: 2px solid #000000;
-                    }
-                    .input__user-info {
-                        width: 280px;
-                        height: 60px;
-                        border-radius: 4px;
-                        border: 2px solid #000000;
-                    }
-                    .button {
-                        width: 280px;
-                        height: 40px;
-                        border: none;
-                        margin-top: 10px;
-                        margin-left: 5px;
-                        border-radius: 4px;
-                        background-color: #FF9DF5;
-                    }
-                `;
-                            
-                this.shadow.appendChild(reportNotification);
-                this.shadow.appendChild(reportNotificationStyle);
-                    
-                const closeButton = this.shadow.querySelector(".close-button");
-                closeButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-        
-                    reportNotificationStyle.innerHTML = `
-                    .notification-pet-seen {
-                        display: none;
-                    }
-                    `;
-                });
-            
-                const currentState = state.getState();
-                const userEmail = currentState["email"];
-                const OtherUserEmail = (this.shadow.querySelector(".input__user-email") as HTMLInputElement);
-                const numeroDelUsuario = (this.shadow.querySelector(".input__user-phone") as HTMLInputElement);
-                const newLocation = (this.shadow.querySelector(".input__user-info") as HTMLInputElement);
-                const sendPetSeenInfo = this.shadow.querySelector(".button");
-            
-                sendPetSeenInfo.addEventListener('submit', (event) => {
-                    event.preventDefault();
-
-                    state.sendEmailWithInfo(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], userEmail, numeroDelUsuario.value, () => {
-
-                        Router.go("/home");
-                    });
-                });
-            });
-        });
     }
 }
 

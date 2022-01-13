@@ -30,8 +30,8 @@ class giveLocation extends HTMLElement {
                     // console.log('Latitude : ' + coord.latitude);
                     // console.log('Longitude: ' + coord.longitude);
                     // console.log('More or less ' + coord.accuracy + ' meters.');
-                    currentState["location"]["lat"] = coord.latitude;
-                    currentState["location"]["lng"] = coord.longitude;
+                    currentState["_geoloc"]["lat"] = coord.latitude;
+                    currentState["_geoloc"]["lng"] = coord.longitude;
 
                     state.setState(currentState);
                 }

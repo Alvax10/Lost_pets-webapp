@@ -56,10 +56,9 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
             width: 200,
             hegiht: 100,
         })
-        .catch((err) => {
-            console.log("Esto contiene imagen: ", imagen);
-            console.log("Esto contiene el error: ", err)
-        });
+        // .catch((err) => {
+        //     console.log("Esto contiene el error: ", err)
+        // });
         
         const mascotCreatedInAlgolia = await index.saveObject({
             petName: petName,
@@ -70,7 +69,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
             autoGenerateObjectIDIfNotExist: true,
         });
 
-        const [ mascotFounded, mascotCreated ] = await Mascot.findOrCreate({
+        const mascotFounded = await Mascot.findOrCreate({
             where: { petName: petName, userId: userFounded["id"] },
             defaults: {
                 petName: petName,
@@ -78,6 +77,9 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
                 ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
             }
+        })
+        .catch((err) => {
+            console.log("Error desde el controlador de report mascot: ", err);
         });
 
         // console.log("Esta es la creación de una Mascota: ", mascotCreated);

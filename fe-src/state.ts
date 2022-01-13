@@ -6,7 +6,7 @@ const state = {
         username: '',
         petName: '',
         email: '',
-        location: {
+        _geoloc: {
             name: '',
             lat: 0,
             lng: 0,
@@ -44,8 +44,8 @@ const state = {
     },
     async mascotCloseFrom(callback) {
         const currentState = this.getState();
-        const lat = currentState["location"]["lat"];
-        const lng = currentState["location"]["lng"];
+        const lat = currentState["_geoloc"]["lat"];
+        const lng = currentState["_geoloc"]["lng"];
 
         const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng)
         .then((res) => { return res.json(); })
@@ -62,31 +62,25 @@ const state = {
         });
         callback();
     },
-    async reportLostPet(ImageDataURL, petName, callback) {
-
+    async reportLostPet(ImageDataURL, petName, _geoloc, callback) {
         const currentState = this.getState();
-        const _geoloc = currentState["location"];
         const email = currentState["email"];
 
-        const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
+        await fetch(API_BASE_URL + "/report/mascot", {
+           method: 'POST',
+           mode: 'cors',
+           headers: {
+            'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
         })
-        .then((res) => { return res.json(); })
-        .then((data) => { 
-
-            if (data) {
-                console.log("Esta es la data de reportar mascota perdida: ", data);
-                currentState["myReportedPets"] = data;
-                state.setState(currentState);
-                
-            } else {
-                console.log("No hay data");
-            }
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+           console.log(data);
         });
+
         callback();
     },
     async allReportedPetsByAUser(callback) {
@@ -95,8 +89,7 @@ const state = {
 
         if (email) {
 
-            const allMascotsByAUser = await fetch(API_BASE_URL+ "/user/reported-mascots" + "?email=" + email, {
-                method: 'GET',
+            const allMascotsByAUser = await fetch(API_BASE_URL + "/user/reported-mascots" + "?email=" + email, {
             })
             .then((res) => { return res.json(); })
             .then((data) => {
