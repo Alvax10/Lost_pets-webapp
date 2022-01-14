@@ -29,7 +29,7 @@ const state = {
     },
     async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario, callback) {
 
-        const sendEmailToUser = await fetch(API_BASE_URL + "/report/mascot", {
+        const sendEmailToUser = await fetch(API_BASE_URL + "/send-email-to-user", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,11 @@ const state = {
         .then((res) => { return res.json(); })
         .then((data) => { 
             console.log("Esta es la data de enviar el email: ", data);
+        })
+        .catch((err) => {
+            console.log("Este es el error de send email: ", err);
         });
+
         callback();
     },
     async mascotCloseFrom(callback) {
@@ -54,12 +58,15 @@ const state = {
             if (data) {
                 console.log("Esta es la data de mascotas cerca de: ", data);
                 currentState["lostPetsAround"] = data;
-                this.setState(currentState);
                 
             } else {
                 console.log("No hay mascotas cerca");
             }
+        })
+        .catch((err) => {
+            console.log("Este es el error de mascots close from: ", err);
         });
+
         callback();
     },
     async reportLostPet(petName, ImageDataURL, _geoloc, callback) {
@@ -78,6 +85,9 @@ const state = {
         })
         .then((data) => {
            console.log(data);
+        })
+        .catch((err) => {
+            console.log("Este es el error de report mascot: ", err);
         });
 
         callback();
@@ -102,9 +112,12 @@ const state = {
                     console.log("No reportaste mascotas");
                 }
                 return data;
+            })
+            .catch((err) => {
+                console.log("Este es el error de mascots reported by a user: ", err);
             });
+
             callback();
-            if (callback) callback();
 
         } else {
             console.error('Falta el email');
@@ -125,6 +138,9 @@ const state = {
         })
         .then((data) => {
             console.log("Esta es la data de modifyUserInfo: " + data);
+        })
+        .catch((err) => {
+            console.log("Este es el error de modify user info: ", err);
         });
     },
     async signUpUser(password) {
@@ -142,6 +158,9 @@ const state = {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
+            })
+            .catch((err) => {
+                console.log("Este es el error de sign up user: ", err);
             });
         }
     },
@@ -165,6 +184,9 @@ const state = {
             .then((data) => {
                 // console.log("User exists: ", data);
                 currentState['userExists'] = data;
+            })
+            .catch((err) => {
+                console.log("Este es el error de check if user exists: ", err);
             });
         }
         callback();
@@ -187,7 +209,11 @@ const state = {
             })
             .then((data) => {
                 return data;
+            })
+            .catch((err) => {
+                console.log("Este es el error de sign in user: ", err);
             });
+
             callback();
 
         } else {

@@ -34,6 +34,7 @@ app.post("/send-email-to-user", async(req, res) => {
         .catch((error) => {
             console.error("Este es el error al mandar el mail: ",error)
         });
+        
         res.json(msg);
         return msg;
 
