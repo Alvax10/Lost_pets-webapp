@@ -47,7 +47,7 @@ export class Header extends HTMLElement {
                 justify-content: center;
             }
             .mis-datos {
-                padding-left: 62px;
+                padding-left: 6px;
             }
             .reportar-mascotas {
                 padding-left: 30px;
