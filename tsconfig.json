@@ -10,5 +10,5 @@
   "exclude": ["fe-src/*"],
   "runtimeArgs": [
     "--max-old-space-size=3072"
-]
+  ]
 }

@@ -69,6 +69,11 @@ export class Header extends HTMLElement {
                 justify-content: center;
                 text-decoration-line: underline;
             }
+            @media (min-width: 800px) {
+                .sesion {
+                    padding-top: 35%;
+                }
+            }
             `;
     
             menuDiv.innerHTML = `
@@ -118,6 +123,11 @@ export class Header extends HTMLElement {
                         border-style: none;
                         border-radius: 4px;
                         background-color: #FF9DF5;
+                    }
+                    @media (min-width: 800px) {
+                        .notification {
+                            left: 35%;
+                        }
                     }
                 `;
 

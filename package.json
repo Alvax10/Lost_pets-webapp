@@ -8,7 +8,7 @@
     "build:front": "parcel build ./fe-src/index.html",
     "build:be": "tsc",
     "build": "yarn build:front && yarn build:be",
-    "start": "node ./be-dist/views/index.js"
+    "start": "node --max-old-space-size=2048 ./be-dist/views/index.js"
   },
   "dependencies": {
     "@parcel/transformer-image": "^2.0.1",
