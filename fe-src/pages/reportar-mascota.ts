@@ -199,16 +199,17 @@ class reportMascot extends HTMLElement {
                         const petPhoto = ImageDataURL.dataURL;
                         const petName = (target["pet-name-input"] as HTMLInputElement);
 
-                        console.log({
-                            petName: petName,
-                            _geoloc: mascotLocation,
-                            ImageDataURL: petPhoto
-                        });
+                        // console.log({
+                        //     petName: petName.value,
+                        //     _geoloc: mascotLocation,
+                        //     ImageDataURL: petPhoto
+                        // });
                         
                         console.log("Clickeaste en reportar mascota");
                         state.reportLostPet(petName.value, petPhoto, mascotLocation, () => {
         
                             console.log("Reportaste la mascota");
+                            Router.go("/home");
                         });
                     });
                 });
