@@ -6,9 +6,6 @@
     "resolveJsonModule": true,
     "outDir": "be-dist"
   },
-  "include": ["be-src/**/*"],
-  "exclude": ["fe-src/*"],
-  "runtimeArgs": [
-    "--max-old-space-size=3072"
-  ]
+  "include": ["be-src"],
+  "exclude": ["fe-src"],
 }
