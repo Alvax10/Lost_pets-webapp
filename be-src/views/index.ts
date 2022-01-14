@@ -6,12 +6,11 @@ import * as path from "path";
 import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
 import * as sgMail from "@sendgrid/mail";
-process.env.NODE_OPTIONS="--max-old-space-size=4096"
 
 const app = express();
 const port = process.env.PORT || 3011;
 
-app.use(express.json({ limit: "70mb" }));
+app.use(express.json({ limit: "75mb" }));
 app.use(cors());
 
 // Send an email to other user
