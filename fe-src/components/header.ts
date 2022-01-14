@@ -74,7 +74,7 @@ export class Header extends HTMLElement {
             menuDiv.innerHTML = `
             <img class="close-button" src="${xButton}" alt="x-button">
             <div class="opciones">
-                <h3 class="mis-datos"> Mis Datos </h3>
+                <h3 class="mis-datos"> Mis Datos / Registrarse </h3>
                 <h3 class="mis-mascotas-reportadas"> Mis mascotas reportadas </h3>
                 <h3 class="reportar-mascotas"> Reportar mascotas </h3>
             </div>
@@ -141,7 +141,7 @@ export class Header extends HTMLElement {
                     myData.addEventListener('click',(e) => {
                         e.preventDefault();
             
-                        Router.go("/mis-datos");
+                        Router.go("/mis-datos/registrarse");
                     });
             
                     const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');

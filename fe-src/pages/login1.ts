@@ -111,7 +111,7 @@ class Login extends HTMLElement {
                     Router.go("/login-2");
                     
                 } else {
-                    Router.go("/mis-datos");
+                    Router.go("/mis-datos/registrarse");
                 }
                 state.setState(currentState);
             });

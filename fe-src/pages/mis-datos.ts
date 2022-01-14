@@ -78,7 +78,7 @@ class myData extends HTMLElement {
         divEl.innerHTML = `
             <header-component></header-component>
             <div class="main-body">
-                <h2 class="title"> Mis datos </h2>
+                <h2 class="title"> Mis datos / Registrarse </h2>
                 <form class="form">
                     <label class="username-zone">
                         <p class="username"> Tu Nombre </p>
