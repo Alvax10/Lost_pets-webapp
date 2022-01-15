@@ -1,5 +1,5 @@
 // const API_BASE_URL = "http://localhost:3011";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com/";
 
 const state = {
     data: {
@@ -44,6 +44,7 @@ const state = {
             console.log("Este es el error de send email: ", err);
         });
 
+        console.log(sendEmailToUser);
         callback();
     },
     async mascotCloseFrom(callback) {
@@ -51,7 +52,10 @@ const state = {
         const lat = currentState["_geoloc"]["lat"];
         const lng = currentState["_geoloc"]["lng"];
 
-        const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng)
+        const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng, {
+            mode: 'cors',
+            credentials: 'omit',
+        })
         .then((res) => { return res.json(); })
         .then((data) => {
 
@@ -73,7 +77,7 @@ const state = {
         const currentState = this.getState();
         const email = currentState["email"];
 
-        await fetch(API_BASE_URL + "/report/mascot", {
+        const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
            method: 'POST',
            headers: {
             'Content-Type': 'application/json',
@@ -152,7 +156,6 @@ const state = {
         } else {
 
             await fetch(API_BASE_URL + '/auth', {
-    
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

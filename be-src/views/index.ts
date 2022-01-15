@@ -35,6 +35,8 @@ app.post("/send-email-to-user", async(req, res) => {
             console.error("Este es el error al mandar el mail: ",error)
         });
         
+        console.log(enviarMail);
+
         res.json(msg);
         return msg;
 
@@ -54,6 +56,7 @@ app.get("/mascots-close-from", async (req, res) => {
             console.log("Este es el error de mascots close from: ", err);
         });
         
+        console.log(hits);
         res.json(hits);
         return hits;
 
@@ -72,6 +75,7 @@ app.get("/user/reported-mascots", async(req, res) => {
             console.error("Este es el error: ", err);
         });
 
+        console.log(allReportedPets);
         await res.json(allReportedPets);
         return allReportedPets;
 
@@ -93,6 +97,7 @@ app.post("/report/mascot", async(req, res) => {
             console.log("El error de report mascot endpoint: ", err);
         });
 
+        console.log(reportedPet);
         await res.json(reportedPet);
         return reportedPet;
 
@@ -209,14 +214,6 @@ app.get("/me", verifyAuth , async (req, res) => {
         });
     }
 });
-
-app.post("/test", async(req, res) => {
-
-    await res.json({
-        message: 'todo ok',
-    });
-});
-
 
 const relativeRoute = path.resolve(__dirname + "../../../dist");
 app.get("*", app.use(express.static(relativeRoute)));

@@ -1,6 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-const xButton = require("url:../img/Vector.png");
 
 class Home extends HTMLElement {
 
@@ -12,36 +11,9 @@ class Home extends HTMLElement {
     connectedCallback() {
         this.render();
     }
-    render() {
+    listeners() {
 
         const currentState = state.getState();
-        const divEl = document.createElement('div');
-        divEl.className = 'general-container';
-        const style = document.createElement('style');
-
-        style.innerHTML = `
-        .main-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .title {
-            font-size: 40px;
-            margin: 40px 20px;
-        }
-        `;
-
-        divEl.innerHTML = `
-            <header-component></header-component>
-            <div class="main-body">
-                <h2 class="title"> Mascotas perdidas cerca tuyo </h2>
-                <div class="lost-pets"></div>
-            </div>
-        `;
-
-        this.shadow.appendChild(divEl);
-        this.shadow.appendChild(style);
-
         const lostPets = this.shadow.querySelector(".lost-pets");
         const lostPetsStyle = document.createElement("style");
 
@@ -148,12 +120,42 @@ class Home extends HTMLElement {
                         text-decoration: underline;
                     }
                 `;
-                // this.listeners();
             }
         });
 
         this.shadow.appendChild(lostPets);
         this.shadow.appendChild(lostPetsStyle);
+    }
+    render() {
+
+        const currentState = state.getState();
+        const divEl = document.createElement('div');
+        divEl.className = 'general-container';
+        const style = document.createElement('style');
+
+        style.innerHTML = `
+        .main-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-size: 40px;
+            margin: 40px 20px;
+        }
+        `;
+
+        divEl.innerHTML = `
+            <header-component></header-component>
+            <div class="main-body">
+                <h2 class="title"> Mascotas perdidas cerca tuyo </h2>
+                <div class="lost-pets"></div>
+            </div>
+        `;
+
+        this.shadow.appendChild(divEl);
+        this.shadow.appendChild(style);
+        this.listeners();
     }
 }
 
