@@ -24,8 +24,9 @@ app.post("/send-email-to-user", async(req, res) => {
             to: OtherUserEmail,
             from: userEmail,
             subject: `Informacion reportada sobre ${petName}`,
-            text: `Tu mascota fue vista en ${newLocation}`,
-            html: `<strong> Este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
+            text: ``,
+            html: `<strong> Tu mascota fue vista en ${newLocation},
+            este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
         }
         const enviarMail = await sgMail.send(msg)
         .then(() => {
@@ -35,10 +36,8 @@ app.post("/send-email-to-user", async(req, res) => {
             console.error("Este es el error al mandar el mail: ",error)
         });
         
-        console.log(enviarMail);
 
-        res.json(msg);
-        return msg;
+        res.json(enviarMail);
 
     } else {
         res.status(400).json({ message: "Faltan datos en el body!" })

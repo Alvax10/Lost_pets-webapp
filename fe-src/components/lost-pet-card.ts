@@ -159,9 +159,7 @@ export class Card extends HTMLElement {
                                 event.preventDefault();
                                 
                                 console.log(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], userEmail, numeroDelUsuario.value);
-                                state.sendEmailWithInfo(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], userEmail, numeroDelUsuario.value, () => {
-                                    Router.go("/home");
-                                });
+                                state.sendEmailWithInfo(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], userEmail, numeroDelUsuario.value);
                             });
                         });
                     });

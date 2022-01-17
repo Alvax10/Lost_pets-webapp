@@ -2,7 +2,6 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 import * as Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
-require("../components/header");
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
 
@@ -67,9 +66,8 @@ class reportMascot extends HTMLElement {
                     <div id="map" style="width: 620px; height: 335px;"></div>
                 </label>
 
-                <div id="dropzone" class="pet-photo-container dropzone">
+                <div id="dropzone" class="pet-photo-container">
                     <p class="pet-photo"> Foto de la Mascota </p>
-                    <img class="pet-photo-input" name="pet-photo-input" width: 200px/>
                 </div>
 
                 <button class="button"> Reportar Mascota </button>
@@ -99,8 +97,15 @@ class reportMascot extends HTMLElement {
                 align-self: center;
                 align-items: center;
             }
-            .pet-photo {
-                align-self: center;
+            .pet-photo-container {
+                margin: 20px;
+                width: 300px;
+                height: 50px;
+                display: flex;
+                border-radius: 4px;
+                align-items: center;
+                justify-content: center;
+                background-color: #97EA9F;
             }
             .search {
                 width: 330px;
@@ -138,7 +143,7 @@ class reportMascot extends HTMLElement {
             const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
 
             const dropzoneEl = this.shadow.getElementById('dropzone');
-            const myDropzone = new Dropzone(dropzoneEl, {
+            const myDropzone = Dropzone(dropzoneEl, {
                 url: "/falsa",
                 clickeable: true,
                 autoProcessQueue: false,
