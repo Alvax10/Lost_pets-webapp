@@ -143,7 +143,7 @@ class reportMascot extends HTMLElement {
             const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
 
             const dropzoneEl = this.shadow.getElementById('dropzone');
-            const myDropzone = Dropzone(dropzoneEl, {
+            const myDropzone = new Dropzone(dropzoneEl, {
                 url: "/falsa",
                 clickeable: true,
                 autoProcessQueue: false,
