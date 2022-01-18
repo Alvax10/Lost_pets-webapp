@@ -59,16 +59,11 @@ const state = {
 
             const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng, {
             })
-            .then((res) => { return res.json(); })
+            .then((res) => { return res.json() })
             .then((data) => {
-    
-                if (data) {
-                    console.log("Esta es la data de mascotas cerca de: ", data);
-                    currentState["lostPetsAround"] = data;
-                    
-                } else {
-                    console.log("No hay mascotas cerca");
-                }
+
+                console.log("Esta es la data de mascotas cerca de: ", data);
+                currentState["lostPetsAround"] = data;
             })
             // .catch((err) => {
             //     console.log("Este es el error de mascots close from: ", err);
