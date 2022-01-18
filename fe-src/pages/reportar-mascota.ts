@@ -100,12 +100,23 @@ class reportMascot extends HTMLElement {
             .pet-photo-container {
                 margin: 20px;
                 width: 300px;
-                height: 50px;
+                height: 150px;
                 display: flex;
                 border-radius: 4px;
-                align-items: center;
                 justify-content: center;
                 background-color: #97EA9F;
+            }
+            .dz-size {
+                display: none;
+            }
+            .dz-filename {
+                display: none;
+            }
+            .dz-success-mark {
+                display: none;
+            }
+            .dz-error-mark {
+                display: none;
             }
             .search {
                 width: 330px;
