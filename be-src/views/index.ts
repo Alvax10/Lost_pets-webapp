@@ -24,7 +24,7 @@ app.post("/send-email-to-user", async(req, res) => {
             to: OtherUserEmail,
             from: userEmail,
             subject: `Informacion reportada sobre ${petName}`,
-            text: ``,
+            text: `este es el numero de la persona que lo vió: ${numeroDelUsuario}`,
             html: `<strong> Tu mascota fue vista en ${newLocation},
             este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
         }
@@ -95,10 +95,7 @@ app.post("/report/mascot", async(req, res) => {
         .catch((err) => {
             console.log("El error de report mascot endpoint: ", err);
         });
-
-        console.log(reportedPet);
         await res.json(reportedPet);
-        return reportedPet;
 
     } else {
         res.status(400).json({ message: 'Faltan datos en el body o el userId no existe'});

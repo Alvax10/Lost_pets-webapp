@@ -56,9 +56,9 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
             width: 200,
             hegiht: 100,
         })
-        .catch((err) => {
-            console.log("Esto contiene el error: ", err)
-        });
+        // .catch((err) => {
+        //     console.log("Esto contiene el error: ", err)
+        // });
         
         const mascotCreatedInAlgolia = await index.saveObject({
             petName: petName,
