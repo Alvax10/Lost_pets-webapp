@@ -1,5 +1,4 @@
 import { state } from "../state";
-import { Router } from "@vaadin/router";
 const xButton = require("url:../img/Vector.png");
 
 export class Card extends HTMLElement {
@@ -50,6 +49,7 @@ export class Card extends HTMLElement {
                     const petSeenReported = reportedMascot.querySelector(".pet-seen");
                     petSeenReported.addEventListener('click', (ev) => {
 
+                        ev.preventDefault();
                         const reportNotification = document.createElement("div");
                         reportNotification.className = "notification-pet-seen"
                         const reportNotificationStyle = document.createElement("style");

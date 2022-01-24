@@ -11,34 +11,9 @@ class myReportedMascots extends HTMLElement {
     connectedCallback() {
         this.render();
     }
-    render() {
+    listeners() {
 
         const currentState = state.getState();
-        const divEl = document.createElement('div');
-        divEl.className = 'general-container';
-        const style = document.createElement('style');
-
-        style.innerHTML = `
-        .main-body {
-            display: flex;
-            flex-direction: column;
-        }
-        .title {
-            font-size: 32px;
-            align-self: center;
-        }
-        `;
-
-        divEl.innerHTML = `
-            <header-component></header-component>
-            <div class="main-body">
-                <h2 class="title"> Mis mascotas reportadas </h2>
-                <div class="reported-mascots"></div>
-            </div>
-        `;
-        this.shadow.appendChild(divEl);
-        this.shadow.appendChild(style);
-
         const reportedMascots = this.shadow.querySelector(".reported-mascots");
         const reportedMascotsStyle = document.createElement("style");
         state.allReportedPetsByAUser(() => {
@@ -81,13 +56,13 @@ class myReportedMascots extends HTMLElement {
                 })
     
             } else {
-    
+                
                 reportedMascots.innerHTML = `  
                     ${currentState["myReportedPets"].map((pet) => 
-                    
-                    `<lost-pet-card class="pet" pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></lost-pet-card>`
+
+                    `<my-lost-pets pet-id=${pet['id']} class="pet" pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></my-lost-pets>`
                 ).join("")}`;
-    
+
                 reportedMascotsStyle.innerHTML = `
                     .reported-mascots {
                         display: flex;
@@ -141,12 +116,39 @@ class myReportedMascots extends HTMLElement {
                         text-decoration: underline;
                     }
                 `;
-                // this.listeners();
             }
         });
 
         this.shadow.appendChild(reportedMascots);
         this.shadow.appendChild(reportedMascotsStyle);
+    }
+    render() {
+
+        const divEl = document.createElement('div');
+        divEl.className = 'general-container';
+        const style = document.createElement('style');
+
+        style.innerHTML = `
+        .main-body {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            font-size: 32px;
+            align-self: center;
+        }
+        `;
+
+        divEl.innerHTML = `
+            <header-component></header-component>
+            <div class="main-body">
+                <h2 class="title"> Mis mascotas reportadas </h2>
+                <div class="reported-mascots"></div>
+            </div>
+        `;
+        this.shadow.appendChild(divEl);
+        this.shadow.appendChild(style);
+        this.listeners();
     }
 }
 

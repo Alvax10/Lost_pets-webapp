@@ -95,79 +95,186 @@ export class Header extends HTMLElement {
             const menuOpen = this.shadow.querySelector('.menu-open');
             menuOpen.addEventListener('click', (e) => {
                 e.preventDefault();
-    
-                if (currentState["email"] == '') {
+            
+                const myData = this.shadow.querySelector('.mis-datos');
+                myData.addEventListener('click',(e) => {
+                    e.preventDefault();
+                    
+                    if (currentState["email"] == '') {
 
-                    const divNotification = document.createElement('div');
-                    divNotification.className = 'notification';
-                    const notificationStyle = document.createElement('style');
-    
-                    notificationStyle.innerHTML = `
-                    .notification {
-                        top: 30%;
-                        left: 15%;
-                        width: 250px;
-                        height: 115px;
-                        border-radius: 4px;
-                        padding: 10px 10px;
-                        position: absolute;
-                        background-color: #FF6868;
-                    }
-                    .alert {
-                        font-size: 24px;
-                    }
-                    .login-button {
-                        width: 270px;
-                        height: 50px;
-                        margin: -5px -10px;
-                        border-style: none;
-                        border-radius: 4px;
-                        background-color: #FF9DF5;
-                    }
-                    @media (min-width: 800px) {
+                        currentState["locationBefore"] = "/mis-datos/registrarse";
+                        const divNotification = document.createElement('div');
+                        divNotification.className = 'notification';
+                        const notificationStyle = document.createElement('style');
+        
+                        notificationStyle.innerHTML = `
                         .notification {
-                            left: 35%;
+                            top: 30%;
+                            left: 15%;
+                            width: 250px;
+                            height: 115px;
+                            border-radius: 4px;
+                            padding: 10px 10px;
+                            position: absolute;
+                            background-color: #FF6868;
                         }
+                        .alert {
+                            font-size: 24px;
+                        }
+                        .login-button {
+                            width: 270px;
+                            height: 50px;
+                            margin: -5px -10px;
+                            border-style: none;
+                            border-radius: 4px;
+                            background-color: #FF9DF5;
+                        }
+                        @media (min-width: 800px) {
+                            .notification {
+                                left: 35%;
+                            }
+                        }
+                    `;
+    
+                    divNotification.innerHTML = `
+                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
+                        <button class="login-button"> Loguearme </button>
+                    `;  
+        
+                        this.shadow.appendChild(divNotification);
+                        this.shadow.appendChild(notificationStyle);
+        
+                        const loginButton = this.shadow.querySelector('.login-button');
+                        loginButton.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            Router.go("/login-1");
+                        });
+    
                     }
-                `;
+                    else {
+                        Router.go("/mis-datos/registrarse")
+                    }
+                });
+        
+                const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
+                myMascotsReported.addEventListener('click',(e) => {
+                    e.preventDefault();
+                    
+                    if (currentState["email"] == '') {
 
-                divNotification.innerHTML = `
-                    <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                    <button class="login-button"> Loguearme </button>
-                `;  
+                        currentState["locationBefore"] = "/mis-mascotas-reportadas";
+                        const divNotification = document.createElement('div');
+                        divNotification.className = 'notification';
+                        const notificationStyle = document.createElement('style');
+        
+                        notificationStyle.innerHTML = `
+                        .notification {
+                            top: 30%;
+                            left: 15%;
+                            width: 250px;
+                            height: 115px;
+                            border-radius: 4px;
+                            padding: 10px 10px;
+                            position: absolute;
+                            background-color: #FF6868;
+                        }
+                        .alert {
+                            font-size: 24px;
+                        }
+                        .login-button {
+                            width: 270px;
+                            height: 50px;
+                            margin: -5px -10px;
+                            border-style: none;
+                            border-radius: 4px;
+                            background-color: #FF9DF5;
+                        }
+                        @media (min-width: 800px) {
+                            .notification {
+                                left: 35%;
+                            }
+                        }
+                    `;
     
-                    this.shadow.appendChild(divNotification);
-                    this.shadow.appendChild(notificationStyle);
+                    divNotification.innerHTML = `
+                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
+                        <button class="login-button"> Loguearme </button>
+                    `;  
+        
+                        this.shadow.appendChild(divNotification);
+                        this.shadow.appendChild(notificationStyle);
+        
+                        const loginButton = this.shadow.querySelector('.login-button');
+                        loginButton.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            Router.go("/login-1");
+                        });
     
-                    const loginButton = this.shadow.querySelector('.login-button');
-                    loginButton.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        Router.go("/login-1");
-                    });
+                    } else {
 
-                } else {
-            
-                    const myData = this.shadow.querySelector('.mis-datos');
-                    myData.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
-                        Router.go("/mis-datos/registrarse");
-                    });
-            
-                    const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
-                    myMascotsReported.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
                         Router.go("/mis-mascotas-reportadas");
-                    });
-            
-                    const reportMascot = this.shadow.querySelector('.reportar-mascotas');
-                    reportMascot.addEventListener('click',(e) => {
-                        e.preventDefault();
-            
+                    }
+                });
+        
+                const reportMascot = this.shadow.querySelector('.reportar-mascotas');
+                reportMascot.addEventListener('click',(e) => {
+                    e.preventDefault();
+                    
+                    if (currentState["email"] == '') {
+
+                        currentState["locationBefore"] = "/reportar-mascota";
+                        const divNotification = document.createElement('div');
+                        divNotification.className = 'notification';
+                        const notificationStyle = document.createElement('style');
+        
+                        notificationStyle.innerHTML = `
+                        .notification {
+                            top: 30%;
+                            left: 15%;
+                            width: 250px;
+                            height: 115px;
+                            border-radius: 4px;
+                            padding: 10px 10px;
+                            position: absolute;
+                            background-color: #FF6868;
+                        }
+                        .alert {
+                            font-size: 24px;
+                        }
+                        .login-button {
+                            width: 270px;
+                            height: 50px;
+                            margin: -5px -10px;
+                            border-style: none;
+                            border-radius: 4px;
+                            background-color: #FF9DF5;
+                        }
+                        @media (min-width: 800px) {
+                            .notification {
+                                left: 35%;
+                            }
+                        }
+                    `;
+    
+                    divNotification.innerHTML = `
+                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
+                        <button class="login-button"> Loguearme </button>
+                    `;  
+        
+                        this.shadow.appendChild(divNotification);
+                        this.shadow.appendChild(notificationStyle);
+        
+                        const loginButton = this.shadow.querySelector('.login-button');
+                        loginButton.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            Router.go("/login-1");
+                        });
+    
+                    } else {
+
                         Router.go("/reportar-mascota");
-                    });
-                }
+                    }
+                });
             });
     
             const closeButton = this.shadow.querySelector('.close-button');
@@ -179,6 +286,21 @@ export class Header extends HTMLElement {
                         display: none;
                     }
                 `;
+            });
+
+            burgerMenu.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuStyle.innerHTML =  `
+                    .menu {
+                        display: inherit;
+                    }
+                `;
+            });
+
+            const logoHome = this.shadow.querySelector(".img");
+            logoHome.addEventListener('click', (e) => {
+                e.preventDefault();
+                Router.go("/home");
             });
         });
     }

@@ -66,11 +66,13 @@ class reportMascot extends HTMLElement {
                     <div id="map" style="width: 620px; height: 335px;"></div>
                 </label>
 
+                <button class="button"> Marcar Ubicación </button>
+
                 <div id="dropzone" class="pet-photo-container">
                     <p class="pet-photo"> Foto de la Mascota </p>
                 </div>
 
-                <button class="button"> Reportar Mascota </button>
+                <button class="report-button"> Reportar Mascota </button>
             </form>
         `;
 
@@ -122,7 +124,7 @@ class reportMascot extends HTMLElement {
                 width: 330px;
                 height: 40px;
             }
-            .button {
+            .report-button, .button {
                 width: 300px;
                 height: 50px;
                 border: none;
@@ -150,6 +152,7 @@ class reportMascot extends HTMLElement {
 
             let ImageDataURL;
             const map = this.shadow.getElementById('map');
+            const sendLocButton = this.shadow.querySelector(".button");
             const reportPetForm = this.shadow.querySelector(".form");
             const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
 
@@ -175,7 +178,7 @@ class reportMascot extends HTMLElement {
             }
     
             function initSearchForm(callback) {
-                reportPetForm.addEventListener('submit', (e) => {
+                sendLocButton.addEventListener('click', (e) => {
                     e.preventDefault();
     
                     mapboxClient.geocodeForward(

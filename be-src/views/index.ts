@@ -3,8 +3,8 @@ import { Mascot } from "../models/user-mascot";
 import * as express from "express";
 import * as cors from "cors";
 import * as path from "path";
-import { findOrCreateUser, verifyAuth, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
-import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom } from "../controllers/mascot-controller";
+import { findOrCreateUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
+import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
 import * as sgMail from "@sendgrid/mail";
 
 const app = express();
@@ -13,9 +13,53 @@ const port = process.env.PORT || 3011;
 app.use(express.json({ limit: "75mb" }));
 app.use(cors());
 
+
+//Eliminate mascot
+app.delete("/eliminate-mascot", async(req, res) => {
+    const { mascotId } = req.body;
+
+    if (mascotId) {
+
+        await eliminateMascot(mascotId)
+        .then((res) => {
+            return res;
+        })
+        .catch((err) => {
+            console.log("Este es el error de eliminate mascot");
+        });
+
+    } else {
+        res.status(400).json({ message: "Faltan datos en el body!" });
+    }
+});
+
+// Update mascot info
+app.patch("/update-mascot-info", async(req, res) => {
+    const { mascotId, petName, petPhoto, mascotLocation } = req.body;
+    console.log("Este es el endpoint de actualizar mascot info");
+
+    if (mascotId && petName | petPhoto | mascotLocation) {
+
+        const dataUpdated = await updateProfile(mascotId, petName, petPhoto, mascotLocation)
+        .catch((err) => {
+            console.log(err);
+        });
+
+        console.log(dataUpdated);
+        res.json(dataUpdated);
+        return dataUpdated;
+
+    } else {
+        res.status(400).json({ message: "Faltan datos en el body!" });
+    }
+});
+
+
 // Send an email to other user
 app.post("/send-email-to-user", async(req, res) => {
     const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario } = req.body;
+
+    console.log("Este es el endpoint de 'mandar email'")
 
     if (OtherUserEmail && userEmail && petName && newLocation && numeroDelUsuario) {
 
@@ -48,6 +92,8 @@ app.post("/send-email-to-user", async(req, res) => {
 app.get("/mascots-close-from", async (req, res) => {
     const { lat, lng } = req.query;
 
+    console.log("Este es el endpoint de 'mascotas cerca'")
+
     if (lat && lng) {
 
         const hits = await mascotsCloseFrom(lat, lng)
@@ -68,6 +114,8 @@ app.get("/mascots-close-from", async (req, res) => {
 app.get("/user/reported-mascots", async(req, res) => {
     const { email } = req.query;
 
+    console.log("Este es el endpoint de 'mis mascotas reportadas'")
+
     if (email) {
         const allReportedPets = await allReportedPetsByAUser(email)
         .catch((err) => {
@@ -87,7 +135,7 @@ app.get("/user/reported-mascots", async(req, res) => {
 app.post("/report/mascot", async(req, res) => {
     const { petName, _geoloc, ImageDataURL, email } = req.body;
 
-    console.log(req.body);
+    console.log("Este es el endpoint de 'reportar mascotas'")
 
     if ( petName && _geoloc && ImageDataURL && email) {
 
@@ -106,6 +154,8 @@ app.post("/report/mascot", async(req, res) => {
 app.patch("/user/data", async(req, res) => {
     const { email, newPassword } = req.body;
 
+    console.log("Este es el endpoint de 'user data'")
+
     if (email && newPassword) {
         await updateUserData(email, newPassword);
         await res.json({ message: 'updated succesfully' });
@@ -118,6 +168,8 @@ app.patch("/user/data", async(req, res) => {
 // Complete user Info
 app.post("/update/user/info", async(req, res) => {
     const { email, phone_number, username } = req.body;
+
+    console.log("Este es el endpoint de 'reportar mascotas'")
 
     if (email && phone_number && username) {
 
@@ -133,6 +185,8 @@ app.post("/update/user/info", async(req, res) => {
 app.post("/verify/user", async(req, res) => {
     const { email } = req.body;
 
+    console.log("Este es el endpoint de 'verify user'")
+
     if (email) {
         const response = await verifyIfUserExists(email);
         await res.json( response );
@@ -145,6 +199,8 @@ app.post("/verify/user", async(req, res) => {
 // Sign In
 app.post("/auth/token", async(req, res) => {
     const { email, password } = req.body;
+
+    console.log("Este es el endpoint de 'auth token'")
 
     if (req.body) {
 
@@ -159,6 +215,8 @@ app.post("/auth/token", async(req, res) => {
 // Sign Up
 app.post("/auth", async (req, res) => {
     const { email, password } = req.body;
+
+    console.log("Este es el endpoint de 'auth'")
     
     if (req.body) {
         const response = await findOrCreateUser(email, password);
@@ -172,6 +230,8 @@ app.post("/auth", async (req, res) => {
 // Finds all users
 app.get("/users", async(req, res) => {
 
+    console.log("Este es el endpoint de 'all users'")
+
     const users = await User.findAll();
     await res.json({ users });
 });
@@ -180,6 +240,8 @@ app.get("/users", async(req, res) => {
 app.get("/user", async(req, res) => {
     const { user_id } = req.body;
 
+    console.log("Este es el endpoint de 'user'")
+
     const user = await User.findByPk(user_id);
     await res.json({ user });
 });
@@ -187,32 +249,34 @@ app.get("/user", async(req, res) => {
 // Finds all mascots
 app.get("/mascots", async(req, res) => {
 
+    console.log("Este es el endpoint de 'all mascots'")
+
     const mascots = await Mascot.findAll();
     await res.json(mascots);
 });
 
 // Shows the info of a user
-app.get("/me", verifyAuth , async (req, res) => {
+// app.get("/me", verifyAuth , async (req, res) => {
     
-    if (req) {
+//     if (req) {
 
-        const data = req._user;
-        const userData = await User.findByPk(data['id']);
-        await res.json({
-            id: userData['id'],
-            email: userData['email'],
-            user_name: userData['user_name']
-        });
+//         const data = req._user;
+//         const userData = await User.findByPk(data['id']);
+//         await res.json({
+//             id: userData['id'],
+//             email: userData['email'],
+//             user_name: userData['user_name']
+//         });
 
-    } else {
-        res.status(404).json({
-            message: 'Faltan datos o los datos no coinciden',
-        });
-    }
-});
+//     } else {
+//         res.status(404).json({
+//             message: 'Faltan datos o los datos no coinciden',
+//         });
+//     }
+// });
 
 const relativeRoute = path.resolve(__dirname + "../../../dist");
-app.get("*", app.use(express.static(relativeRoute)));
+app.use(express.static(relativeRoute));
 
 app.get("*", (req, res) => {
     res.sendFile(relativeRoute + "/index.html");

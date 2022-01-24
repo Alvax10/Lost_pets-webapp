@@ -2,6 +2,14 @@ import { Mascot, User } from "../models/user-mascot";
 import { cloudinary } from "../lib/cloudinary";
 import { index } from "../lib/algolia";
 
+export async function eliminateMascot(mascotId) {
+
+    const mascotFound = await Mascot.findByPk(mascotId);
+    await mascotFound.destroy();
+
+    return console.log("Mascot eliminated");
+}
+
 export async function mascotsCloseFrom(lat, lng) {
 
     if (lat && lng) {
@@ -92,12 +100,12 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 }
 
 // update profile
-export async function updateProfile(mascotId, updateData) {
+export async function updateProfile(mascotId, petName, petPhoto, mascotLocation) {
 
-    if (updateData.imageDataURL) {
+    if (petPhoto) {
 
         const imagen = await cloudinary.uploader.upload(
-            updateData.imageDataURL,
+            petPhoto,
             {
                 resource_type: 'image',
                 discard_original_filename: true,
@@ -110,8 +118,8 @@ export async function updateProfile(mascotId, updateData) {
         });
 
         const updateDataComplete = {
-            name: updateData.name,
-            _geoloc: updateData._geoloc,
+            name: petName,
+            _geoloc: mascotLocation,
             ImageDataURL: imagen["secure_url"],
         };
 

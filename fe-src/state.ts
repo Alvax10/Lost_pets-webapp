@@ -1,5 +1,5 @@
-// const API_BASE_URL = "http://localhost:3011";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "http://localhost:3011";
+// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
@@ -14,6 +14,7 @@ const state = {
         locationBefore: '/',
         myReportedPets: [],
         lostPetsAround: [],
+        mascotId: 0,
     },
     listeners: [],
     init() {
@@ -25,6 +26,49 @@ const state = {
     },
     getState() {
         return this.data;
+    },
+    async eliminateMascot() {
+        const currentState = this.getState();
+        const mascotId = currentState["mascotId"];
+
+        if (mascotId) {
+
+            const eliminatePet = fetch(API_BASE_URL + "/eliminate-mascot", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mascotId }),
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data);
+            });
+        }
+    },
+    async updateMascotInfo(petPhoto, petName, mascotLocation) {
+        const currentState = this.getState();
+        const mascotId = currentState["mascotId"];
+        const updateData = { petName, petPhoto, mascotLocation };
+
+        if (mascotId && petName | petPhoto | mascotLocation) {
+
+            const updatedData = await fetch(API_BASE_URL + "/update-mascot-info", {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mascotId, petName, petPhoto, mascotLocation }),
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Se actualizó la info: ",data);
+            });
+        }
     },
     async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario) {
 
