@@ -288,16 +288,7 @@ export class Header extends HTMLElement {
                 `;
             });
 
-            burgerMenu.addEventListener('click', (e) => {
-                e.preventDefault();
-                menuStyle.innerHTML =  `
-                    .menu {
-                        display: inherit;
-                    }
-                `;
-            });
-
-            const logoHome = this.shadow.querySelector(".img");
+            const logoHome = this.shadow.querySelector(".logo");
             logoHome.addEventListener('click', (e) => {
                 e.preventDefault();
                 Router.go("/home");
@@ -328,7 +319,7 @@ export class Header extends HTMLElement {
 
         divEl.innerHTML = `
             <header class="header">
-                <img class="img" src="${logo}" alt="logo">
+                <img class="img logo" src="${logo}" alt="logo">
                 <img class="img menu" src="${burgerMenu}" alt="menu" >
             </header>
         `;
