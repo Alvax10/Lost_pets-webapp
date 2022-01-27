@@ -27,7 +27,7 @@ const state = {
     getState() {
         return this.data;
     },
-    async eliminateMascot() {
+    async eliminateMascot(callback) {
         const currentState = this.getState();
         const mascotId = currentState["mascotId"];
 
@@ -47,8 +47,9 @@ const state = {
                 console.log(data);
             });
         }
+        callback();
     },
-    async updateMascotInfo(petPhoto, petName, mascotLocation) {
+    async updateMascotInfo(petPhoto, petName, mascotLocation, callback) {
         const currentState = this.getState();
         const mascotId = currentState["mascotId"];
 
@@ -68,25 +69,19 @@ const state = {
                 console.log("Se actualizó la info: ",data);
             });
         }
+        callback();
     },
-    async sendEmailWithInfo(newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario) {
+    async sendEmailWithInfo(OtherUserEmail, petName, newLocation, userEmail, numeroDelUsuario) {
 
         const sendEmailToUser = await fetch(API_BASE_URL + "/send-email-to-user", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ newLocation, petName, OtherUserEmail, userEmail, numeroDelUsuario }),
+            body: JSON.stringify({ OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario }),
         })
-        .then((res) => { return res.json() })
-        .then((data) => {
-
-            console.log(data);
+        .then(() => {
             console.log("Email enviado! :D");
-        })
-        .catch((err) => {
-
-            console.log("Este es el error de send email: ", err);
         });
     },
     async mascotCloseFrom(callback) {
@@ -101,11 +96,8 @@ const state = {
 
             console.log("Esta es la data de mascotas cerca de: ", data);
             currentState["lostPetsAround"] = data;
-        })
-        .catch((err) => {
-
-            console.log("Este es el error de mascots close from: ", err);
         });
+
         callback();
 
     },
@@ -120,16 +112,9 @@ const state = {
            },
            body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
         })
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            
-           console.log(data);
-        })
-        .catch((err) => {
+        .then(() => {
 
-            console.log("Este es el error de report mascot: ", err);
+            console.log("Mascota reportada! :D");
         });
 
         callback();
@@ -154,9 +139,6 @@ const state = {
                 } else {
                     console.log("No reportaste mascotas");
                 }
-            })
-            .catch((err) => {
-                console.log("Este es el error de mascots reported by a user: ", err);
             });
             
             callback();
@@ -180,9 +162,6 @@ const state = {
         })
         .then((data) => {
             console.log("Esta es la data de modifyUserInfo: " + data);
-        })
-        .catch((err) => {
-            console.log("Este es el error de modify user info: ", err);
         });
     },
     async signUpUser(password) {
@@ -199,9 +178,6 @@ const state = {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-            })
-            .catch((err) => {
-                console.log("Este es el error de sign up user: ", err);
             });
         }
     },
@@ -225,9 +201,6 @@ const state = {
             .then((data) => {
                 // console.log("User exists: ", data);
                 currentState['userExists'] = data;
-            })
-            .catch((err) => {
-                console.log("Este es el error de check if user exists: ", err);
             });
         }
         callback();
@@ -250,9 +223,6 @@ const state = {
             })
             .then((data) => {
                 return data;
-            })
-            .catch((err) => {
-                console.log("Este es el error de sign in user: ", err);
             });
 
             callback();

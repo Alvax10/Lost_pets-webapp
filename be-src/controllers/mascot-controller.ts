@@ -6,6 +6,7 @@ export async function eliminateMascot(mascotId) {
 
     const mascotFound = await Mascot.findByPk(mascotId);
     await mascotFound.destroy();
+    await index.delete(mascotFound);
 
     return console.log("Mascot eliminated");
 }
@@ -16,7 +17,6 @@ export async function mascotsCloseFrom(lat, lng) {
 
         const hits = await index.search("", {
             aroundLatLng: [lat, lng].join(','),
-            aroundRadius: 10000,
         });
 
         return hits["hits"];

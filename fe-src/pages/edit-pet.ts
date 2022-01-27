@@ -135,7 +135,6 @@ class EditPet extends HTMLElement {
 
         divEl.innerHTML = `
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-        <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
             <header-component></header-component>
             <div class="main-body">
@@ -174,9 +173,10 @@ class EditPet extends HTMLElement {
 
         let ImageDataURL;
         const map = this.shadow.getElementById('map');
-        const sendLocButton = this.shadow.querySelector(".button");
         const reportPetForm = this.shadow.querySelector(".form");
+        const sendLocButton = this.shadow.querySelector(".button");
         const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
+        const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
 
         const dropzoneEl = this.shadow.getElementById('dropzone');
         const myDropzone = new Dropzone(dropzoneEl, {
@@ -204,7 +204,7 @@ class EditPet extends HTMLElement {
                 e.preventDefault();
     
                 mapboxClient.geocodeForward(
-                    e["target"]['q'].value,
+                    locationValue.value,
                     {
                     autocomplete: true,
                     language: "es",
@@ -248,8 +248,11 @@ class EditPet extends HTMLElement {
                         
                     console.log("Clickeaste en editar mascota");
                     // ACA SE TIENE QUE ACTUALIZAR LA MASCOTA
-                    state.updateMascotInfo(petPhoto, petName, mascotLocation);
-                    Router.go("/home");
+                    state.updateMascotInfo(petPhoto, petName, mascotLocation, () => {
+
+                        console.log("Editaste la mascota");
+                        Router.go("/home");
+                    });
                 });
             });
         })();
@@ -259,8 +262,11 @@ class EditPet extends HTMLElement {
             e.preventDefault();
 
             // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
-            state.eliminateMascot();
-            Router.go("/mis-mascotas-reportadas");
+            state.eliminateMascot(() => {
+                
+                console.log("Eliminaste la mascota");
+                Router.go("/mis-mascotas-reportadas");
+            });
         });
     }
 }

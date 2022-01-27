@@ -5,7 +5,7 @@ import * as cors from "cors";
 import * as path from "path";
 import { findOrCreateUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
-import * as sgMail from "@sendgrid/mail";
+import { sendEmailToUser } from "../lib/sendgrid";
 
 const app = express();
 const port = process.env.PORT || 3011;
@@ -59,32 +59,26 @@ app.patch("/update-mascot-info", async(req, res) => {
 app.post("/send-email-to-user", async(req, res) => {
     const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario } = req.body;
 
-    console.log("Este es el endpoint de 'mandar email'")
+    console.log("Este es el endpoint de 'mandar email'");
+    console.log({
+        OtherUserEmail: OtherUserEmail,
+        userEmail: userEmail,
+        petName: petName,
+        newLocation: newLocation,
+        numeroDelUsuario: numeroDelUsuario
+    });
 
     if (OtherUserEmail && userEmail && petName && newLocation && numeroDelUsuario) {
 
-        await sgMail.setApiKey(process.env.API_KEY_SENDGRIND);
-        const msg = {
-            to: OtherUserEmail,
-            from: userEmail,
-            subject: `Informacion reportada sobre ${petName}`,
-            text: `este es el numero de la persona que lo vió: ${numeroDelUsuario}`,
-            html: `<strong> Tu mascota fue vista en ${newLocation},
-            este es el numero de la persona que lo vió: ${numeroDelUsuario} </strong>`,
-        }
-        const enviarMail = await sgMail.send(msg)
-        .then(() => {
-            console.log('El email fue enviado correctamente');
-        })
-        .catch((error) => {
-            console.error("Este es el error al mandar el mail: ",error)
-        });
-        
+        try {
 
-        res.json(enviarMail);
+            await sendEmailToUser(OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario)
+        } catch(err) {
+            console.log("Este es el error de send email: ", err);
+        }
 
     } else {
-        res.status(400).json({ message: "Faltan datos en el body!" })
+        res.status(400).json({ message: "Faltan datos en el body!" });
     }
 });
 
@@ -101,7 +95,7 @@ app.get("/mascots-close-from", async (req, res) => {
             console.log("Este es el error de mascots close from: ", err);
         });
         
-        console.log(hits);
+        // console.log(hits);
         res.json(hits);
         return hits;
 

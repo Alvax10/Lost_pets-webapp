@@ -48,7 +48,6 @@ class reportMascot extends HTMLElement {
 
         reportedMascots.innerHTML = `
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-        <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
             <h2 class="title-pet"> Reportar mascota perdida </h2>
 
@@ -100,7 +99,7 @@ class reportMascot extends HTMLElement {
                 align-items: center;
             }
             .pet-photo-container {
-                margin: 20px;
+                margin: 35px;
                 width: 300px;
                 height: 150px;
                 display: flex;
@@ -128,6 +127,7 @@ class reportMascot extends HTMLElement {
                 width: 300px;
                 height: 50px;
                 border: none;
+                cursor: pointer;
                 margin-top: 15px;
                 border-radius: 4px;
                 align-self: center;
@@ -154,6 +154,7 @@ class reportMascot extends HTMLElement {
             const map = this.shadow.getElementById('map');
             const sendLocButton = this.shadow.querySelector(".button");
             const reportPetForm = this.shadow.querySelector(".form");
+            const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
             const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
 
             const dropzoneEl = this.shadow.getElementById('dropzone');
@@ -182,7 +183,7 @@ class reportMascot extends HTMLElement {
                     e.preventDefault();
     
                     mapboxClient.geocodeForward(
-                        e["target"]['q'].value,
+                        locationValue.value,
                         {
                         autocomplete: true,
                         language: "es",

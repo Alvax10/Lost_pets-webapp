@@ -18,13 +18,54 @@ export class Header extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
-        const burgerMenu = this.shadow.querySelector(".menu");
-        burgerMenu.addEventListener('click', () => {
-    
-            const menuDiv = document.createElement('div');
+        const menuDiv = document.createElement('div');
             menuDiv.className = 'menu-open';
     
             const menuStyle = document.createElement('style');
+            menuStyle.innerHTML = `
+                .menu-open {
+                    display: none;
+                }
+            `;
+    
+            menuDiv.innerHTML = `
+            <img class="close-button" src="${xButton}" alt="x-button">
+            <div class="opciones">
+                <h3 class="mis-datos"> Mis Datos / Registrarse </h3>
+                <h3 class="mis-mascotas-reportadas"> Mis mascotas reportadas </h3>
+                <h3 class="reportar-mascotas"> Reportar mascotas </h3>
+            </div>
+            <div class="sesion">
+                <p class="email"> ${currentState["email"]} </p>
+                <p class="cerrar-sesion"> Cerrar sesión </p>
+            </div>
+            `;
+    
+        this.shadow.appendChild(menuDiv);
+        this.shadow.appendChild(menuStyle);
+
+        const divNotification = document.createElement('div');
+        divNotification.className = 'notification';
+        const notificationStyle = document.createElement('style');
+        
+        notificationStyle.innerHTML = `
+            .notification {
+                display: none;
+            }
+        `;
+    
+        divNotification.innerHTML = `
+            <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
+            <button class="login-button"> Loguearme </button>
+        `;  
+        
+        this.shadow.appendChild(divNotification);
+        this.shadow.appendChild(notificationStyle);
+
+        const burgerHamMenu = this.shadow.querySelector(".menu");
+        burgerHamMenu.addEventListener('click', (ev) => {
+            ev.preventDefault();
+
             menuStyle.innerHTML = `
             .menu-open {
                 top: 0%;
@@ -40,6 +81,7 @@ export class Header extends HTMLElement {
                 width: 30px;
                 height: 30px;
                 padding: 20px;
+                cursor: pointer;
                 align-self: flex-end;
             }
             .opciones {
@@ -65,6 +107,7 @@ export class Header extends HTMLElement {
             }
             .cerrar-sesion {
                 color: #C6558B;
+                cursor: pointer;
                 align-self: center;
                 justify-content: center;
                 text-decoration-line: underline;
@@ -75,224 +118,160 @@ export class Header extends HTMLElement {
                 }
             }
             `;
-    
-            menuDiv.innerHTML = `
-            <img class="close-button" src="${xButton}" alt="x-button">
-            <div class="opciones">
-                <h3 class="mis-datos"> Mis Datos / Registrarse </h3>
-                <h3 class="mis-mascotas-reportadas"> Mis mascotas reportadas </h3>
-                <h3 class="reportar-mascotas"> Reportar mascotas </h3>
-            </div>
-            <div class="sesion">
-                <p class="email"> ${currentState["email"]} </p>
-                <p class="cerrar-sesion"> Cerrar sesión </p>
-            </div>
-            `;
-    
-            this.shadow.appendChild(menuDiv);
-            this.shadow.appendChild(menuStyle);
-    
-            const menuOpen = this.shadow.querySelector('.menu-open');
-            menuOpen.addEventListener('click', (e) => {
-                e.preventDefault();
+
+        });
             
-                const myData = this.shadow.querySelector('.mis-datos');
-                myData.addEventListener('click',(e) => {
-                    e.preventDefault();
+        const myData = this.shadow.querySelector('.mis-datos');
+        myData.addEventListener('click',(e) => {
+            e.preventDefault();
                     
-                    if (currentState["email"] == '') {
+            if (currentState["email"] == '') {
 
-                        currentState["locationBefore"] = "/mis-datos/registrarse";
-                        const divNotification = document.createElement('div');
-                        divNotification.className = 'notification';
-                        const notificationStyle = document.createElement('style');
-        
-                        notificationStyle.innerHTML = `
+                currentState["locationBefore"] = "/mis-datos/registrarse";
+                notificationStyle.innerHTML = `
+                    .notification {
+                        top: 30%;
+                        left: 15%;
+                        width: 250px;
+                        height: 115px;
+                        border-radius: 4px;
+                        padding: 10px 10px;
+                        position: absolute;
+                        background-color: #FF6868;
+                    }
+                    .alert {
+                        font-size: 24px;
+                    }
+                    .login-button {
+                        width: 270px;
+                        height: 50px;
+                        margin: -5px -10px;
+                        border-style: none;
+                        border-radius: 4px;
+                        background-color: #FF9DF5;
+                    }
+                    @media (min-width: 800px) {
                         .notification {
-                            top: 30%;
-                            left: 15%;
-                            width: 250px;
-                            height: 115px;
-                            border-radius: 4px;
-                            padding: 10px 10px;
-                            position: absolute;
-                            background-color: #FF6868;
+                            left: 35%;
                         }
-                        .alert {
-                            font-size: 24px;
-                        }
-                        .login-button {
-                            width: 270px;
-                            height: 50px;
-                            margin: -5px -10px;
-                            border-style: none;
-                            border-radius: 4px;
-                            background-color: #FF9DF5;
-                        }
-                        @media (min-width: 800px) {
-                            .notification {
-                                left: 35%;
-                            }
-                        }
-                    `;
-    
-                    divNotification.innerHTML = `
-                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                        <button class="login-button"> Loguearme </button>
-                    `;  
-        
-                        this.shadow.appendChild(divNotification);
-                        this.shadow.appendChild(notificationStyle);
-        
-                        const loginButton = this.shadow.querySelector('.login-button');
-                        loginButton.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            Router.go("/login-1");
-                        });
-    
-                    }
-                    else {
-                        Router.go("/mis-datos/registrarse")
-                    }
-                });
-        
-                const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
-                myMascotsReported.addEventListener('click',(e) => {
-                    e.preventDefault();
-                    
-                    if (currentState["email"] == '') {
-
-                        currentState["locationBefore"] = "/mis-mascotas-reportadas";
-                        const divNotification = document.createElement('div');
-                        divNotification.className = 'notification';
-                        const notificationStyle = document.createElement('style');
-        
-                        notificationStyle.innerHTML = `
-                        .notification {
-                            top: 30%;
-                            left: 15%;
-                            width: 250px;
-                            height: 115px;
-                            border-radius: 4px;
-                            padding: 10px 10px;
-                            position: absolute;
-                            background-color: #FF6868;
-                        }
-                        .alert {
-                            font-size: 24px;
-                        }
-                        .login-button {
-                            width: 270px;
-                            height: 50px;
-                            margin: -5px -10px;
-                            border-style: none;
-                            border-radius: 4px;
-                            background-color: #FF9DF5;
-                        }
-                        @media (min-width: 800px) {
-                            .notification {
-                                left: 35%;
-                            }
-                        }
-                    `;
-    
-                    divNotification.innerHTML = `
-                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                        <button class="login-button"> Loguearme </button>
-                    `;  
-        
-                        this.shadow.appendChild(divNotification);
-                        this.shadow.appendChild(notificationStyle);
-        
-                        const loginButton = this.shadow.querySelector('.login-button');
-                        loginButton.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            Router.go("/login-1");
-                        });
-    
-                    } else {
-
-                        Router.go("/mis-mascotas-reportadas");
-                    }
-                });
-        
-                const reportMascot = this.shadow.querySelector('.reportar-mascotas');
-                reportMascot.addEventListener('click',(e) => {
-                    e.preventDefault();
-                    
-                    if (currentState["email"] == '') {
-
-                        currentState["locationBefore"] = "/reportar-mascota";
-                        const divNotification = document.createElement('div');
-                        divNotification.className = 'notification';
-                        const notificationStyle = document.createElement('style');
-        
-                        notificationStyle.innerHTML = `
-                        .notification {
-                            top: 30%;
-                            left: 15%;
-                            width: 250px;
-                            height: 115px;
-                            border-radius: 4px;
-                            padding: 10px 10px;
-                            position: absolute;
-                            background-color: #FF6868;
-                        }
-                        .alert {
-                            font-size: 24px;
-                        }
-                        .login-button {
-                            width: 270px;
-                            height: 50px;
-                            margin: -5px -10px;
-                            border-style: none;
-                            border-radius: 4px;
-                            background-color: #FF9DF5;
-                        }
-                        @media (min-width: 800px) {
-                            .notification {
-                                left: 35%;
-                            }
-                        }
-                    `;
-    
-                    divNotification.innerHTML = `
-                        <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
-                        <button class="login-button"> Loguearme </button>
-                    `;  
-        
-                        this.shadow.appendChild(divNotification);
-                        this.shadow.appendChild(notificationStyle);
-        
-                        const loginButton = this.shadow.querySelector('.login-button');
-                        loginButton.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            Router.go("/login-1");
-                        });
-    
-                    } else {
-
-                        Router.go("/reportar-mascota");
-                    }
-                });
-            });
-    
-            const closeButton = this.shadow.querySelector('.close-button');
-            closeButton.addEventListener('click',(e) => {
-                e.preventDefault();
-    
-                menuStyle.innerHTML = `
-                    .menu-open {
-                        display: none;
                     }
                 `;
+        
+                const loginButton = this.shadow.querySelector('.login-button');
+                loginButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    Router.go("/login-1");
+                });
+    
+            }
+            else {
+                Router.go("/mis-datos/registrarse")
+            }
+        });
+        
+        const myMascotsReported = this.shadow.querySelector('.mis-mascotas-reportadas');
+        myMascotsReported.addEventListener('click',(e) => {
+            e.preventDefault();
+                    
+            if (currentState["email"] == '') {
+
+                currentState["locationBefore"] = "/mis-mascotas-reportadas";
+                notificationStyle.innerHTML = `
+                .notification {
+                    top: 30%;
+                    left: 15%;
+                    width: 250px;
+                    height: 115px;
+                    border-radius: 4px;
+                    padding: 10px 10px;
+                    position: absolute;
+                    background-color: #FF6868;
+                }
+                .alert {
+                    font-size: 24px;
+                }
+                .login-button {
+                    width: 270px;
+                    height: 50px;
+                    margin: -5px -10px;
+                    border-style: none;
+                    border-radius: 4px;
+                    background-color: #FF9DF5;
+                }
+                @media (min-width: 800px) {
+                    .notification {
+                        left: 35%;
+                    }
+                }
+            `;
+
+            const loginButton = this.shadow.querySelector('.login-button');
+            loginButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    Router.go("/login-1");
+                });
+
+            } else {
+                Router.go("/mis-mascotas-reportadas");
+            }
+        });
+        
+        const reportMascot = this.shadow.querySelector('.reportar-mascotas');
+        reportMascot.addEventListener('click',(e) => {
+            e.preventDefault();
+                    
+            if (currentState["email"] == '') {
+
+                currentState["locationBefore"] = "/reportar-mascota";
+                notificationStyle.innerHTML = `
+                .notification {
+                    top: 30%;
+                    left: 15%;
+                    width: 250px;
+                    height: 115px;
+                    border-radius: 4px;
+                    padding: 10px 10px;
+                    position: absolute;
+                    background-color: #FF6868;
+                }
+                .alert {
+                    font-size: 24px;
+                }
+                .login-button {
+                    width: 270px;
+                    height: 50px;
+                    margin: -5px -10px;
+                    border-style: none;
+                    border-radius: 4px;
+                    background-color: #FF9DF5;
+                }
+                @media (min-width: 800px) {
+                    .notification {
+                        left: 35%;
+                    }
+                }
+            `;
+    
+            const loginButton = this.shadow.querySelector('.login-button');
+            loginButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                Router.go("/login-1");
             });
 
-            const logoHome = this.shadow.querySelector(".logo");
-            logoHome.addEventListener('click', (e) => {
-                e.preventDefault();
-                Router.go("/home");
-            });
+        } else {
+            Router.go("/reportar-mascota");
+            }
+        });
+
+        const closeButton = this.shadow.querySelector(".close-button");
+        closeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            menuStyle.innerHTML = `
+                .menu-open {
+                    display: none;
+                }
+            `;
         });
     }
     render() {
@@ -327,6 +306,12 @@ export class Header extends HTMLElement {
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
         this.listeners();
+
+        const logoHome = this.shadow.querySelector(".logo");
+        logoHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            Router.go("/home");
+        });
     }
 }
 

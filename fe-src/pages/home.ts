@@ -128,7 +128,6 @@ class Home extends HTMLElement {
     }
     render() {
 
-        const currentState = state.getState();
         const divEl = document.createElement('div');
         divEl.className = 'general-container';
         const style = document.createElement('style');
