@@ -102,8 +102,6 @@ class myData extends HTMLElement {
 
         const primerContraseñaInput = (this.shadow.querySelector(".input-password") as HTMLInputElement);
         const segundaContraseñaInput = (this.shadow.querySelector(".input-password-2") as HTMLInputElement);
-        currentState["locationBefore"] = "/login-1";
-
         
         const formEl = this.shadow.querySelector('.form');
         formEl.addEventListener('submit', (e) => {
@@ -128,7 +126,7 @@ class myData extends HTMLElement {
                         console.log(currentState["email"]);
                         state.setState(currentState);
                     }
-                    Router.go(`${currentState['locationBefore']}`)
+                    Router.go("/login-1");
                 });
             }
         });

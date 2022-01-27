@@ -15,6 +15,30 @@ class Login extends HTMLElement {
     connectedCallback() {
         this.render();
     }
+    listeners() {
+
+        const currentState = state.getState();
+        const formEl = this.shadow.querySelector('.form');
+        formEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const emailInput = (this.shadow.querySelector('.input-email') as HTMLInputElement);
+            currentState["email"] = emailInput.value;
+
+            state.checkIfUserExists(() => {
+                
+                if (currentState['userExists'] == true) {
+                    console.log(currentState["locationBefore"]);
+                    Router.go("/login-2");
+                    
+                } else {
+                    console.log(currentState["locationBefore"]);
+                    Router.go("/mis-datos/registrarse");
+                }
+                state.setState(currentState);
+            });
+        });
+    }
     render() {
 
         const currentState = state.getState();
@@ -97,25 +121,6 @@ class Login extends HTMLElement {
 
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
-
-        const formEl = this.shadow.querySelector('.form');
-        formEl.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const emailInput = (this.shadow.querySelector('.input-email') as HTMLInputElement);
-            currentState["email"] = emailInput.value;
-
-            state.checkIfUserExists(() => {
-                
-                if (currentState['userExists'] == true) {
-                    Router.go("/login-2");
-                    
-                } else {
-                    Router.go("/mis-datos/registrarse");
-                }
-                state.setState(currentState);
-            });
-        });
 
         const burgerMenu = this.shadow.querySelector(".menu");
         burgerMenu.addEventListener('click', () => {
@@ -251,6 +256,7 @@ class Login extends HTMLElement {
                 `;
             });
         });
+        this.listeners();
     }
 }
 

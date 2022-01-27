@@ -53,8 +53,8 @@ export class Card extends HTMLElement {
                     <h2 class="title"> Reportar info de ${e["detail"]["petName"]}</h2>
                     <form class="form">
                         <label class="user-name">
-                            <p> Tu Email </p>
-                            <input class="input__user-email" type="text" />
+                            <p> Tu Nombre </p>
+                            <input class="input__user-name" type="text" />
                         </label>
                         <label class="user-phone">
                             <p> Tu Teléfono </p>
@@ -92,7 +92,7 @@ export class Card extends HTMLElement {
                         margin-left: 10px; 
                         flex-direction: column;
                     }
-                    .input__user-email {
+                    .input__user-name {
                         width: 280px;
                         height: 30px;
                         border-radius: 4px;
@@ -135,7 +135,6 @@ export class Card extends HTMLElement {
                     `;
                 });
 
-                const OtherUserEmail = (this.shadow.querySelector(".input__user-email") as HTMLInputElement);
                 const numeroDelUsuario = (this.shadow.querySelector(".input__user-phone") as HTMLInputElement);
                 const newLocation = (this.shadow.querySelector(".input__user-info") as HTMLInputElement);
                 const sendPetSeenInfo = this.shadow.querySelector(".form");
@@ -160,6 +159,7 @@ export class Card extends HTMLElement {
         
                             this.shadow.appendChild(divNotification);
                             this.shadow.appendChild(notificationStyle);
+
                             notificationStyle.innerHTML = `
                                 .notification {
                                     top: 40%;
@@ -199,6 +199,7 @@ export class Card extends HTMLElement {
                             loginButton.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 currentState["locationBefore"] = "/home";
+                                console.log(currentState["locationBefore"]);
                                 Router.go("/login-1");
                             });                      
 

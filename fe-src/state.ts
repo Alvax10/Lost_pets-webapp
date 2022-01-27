@@ -200,7 +200,7 @@ const state = {
                 return res.json();
             })
             .then((data) => {
-                // console.log("User exists: ", data);
+                console.log("User exists: ", data);
                 currentState['userExists'] = data;
             });
         }
