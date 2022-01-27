@@ -13,7 +13,7 @@ import { sequelize } from "../models/database";
 //     }
 // })();
 
-// sequelize.sync({  force: true })
+// sequelize.sync()
 // .then((res) => {
 //     console.log(res);
 // })
@@ -21,7 +21,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync sequelize :", err);
 // });
 
-// Auth.sequelize.sync({ force: true })
+// Auth.sequelize.sync()
 // .then((res) => {
 //     console.log(res);
 // })
@@ -29,7 +29,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync Auth :", err);
 // });
 
-// User.sequelize.sync({ force: true })
+// User.sequelize.sync()
 // .then((res) => {
 //     console.log(res);
 // })
@@ -37,7 +37,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync User :", err);
 // });
 
-// Mascot.sequelize.sync({ force: true })
+// Mascot.sequelize.sync()
 // .then((res) => {
 //     console.log(res);
 // })
