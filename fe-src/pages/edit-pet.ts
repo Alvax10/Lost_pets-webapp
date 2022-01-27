@@ -240,11 +240,11 @@ class EditPet extends HTMLElement {
                     const petPhoto = ImageDataURL.dataURL;
                     const petName = (target["pet-name-input"] as HTMLInputElement);
 
-                    // console.log({
-                    //     petName: petName.value,
-                    //     _geoloc: mascotLocation,
-                    //     ImageDataURL: petPhoto
-                    // });
+                    console.log({
+                        petName: petName.value,
+                        _geoloc: mascotLocation,
+                        ImageDataURL: petPhoto
+                    });
                         
                     console.log("Clickeaste en editar mascota");
                     // ACA SE TIENE QUE ACTUALIZAR LA MASCOTA
