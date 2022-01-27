@@ -268,6 +268,18 @@ class EditPet extends HTMLElement {
                 Router.go("/mis-mascotas-reportadas");
             });
         });
+
+        const eliminatePetButton = this.shadow.querySelector(".despublicar");
+        reportFoundButton.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
+            state.eliminateMascot(() => {
+                
+                console.log("Eliminaste la mascota");
+                Router.go("/mis-mascotas-reportadas");
+            });
+        });
     }
 }
 

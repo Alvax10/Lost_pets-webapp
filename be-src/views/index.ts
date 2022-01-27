@@ -38,7 +38,7 @@ app.patch("/update-mascot-info", async(req, res) => {
     const { mascotId, petName, petPhoto, mascotLocation } = req.body;
     console.log("Este es el endpoint de actualizar mascot info");
 
-    if (mascotId && petName | petPhoto | mascotLocation) {
+    if (mascotId && petName || petPhoto || mascotLocation) {
 
         const dataUpdated = await updateProfile(mascotId, petName, petPhoto, mascotLocation)
         .catch((err) => {
