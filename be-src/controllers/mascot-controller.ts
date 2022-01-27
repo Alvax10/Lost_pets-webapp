@@ -101,7 +101,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 }
 
 // update profile
-export async function updateProfile(mascotId, petName, petPhoto, mascotLocation) {
+export async function updateProfile(mascotId, petName?, petPhoto?, mascotLocation?) {
 
     if (petPhoto) {
 
