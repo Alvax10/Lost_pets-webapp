@@ -57,22 +57,21 @@ app.patch("/update-mascot-info", async(req, res) => {
 
 // Send an email to other user
 app.post("/send-email-to-user", async(req, res) => {
-    const { OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario } = req.body;
+    const { userEmail, petName, newLocation, numeroDelUsuario } = req.body;
 
     console.log("Este es el endpoint de 'mandar email'");
     console.log({
-        OtherUserEmail: OtherUserEmail,
         userEmail: userEmail,
         petName: petName,
         newLocation: newLocation,
         numeroDelUsuario: numeroDelUsuario
     });
 
-    if (OtherUserEmail && userEmail && petName && newLocation && numeroDelUsuario) {
+    if (userEmail && petName && newLocation && numeroDelUsuario) {
 
         try {
 
-            await sendEmailToUser(OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario)
+            await sendEmailToUser(userEmail, petName, newLocation, numeroDelUsuario)
         } catch(err) {
             console.log("Este es el error de send email: ", err);
         }

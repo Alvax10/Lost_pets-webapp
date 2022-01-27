@@ -69,18 +69,12 @@ export class Card extends HTMLElement {
                 `;
 
                 reportNotificationStyle.innerHTML = `
-                    .general-container {
-                        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-                    }
-                    .pets-reported {
-                        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-                    }
                     .notification-pet-seen {
                         top: 20%;
                         left: 30%;
                         width: 314px;
                         height: 603px;
-                        position: absolute;
+                        position: fixed;
                         border-radius: 4px;
                         background: #FFFFFF;
                     }
@@ -174,7 +168,7 @@ export class Card extends HTMLElement {
                                     height: 115px;
                                     border-radius: 4px;
                                     padding: 10px 10px;
-                                    position: absolute;
+                                    position: fixed;
                                     background-color: #FF6868;
                                 }
                                 .alert {
@@ -212,7 +206,7 @@ export class Card extends HTMLElement {
                             
                             // console.log(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], currentState["email"], numeroDelUsuario.value);
                             
-                            state.sendEmailWithInfo(OtherUserEmail.value, e["detail"]["petName"], newLocation.value, currentState["email"], numeroDelUsuario.value);
+                            state.sendEmailWithInfo(e["detail"]["petName"], newLocation.value, currentState["email"], numeroDelUsuario.value);
                             console.log("Email enviado! :D");
                             reportNotificationStyle.innerHTML = `
                                 .notification-pet-seen {

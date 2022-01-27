@@ -71,14 +71,14 @@ const state = {
         }
         callback();
     },
-    async sendEmailWithInfo(OtherUserEmail, petName, newLocation, userEmail, numeroDelUsuario) {
+    async sendEmailWithInfo(petName, newLocation, userEmail, numeroDelUsuario) {
 
         const sendEmailToUser = await fetch(API_BASE_URL + "/send-email-to-user", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ OtherUserEmail, userEmail, petName, newLocation, numeroDelUsuario }),
+            body: JSON.stringify({ userEmail, petName, newLocation, numeroDelUsuario }),
         })
         .then(() => {
             console.log("Email enviado! :D");
