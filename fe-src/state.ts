@@ -1,5 +1,5 @@
-const API_BASE_URL = "http://localhost:3011";
-// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+// const API_BASE_URL = "http://localhost:3011";
+const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
