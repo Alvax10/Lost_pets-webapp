@@ -120,13 +120,14 @@ class myData extends HTMLElement {
 
                     if (currentState['userExists'] == true) {
                         state.modifyUserInfo(primerContraseñaInput.value);
+                        Router.go("/home");
         
                     } else {
+
                         state.signUpUser(primerContraseñaInput.value);
-                        console.log(currentState["email"]);
-                        state.setState(currentState);
+                        Router.go("/login-1");
                     }
-                    Router.go("/login-1");
+                    state.setState(currentState);
                 });
             }
         });

@@ -101,7 +101,6 @@ export async function verifyIfUserExists(email) {
             return true;
 
         } else {
-
             return false;
         }
 

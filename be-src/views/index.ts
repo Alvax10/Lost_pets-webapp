@@ -111,11 +111,7 @@ app.get("/user/reported-mascots", async(req, res) => {
 
     if (email) {
 
-        const allReportedPets = await allReportedPetsByAUser(email)
-        .catch((err) => {
-            console.error("Este es el error: ", err);
-        });
-
+        const allReportedPets = await allReportedPetsByAUser(email);
         await res.json(allReportedPets);
         return allReportedPets;
 

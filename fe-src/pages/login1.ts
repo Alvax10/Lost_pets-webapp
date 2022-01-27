@@ -28,11 +28,9 @@ class Login extends HTMLElement {
             state.checkIfUserExists(() => {
                 
                 if (currentState['userExists'] == true) {
-                    console.log(currentState["locationBefore"]);
                     Router.go("/login-2");
                     
                 } else {
-                    console.log(currentState["locationBefore"]);
                     Router.go("/mis-datos/registrarse");
                 }
                 state.setState(currentState);
