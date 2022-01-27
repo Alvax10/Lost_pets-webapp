@@ -128,10 +128,7 @@ app.post("/report/mascot", async(req, res) => {
 
     if ( petName && _geoloc && ImageDataURL && email) {
 
-        const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email)
-        .catch((err) => {
-            console.log("El error de report mascot endpoint: ", err);
-        });
+        const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
         await res.json(reportedPet);
 
     } else {

@@ -155,7 +155,7 @@ class reportMascot extends HTMLElement {
             const sendLocButton = this.shadow.querySelector(".button");
             const reportPetForm = this.shadow.querySelector(".form");
             const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
-            const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
+            const petNameInput = (this.shadow.querySelector(".pet-name-input") as HTMLInputElement);
 
             const dropzoneEl = this.shadow.getElementById('dropzone');
             const myDropzone = new Dropzone(dropzoneEl, {
@@ -215,9 +215,7 @@ class reportMascot extends HTMLElement {
 
                     reportPetForm.addEventListener('submit', (e) => {
                         e.preventDefault();
-                        const target = e.target as any;
                         const petPhoto = ImageDataURL.dataURL;
-                        const petName = (target["pet-name-input"] as HTMLInputElement);
 
                         // console.log({
                         //     petName: petName.value,
@@ -226,7 +224,7 @@ class reportMascot extends HTMLElement {
                         // });
                         
                         console.log("Clickeaste en reportar mascota");
-                        state.reportLostPet(petName.value, petPhoto, mascotLocation, () => {
+                        state.reportLostPet(petNameInput.value, petPhoto, mascotLocation, () => {
         
                             console.log("Reportaste la mascota");
                             Router.go("/home");
