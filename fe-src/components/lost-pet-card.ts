@@ -80,7 +80,6 @@ export class Card extends HTMLElement {
                         left: 30%;
                         width: 314px;
                         height: 603px;
-                        display: inherit;
                         position: absolute;
                         border-radius: 4px;
                         background: #FFFFFF;
@@ -212,9 +211,11 @@ export class Card extends HTMLElement {
                         } else {
                             
                             // console.log(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], currentState["email"], numeroDelUsuario.value);
+                            
                             state.sendEmailWithInfo(OtherUserEmail.value, e["detail"]["petName"], newLocation.value, currentState["email"], numeroDelUsuario.value);
-                            notificationStyle.innerHTML = `
-                                .notification {
+                            console.log("Email enviado! :D");
+                            reportNotificationStyle.innerHTML = `
+                                .notification-pet-seen {
                                     display: none;
                                 }
                             `;
@@ -233,8 +234,8 @@ export class Card extends HTMLElement {
 
             <div class="lost-pet">
                 <img class="pet-photo" src=${this.petPhoto} alt="imagen de la mascota" />
-                <h3 class="pet-name"> nombre de ${this.petName} </h3>
-                <p class="pet-location"> locacion de ${this.petName} </p>
+                <h3 class="pet-name"> Nombre: ${this.petName} </h3>
+                <p class="pet-location"> Ubicación: ${this.petLocationName} </p>
                 <p class="pet-seen"> Reportar informacion </p>
             </div>
         `;

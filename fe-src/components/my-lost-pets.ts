@@ -59,8 +59,8 @@ export class MyLostPets extends HTMLElement {
 
             <div class="lost-pet" id=${this.petId}>
                 <img class="pet-photo" src=${this.petPhoto} alt="imagen de la mascota" />
-                <h3 class="pet-name"> nombre de ${this.petName} </h3>
-                <p class="pet-location"> locacion de ${this.petName} </p>
+                <h3 class="pet-name"> Nombre: ${this.petName} </h3>
+                <p class="pet-location"> Ubicación: ${this.petLocationName} </p>
                 <img class="edit-pet" src=${lapizEdit} alt="Lápiz" />
             </div>
         `;
