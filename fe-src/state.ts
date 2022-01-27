@@ -1,5 +1,5 @@
-// const API_BASE_URL = "http://localhost:3011";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "http://localhost:3011";
+// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
@@ -135,7 +135,6 @@ const state = {
 
                     console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
                     currentState["myReportedPets"] = data;
-                    state.setState(currentState);
                     
                 } else {
                     console.log("No reportaste mascotas");

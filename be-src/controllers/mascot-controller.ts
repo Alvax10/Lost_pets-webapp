@@ -34,12 +34,13 @@ export async function allReportedPetsByAUser(email) {
             where: { email: email },
         });
 
+        console.log(userFounded['id']);
         const allMascotsReported = await Mascot.findAll({
             where: { userId: userFounded['id'] }
-        })
-        .catch((err) => {
-            console.error("Si hay un error en el controller es este: ", err);
         });
+        // .catch((err) => {
+        //     console.error("Si hay un error en el controller es este: ", err);
+        // });
 
         return allMascotsReported;
 
