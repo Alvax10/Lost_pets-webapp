@@ -207,7 +207,7 @@ class reportMascot extends HTMLElement {
                     map.setZoom(14);
 
                     const mascotLocation = {
-                        name: petLocation.value,
+                        name: locationValue.value,
                         lat: firstResult.geometry.coordinates[1],
                         lng: firstResult.geometry.coordinates[0],
                     }

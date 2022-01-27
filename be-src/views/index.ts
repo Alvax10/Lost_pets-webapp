@@ -110,12 +110,12 @@ app.get("/user/reported-mascots", async(req, res) => {
     console.log("Este es el endpoint de 'mis mascotas reportadas'")
 
     if (email) {
-        const allReportedPets = await allReportedPetsByAUser(email)
-        // .catch((err) => {
-        //     console.error("Este es el error: ", err);
-        // });
 
-        console.log(allReportedPets);
+        const allReportedPets = await allReportedPetsByAUser(email)
+        .catch((err) => {
+            console.error("Este es el error: ", err);
+        });
+
         await res.json(allReportedPets);
         return allReportedPets;
 
