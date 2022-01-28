@@ -113,7 +113,6 @@ class Login extends HTMLElement {
             const passwordInput = (this.shadow.querySelector('.input-password') as HTMLInputElement);
             state.signInUser(passwordInput.value, () => {
 
-                console.log(currentState["locationBefore"]);
                 Router.go(`${currentState['locationBefore']}`);
             });
             

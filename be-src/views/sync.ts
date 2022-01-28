@@ -37,7 +37,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync User :", err);
 // });
 
-// Mascot.sequelize.sync()
+// Mascot.sequelize.sync({ force: true })
 // .then((res) => {
 //     console.log(res);
 // })

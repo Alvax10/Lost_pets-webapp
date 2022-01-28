@@ -15,6 +15,7 @@ const state = {
         myReportedPets: [],
         lostPetsAround: [],
         mascotId: 0,
+        objectID: 0,
     },
     listeners: [],
     init() {
@@ -30,6 +31,7 @@ const state = {
     async eliminateMascot(callback) {
         const currentState = this.getState();
         const mascotId = currentState["mascotId"];
+        const objectID = currentState["mascotId"];
 
         if (mascotId) {
 
@@ -38,35 +40,27 @@ const state = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ mascotId }),
-            })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log(data);
+                body: JSON.stringify({ mascotId, objectID }),
             });
         }
         callback();
     },
-    async updateMascotInfo(callback, petPhoto?, petName?, mascotLocation?) {
+    async updateMascotInfo(petName, petPhoto, mascotLocation, callback) {
         const currentState = this.getState();
         const mascotId = currentState["mascotId"];
+        const objectID = currentState["mascotId"];
 
-        if (mascotId && petName | petPhoto | mascotLocation) {
+        if (mascotId && mascotLocation && petName && petPhoto) {
 
             const updatedData = await fetch(API_BASE_URL + "/update-mascot-info", {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ mascotId, petName, petPhoto, mascotLocation }),
+                body: JSON.stringify({ mascotId: mascotId, objectID: objectID, petName: petName, petPhoto: petPhoto, mascotLocation: mascotLocation }),
             })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log("Se actualizó la info: ",data);
+            .then(() => {
+                console.log("Se actualizó la info! :D");
             });
         }
         callback();
@@ -151,7 +145,7 @@ const state = {
     async modifyUserInfo(password) {
         
         await fetch(API_BASE_URL + "/user/data", {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -60,7 +60,7 @@ class myReportedMascots extends HTMLElement {
                 reportedMascots.innerHTML = `  
                     ${currentState["myReportedPets"].map((pet) => 
 
-                    `<my-lost-pets pet-id=${pet['id']} class="pet" pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></my-lost-pets>`
+                    `<my-lost-pets pet-id=${pet['id']} class="pet" object-id=${pet["objectID"]} pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></my-lost-pets>`
                 ).join("")}`;
 
                 reportedMascotsStyle.innerHTML = `

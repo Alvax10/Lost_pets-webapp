@@ -2,11 +2,11 @@ import { Mascot, User } from "../models/user-mascot";
 import { cloudinary } from "../lib/cloudinary";
 import { index } from "../lib/algolia";
 
-export async function eliminateMascot(mascotId) {
+export async function eliminateMascot(mascotId, objectID) {
 
     const mascotFound = await Mascot.findByPk(mascotId);
     await mascotFound.destroy();
-    await index.delete(mascotFound);
+    await index.deleteObject(objectID);
 
     return console.log("Mascot eliminated");
 }
@@ -85,6 +85,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
                 _geoloc: _geoloc,
                 ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
+                objectID: mascotCreatedInAlgolia["objectID"],
             }
         })
         .catch((err) => {
@@ -101,38 +102,38 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 }
 
 // update profile
-export async function updateProfile(mascotId, petName?, petPhoto?, mascotLocation?) {
+export async function updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation?) {
 
-    if (petPhoto) {
+    if (mascotId && petName && petPhoto && mascotLocation) {
 
-        const imagen = await cloudinary.uploader.upload(
-            petPhoto,
-            {
-                resource_type: 'image',
-                discard_original_filename: true,
-                width: 1000,
-            }
-        )
+        let image;
+        const imagen = await cloudinary.uploader.upload(petPhoto, function (error, result) {
+            image = result.secure_url;
+        })
         .catch((err) => {
             console.log("Esto contiene imagen: ", imagen);
             console.log("Esto contiene el error: ", err)
         });
 
-        const updateDataComplete = {
-            name: petName,
+        const allDataComplete = {
+            imageDataURL: image,
+            petName: petName,
+            _geoloc: mascotLocation,
+        }
+
+        const mascotUpdated = await index.partialUpdateObject({
+            objectID: objectID,
+            petName: petName,
             _geoloc: mascotLocation,
             ImageDataURL: imagen["secure_url"],
-        };
-
-        const mascotUpdated = await index.partialUpdateObject(updateDataComplete);
-
-        const petUpdated = await Mascot.update(updateDataComplete,
+        });
+        const petUpdated = await Mascot.update(allDataComplete,
         {
             where: {
                 id: mascotId,
             }
         });
 
-        return updateDataComplete;
+        return petUpdated;
     }
 }

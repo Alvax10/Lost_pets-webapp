@@ -16,16 +16,16 @@ app.use(cors());
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", async(req, res) => {
-    const { mascotId } = req.body;
+    const { mascotId, objectID } = req.body;
 
     if (mascotId) {
 
-        await eliminateMascot(mascotId)
+        await eliminateMascot(mascotId, objectID)
         .then((res) => {
             return res;
         })
         .catch((err) => {
-            console.log("Este es el error de eliminate mascot");
+            console.log("Este es el error de eliminate mascot: ", err);
         });
 
     } else {
@@ -35,20 +35,21 @@ app.delete("/eliminate-mascot", async(req, res) => {
 
 // Update mascot info
 app.patch("/update-mascot-info", async(req, res) => {
-    const { mascotId, petName, petPhoto, mascotLocation } = req.body;
+    const { mascotId, objectID, petName, petPhoto, mascotLocation } = req.body;
+
     console.log("Este es el endpoint de actualizar mascot info");
-    console.log(mascotId, petName, petPhoto, mascotLocation);
 
-    if (mascotId && petName || petPhoto || mascotLocation) {
+    if (mascotId && objectID && mascotLocation && petName && petPhoto) {
 
-        const dataUpdated = await updateProfile(mascotId, petName, petPhoto, mascotLocation)
+        const dataUpdated = await updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation)
+        .then((resp) => {
+            console.log(resp);
+        })
         .catch((err) => {
             console.log(err);
         });
 
-        console.log(dataUpdated);
         res.json(dataUpdated);
-        return dataUpdated;
 
     } else {
         res.status(400).json({ message: "Faltan datos en el body!" });
@@ -130,6 +131,7 @@ app.post("/report/mascot", async(req, res) => {
     if ( petName && _geoloc && ImageDataURL && email) {
 
         const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
+        await console.log(reportedPet);
         await res.json(reportedPet);
 
     } else {
@@ -153,10 +155,10 @@ app.patch("/user/data", async(req, res) => {
 })
 
 // Complete user Info
-app.post("/update/user/info", async(req, res) => {
+app.post("/complete/user/info", async(req, res) => {
     const { email, phone_number, username } = req.body;
 
-    console.log("Este es el endpoint de 'reportar mascotas'")
+    console.log("Este es el endpoint de 'complete user info'")
 
     if (email && phone_number && username) {
 

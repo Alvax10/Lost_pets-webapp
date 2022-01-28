@@ -7,5 +7,6 @@ Mascot.init({
   _geoloc: DataTypes.JSON,
   ImageDataURL: DataTypes.STRING,
   userId: DataTypes.INTEGER,
+  objectID: DataTypes.STRING,
 }, 
 { sequelize, modelName: 'mascot' });

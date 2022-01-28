@@ -9,12 +9,14 @@ export class MyLostPets extends HTMLElement {
     petPhoto;
     petLocationName;
     petId;
+    objectID;
     constructor() {
 
       super();
       this.shadow = this.attachShadow({ mode: 'open' });
       this.petName = this.getAttribute("pet-name");
       this.petId = this.getAttribute("pet-id");
+      this.objectID = this.getAttribute("object-id");
       this.petPhoto = this.getAttribute("pet-photo");
       this.petLocationName = this.getAttribute("pet-location-name");
     }
@@ -32,6 +34,7 @@ export class MyLostPets extends HTMLElement {
                 petPhoto: this.petPhoto,
                 petLocationName: this.petLocationName,
                 petId: this.petId,
+                objectID: this.objectID,
             },
             bubbles: true
             // esto hace que el evento pueda
@@ -44,6 +47,7 @@ export class MyLostPets extends HTMLElement {
                 e.preventDefault();
 
                 currentState["mascotId"] = this.petId;
+                currentState["objectID"] = this.objectID;
                 state.setState(currentState);
 
                 Router.go("/edit-reported-pet")

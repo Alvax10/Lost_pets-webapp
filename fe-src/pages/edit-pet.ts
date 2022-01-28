@@ -15,9 +15,118 @@ class EditPet extends HTMLElement {
     connectedCallback() {
         this.render();
     }
+    listeners() {
+
+        let ImageDataURL;
+        const map = this.shadow.getElementById('map');
+        const reportPetForm = this.shadow.querySelector(".form");
+        const sendLocButton = this.shadow.querySelector(".button");
+        const petName = (this.shadow.querySelector(".input-petname") as HTMLInputElement);
+        const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
+
+        const dropzoneEl = this.shadow.getElementById('dropzone');
+        const myDropzone = new Dropzone(dropzoneEl, {
+            url: "/falsa",
+            clickeable: true,
+            autoProcessQueue: false,
+        });
+
+        myDropzone.on("thumbnail", function (file) {
+            // usando este evento pueden acceder al dataURL directamente
+            ImageDataURL = file;
+            // console.log(file.dataURL);
+        });
+    
+        function initMap() {
+            mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
+            return new mapboxgl.Map({
+                container: map,
+                style: 'mapbox://styles/mapbox/streets-v11',
+            });
+        }
+    
+        function initSearchForm(callback) {
+            sendLocButton.addEventListener('click', (e) => {
+                e.preventDefault();
+    
+                mapboxClient.geocodeForward(
+                    locationValue.value,
+                    {
+                    autocomplete: true,
+                    language: "es",
+                    },
+                    function (err, data, res) {
+                    // console.log(data);
+                    if (!err) callback(data.features);
+                    }
+                );
+            });
+        }
+
+        (function () {
+            const map = initMap();
+            initSearchForm(function (results) {
+                const firstResult = results[0];
+                const marker = new mapboxgl.Marker()
+                    .setLngLat(firstResult.geometry.coordinates)
+                    .addTo(map);
+                map.setCenter(firstResult.geometry.coordinates);
+                map.setZoom(14);
+
+                const mascotLocation = {
+                    name: locationValue.value,
+                    lat: firstResult.geometry.coordinates[1],
+                    lng: firstResult.geometry.coordinates[0],
+                }
+                // console.log(mascotLocation);
+
+                reportPetForm.addEventListener('submit', (ev) => {
+                    ev.preventDefault();
+                    const petPhoto = ImageDataURL.dataURL;
+
+                    // console.log({
+                    //     petName: petName.value,
+                    //     _geoloc: mascotLocation,
+                    //     ImageDataURL: petPhoto
+                    // });
+                        
+                    console.log("Clickeaste en editar mascota");
+                    // ACA SE TIENE QUE ACTUALIZAR LA MASCOTA
+                    state.updateMascotInfo(petName.value, petPhoto, mascotLocation, () => {
+                        
+                        console.log("Editaste la mascota");
+                        Router.go("/home");
+                    });
+                });
+            });
+        })();
+
+        const reportFoundButton = this.shadow.querySelector(".button-found");
+        reportFoundButton.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
+            state.eliminateMascot(() => {
+                
+                console.log("Eliminaste la mascota");
+                Router.go("/mis-mascotas-reportadas");
+            });
+        });
+
+        const eliminatePetButton = this.shadow.querySelector(".despublicar");
+        eliminatePetButton.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
+            state.eliminateMascot(() => {
+                
+                console.log("Eliminaste la mascota");
+                Router.go("/mis-mascotas-reportadas");
+            });
+        });
+    }
     render() {
             
-        const currentState = state.getState();
         const divEl = document.createElement('div');
         divEl.className = 'general-container';
         const style = document.createElement('style');
@@ -170,116 +279,8 @@ class EditPet extends HTMLElement {
 
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
+        this.listeners();
 
-        let ImageDataURL;
-        const map = this.shadow.getElementById('map');
-        const reportPetForm = this.shadow.querySelector(".form");
-        const sendLocButton = this.shadow.querySelector(".button");
-        const petLocation = (this.shadow.querySelector(".search") as HTMLInputElement);
-        const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
-
-        const dropzoneEl = this.shadow.getElementById('dropzone');
-        const myDropzone = new Dropzone(dropzoneEl, {
-            url: "/falsa",
-            clickeable: true,
-            autoProcessQueue: false,
-        });
-
-        myDropzone.on("thumbnail", function (file) {
-            // usando este evento pueden acceder al dataURL directamente
-            ImageDataURL = file;
-            // console.log(file.dataURL);
-        });
-    
-        function initMap() {
-            mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
-            return new mapboxgl.Map({
-                container: map,
-                style: 'mapbox://styles/mapbox/streets-v11',
-            });
-        }
-    
-        function initSearchForm(callback) {
-            sendLocButton.addEventListener('click', (e) => {
-                e.preventDefault();
-    
-                mapboxClient.geocodeForward(
-                    locationValue.value,
-                    {
-                    autocomplete: true,
-                    language: "es",
-                    },
-                    function (err, data, res) {
-                    // console.log(data);
-                    if (!err) callback(data.features);
-                    }
-                );
-            });
-        }
-
-        (function () {
-            const map = initMap();
-            initSearchForm(function (results) {
-                const firstResult = results[0];
-                const marker = new mapboxgl.Marker()
-                    .setLngLat(firstResult.geometry.coordinates)
-                    .addTo(map);
-                map.setCenter(firstResult.geometry.coordinates);
-                map.setZoom(14);
-
-                const mascotLocation = {
-                    name: petLocation.value,
-                    lat: firstResult.geometry.coordinates[1],
-                    lng: firstResult.geometry.coordinates[0],
-                }
-                // console.log(mascotLocation);
-
-                reportPetForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const target = e.target as any;
-                    const petPhoto = ImageDataURL.dataURL;
-                    const petName = (target["pet-name-input"] as HTMLInputElement);
-
-                    console.log({
-                        petName: petName.value,
-                        _geoloc: mascotLocation,
-                        ImageDataURL: petPhoto
-                    });
-                        
-                    console.log("Clickeaste en editar mascota");
-                    // ACA SE TIENE QUE ACTUALIZAR LA MASCOTA
-                    state.updateMascotInfo(petPhoto, petName, mascotLocation, () => {
-
-                        console.log("Editaste la mascota");
-                        Router.go("/home");
-                    });
-                });
-            });
-        })();
-
-        const reportFoundButton = this.shadow.querySelector(".button-found");
-        reportFoundButton.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
-            state.eliminateMascot(() => {
-                
-                console.log("Eliminaste la mascota");
-                Router.go("/mis-mascotas-reportadas");
-            });
-        });
-
-        const eliminatePetButton = this.shadow.querySelector(".despublicar");
-        reportFoundButton.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
-            state.eliminateMascot(() => {
-                
-                console.log("Eliminaste la mascota");
-                Router.go("/mis-mascotas-reportadas");
-            });
-        });
     }
 }
 
