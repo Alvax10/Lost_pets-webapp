@@ -18,6 +18,7 @@ class reportMascot extends HTMLElement {
     render() {
 
         const currentState = state.getState();
+        const { token } = currentState;
         const divEl = document.createElement('div');
         divEl.className = 'general-container';
         const style = document.createElement('style');
@@ -144,7 +145,7 @@ class reportMascot extends HTMLElement {
         this.shadow.appendChild(reportedMascots);
         this.shadow.appendChild(reportedMascotsStyle);
 
-        if (currentState["email"] == '') {
+        if (!token) {
             currentState["locationBefore"] = "/reportar-mascota";
             Router.go("/login-1");
 

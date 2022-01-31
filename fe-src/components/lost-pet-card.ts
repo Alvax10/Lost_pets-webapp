@@ -22,6 +22,7 @@ export class Card extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
+        const  { token } = currentState;
         const reportNotification = document.createElement("div");
         reportNotification.className = "notification-pet-seen"
         const reportNotificationStyle = document.createElement("style");
@@ -145,12 +146,7 @@ export class Card extends HTMLElement {
                     sendPetSeenInfo.addEventListener('submit', (ev) => {
                         ev.preventDefault();
 
-                        if (currentState["email"] == '') {
-
-
-                            const divNotification = document.createElement('div');
-                            divNotification.className = 'notification';
-                            const notificationStyle = document.createElement('style');
+                        if (!token) {
     
                             divNotification.innerHTML = `
                                 <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
@@ -199,7 +195,6 @@ export class Card extends HTMLElement {
                             loginButton.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 currentState["locationBefore"] = "/home";
-                                console.log(currentState["locationBefore"]);
                                 Router.go("/login-1");
                             });                      
 

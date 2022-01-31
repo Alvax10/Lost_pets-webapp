@@ -14,6 +14,7 @@ class myReportedMascots extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
+        const { token } = currentState;
         const reportedMascots = this.shadow.querySelector(".reported-mascots");
         const reportedMascotsStyle = document.createElement("style");
         state.allReportedPetsByAUser(() => {
@@ -47,7 +48,7 @@ class myReportedMascots extends HTMLElement {
                 reportButton.addEventListener('click', (e) => {
                     e.preventDefault();
 
-                    if (currentState["email"] == '') {
+                    if (!token) {
                         Router.go("/login-1");
 
                     } else {

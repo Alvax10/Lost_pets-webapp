@@ -7,6 +7,9 @@ import "./pages/mis-datos";
 import "./pages/mis-mascotas-reportadas";
 import "./pages/reportar-mascota";
 import "./pages/edit-pet";
+import { state } from "./state";
 require("./components/header");
 require("./components/lost-pet-card");
 require("./components/my-lost-pets");
+
+state.init();

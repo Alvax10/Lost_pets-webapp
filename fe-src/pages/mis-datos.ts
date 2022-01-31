@@ -82,7 +82,7 @@ class myData extends HTMLElement {
                 <form class="form">
                     <label class="username-zone">
                         <p class="username"> Tu Nombre </p>
-                        <input class="input-username" type="text" placeholder="${currentState['username']}" />
+                        <input class="input-username" type="text" placeholder="Tu nombre" />
                     </label>
                     <label class="password-zone">
                         <p class="password"> Tu Contraseña </p>
@@ -107,18 +107,18 @@ class myData extends HTMLElement {
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (primerContraseñaInput.value != segundaContraseñaInput.value) {
+            if (primerContraseñaInput.value == '' || segundaContraseñaInput.value == '') {
     
                 alert('las contraseñas no coinciden');
             } else {
                 // console.log(primerContraseñaInput.value, segundaContraseñaInput.value);
-                const currentState = state.getState();
                 const username = (this.shadow.querySelector(".input-username") as HTMLInputElement);
                 currentState['username'] = username.value;
 
                 state.checkIfUserExists(() => {
 
                     if (currentState['userExists'] == true) {
+                        
                         state.modifyUserInfo(primerContraseñaInput.value);
                         Router.go("/home");
         

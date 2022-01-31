@@ -6,6 +6,8 @@ import * as path from "path";
 import { findOrCreateUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
 import { sendEmailToUser } from "../lib/sendgrid";
+import { checkBody } from "../middleware/checkBody";
+import { verifyAuth } from "../middleware/verifyAuth";
 
 const app = express();
 const port = process.env.PORT || 3011;
@@ -13,223 +15,126 @@ const port = process.env.PORT || 3011;
 app.use(express.json({ limit: "75mb" }));
 app.use(cors());
 
-
 //Eliminate mascot
-app.delete("/eliminate-mascot", async(req, res) => {
+app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
     const { mascotId, objectID } = req.body;
 
-    if (mascotId) {
-
-        await eliminateMascot(mascotId, objectID)
-        .then((res) => {
-            return res;
-        })
-        .catch((err) => {
-            console.log("Este es el error de eliminate mascot: ", err);
-        });
-
-    } else {
-        res.status(400).json({ message: "Faltan datos en el body!" });
-    }
+    await eliminateMascot(mascotId, objectID)
+    .then((res) => {
+        return res;
+    })
+    .catch((err) => {
+        console.log("Este es el error de eliminate mascot: ", err);
+    });
 });
 
 // Update mascot info
-app.patch("/update-mascot-info", async(req, res) => {
+app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
     const { mascotId, objectID, petName, petPhoto, mascotLocation } = req.body;
 
-    console.log("Este es el endpoint de actualizar mascot info");
-
-    if (mascotId && objectID && mascotLocation && petName && petPhoto) {
-
-        const dataUpdated = await updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation)
-        .then((resp) => {
-            console.log(resp);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-
-        res.json(dataUpdated);
-
-    } else {
-        res.status(400).json({ message: "Faltan datos en el body!" });
-    }
+    const dataUpdated = await updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation)
+    .then((resp) => {
+        console.log(resp);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+    res.json(dataUpdated);
 });
 
 
 // Send an email to other user
-app.post("/send-email-to-user", async(req, res) => {
+app.post("/send-email-to-user", verifyAuth, checkBody, async(req, res) => {
     const { userEmail, petName, newLocation, numeroDelUsuario } = req.body;
 
-    console.log("Este es el endpoint de 'mandar email'");
-    console.log({
-        userEmail: userEmail,
-        petName: petName,
-        newLocation: newLocation,
-        numeroDelUsuario: numeroDelUsuario
-    });
-
-    if (userEmail && petName && newLocation && numeroDelUsuario) {
-
-        try {
-
-            await sendEmailToUser(userEmail, petName, newLocation, numeroDelUsuario)
-        } catch(err) {
-            console.log("Este es el error de send email: ", err);
-        }
-
-    } else {
-        res.status(400).json({ message: "Faltan datos en el body!" });
+    try {
+        await sendEmailToUser(userEmail, petName, newLocation, numeroDelUsuario)
+    } catch(err) {
+        console.log("Este es el error de send email: ", err);
     }
 });
 
 // Get pet around the raidus
-app.get("/mascots-close-from", async (req, res) => {
+app.get("/mascots-close-from", checkBody, async(req, res) => {
     const { lat, lng } = req.query;
 
-    console.log("Este es el endpoint de 'mascotas cerca'")
+    const hits = await mascotsCloseFrom(lat, lng)
+    .catch((err) => {
+        console.log("Este es el error de mascots close from: ", err);
+    });
 
-    if (lat && lng) {
-
-        const hits = await mascotsCloseFrom(lat, lng)
-        .catch((err) => {
-            console.log("Este es el error de mascots close from: ", err);
-        });
-        
-        // console.log(hits);
-        res.json(hits);
-        return hits;
-
-    } else {
-        res.status(400).json({ message: "Faltan datos en el query!" });
-    }
+    res.json(hits);
+    return hits;
 });
 
 // All reported pets by a user
-app.get("/user/reported-mascots", async(req, res) => {
+app.get("/user/reported-mascots", verifyAuth, checkBody, async(req, res) => {
     const { email } = req.query;
 
-    console.log("Este es el endpoint de 'mis mascotas reportadas'")
-
-    if (email) {
-
-        const allReportedPets = await allReportedPetsByAUser(email);
-        await res.json(allReportedPets);
-        return allReportedPets;
-
-    } else {
-        res.status(400).json({ message: 'Falta el userId o no existe'});
-    }
+    const allReportedPets = await allReportedPetsByAUser(email);
+    await res.json(allReportedPets);
+    return allReportedPets;
 });
 
 // Report mascot
-app.post("/report/mascot", async(req, res) => {
+app.post("/report/mascot", verifyAuth, checkBody, async(req, res) => {
     const { petName, _geoloc, ImageDataURL, email } = req.body;
 
-    console.log("Este es el endpoint de 'reportar mascotas'")
-
-    if ( petName && _geoloc && ImageDataURL && email) {
-
-        const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
-        await console.log(reportedPet);
-        await res.json(reportedPet);
-
-    } else {
-        res.status(400).json({ message: 'Faltan datos en el body o el userId no existe'});
-    }
+    const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
+    await console.log(reportedPet);
+    await res.json(reportedPet);
 });
 
 // Update user data
-app.patch("/user/data", async(req, res) => {
+app.patch("/user/data", checkBody, async(req, res) => {
     const { email, newPassword } = req.body;
 
-    console.log("Este es el endpoint de 'user data'")
-
-    if (email && newPassword) {
-        await updateUserData(email, newPassword);
-        await res.json({ message: 'updated succesfully' });
-
-    } else {
-        res.status(400).json({ message: 'Falta contraseña'});
-    }
+    await updateUserData(email, newPassword);
+    await res.json({ message: 'updated succesfully' });
 })
 
 // Complete user Info
-app.post("/complete/user/info", async(req, res) => {
+app.post("/complete/user/info", verifyAuth, checkBody, async(req, res) => {
     const { email, phone_number, username } = req.body;
 
-    console.log("Este es el endpoint de 'complete user info'")
-
-    if (email && phone_number && username) {
-
-        await completeUserData(email, phone_number, username);
-        await res.json({ message: 'info updated'});
-
-    } else {
-        res.status(400).json({ message: 'faltan datos en el body o el email no existe'});
-    }
+    await completeUserData(email, phone_number, username);
+    await res.json({ message: 'info updated'});
 });
 
 // Verify if user exists
-app.post("/verify/user", async(req, res) => {
+app.post("/verify/user", checkBody, async(req, res) => {
     const { email } = req.body;
 
-    console.log("Este es el endpoint de 'verify user'")
-
-    if (email) {
-        const response = await verifyIfUserExists(email);
-        await res.json( response );
-
-    } else {
-        res.status(404).json({ message:'falta el email' });
-    }
+    const response = await verifyIfUserExists(email);
+    await res.json( response );
 });
 
 // Sign In
-app.post("/auth/token", async(req, res) => {
+app.post("/auth/token", checkBody, async(req, res) => {
     const { email, password } = req.body;
 
-    console.log("Este es el endpoint de 'auth token'")
-
-    if (req.body) {
-
-        const response = await authenticateUser(email, password);
-        await res.json(response);
-
-    } else {
-        res.status(404).json({ message: 'falta el email o la contraseña' });
-    }
+    const response = await authenticateUser(email, password);
+    await res.json(response);
 })
 
 // Sign Up
-app.post("/auth", async (req, res) => {
+app.post("/auth", checkBody, async (req, res) => {
     const { email, password } = req.body;
 
-    console.log("Este es el endpoint de 'auth'")
-    
-    if (req.body) {
-        const response = await findOrCreateUser(email, password);
-        await res.json( response );
-
-    } else {
-        res.json({ message: 'el body tiene que tener email y password'});
-    }
-})
+    const response = await findOrCreateUser(email, password);
+    await res.json( response );
+});
 
 // Finds all users
 app.get("/users", async(req, res) => {
-
-    console.log("Este es el endpoint de 'all users'")
 
     const users = await User.findAll();
     await res.json({ users });
 });
 
 // Finds a user
-app.get("/user", async(req, res) => {
+app.get("/user", checkBody, async(req, res) => {
     const { user_id } = req.body;
-
-    console.log("Este es el endpoint de 'user'")
 
     const user = await User.findByPk(user_id);
     await res.json({ user });
@@ -238,31 +143,20 @@ app.get("/user", async(req, res) => {
 // Finds all mascots
 app.get("/mascots", async(req, res) => {
 
-    console.log("Este es el endpoint de 'all mascots'")
-
     const mascots = await Mascot.findAll();
     await res.json(mascots);
 });
 
 // Shows the info of a user
-// app.get("/me", verifyAuth , async (req, res) => {
-    
-//     if (req) {
+app.get("/me", checkBody, verifyAuth , async (req, res) => {
 
-//         const data = req._user;
-//         const userData = await User.findByPk(data['id']);
-//         await res.json({
-//             id: userData['id'],
-//             email: userData['email'],
-//             user_name: userData['user_name']
-//         });
-
-//     } else {
-//         res.status(404).json({
-//             message: 'Faltan datos o los datos no coinciden',
-//         });
-//     }
-// });
+    // const data = req._user;
+    // const userData = await User.findByPk(data['id']);
+    // await res.json({
+    //     id: userData['id'],
+    //     email: userData['email'],
+    // });
+});
 
 const relativeRoute = path.resolve(__dirname + "../../../dist");
 app.use(express.static(relativeRoute));

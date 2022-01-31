@@ -1,10 +1,8 @@
-// const API_BASE_URL = "http://localhost:3011";
-const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
+const API_BASE_URL = "http://localhost:3011";
+// const API_BASE_URL = "https://desafio-final-dwf-m7.herokuapp.com";
 
 const state = {
     data: {
-        username: '',
-        petName: '',
         email: '',
         _geoloc: {
             lat: 0,
@@ -16,10 +14,11 @@ const state = {
         lostPetsAround: [],
         mascotId: 0,
         objectID: 0,
+        token: null,
     },
     listeners: [],
     init() {
-        const localData = JSON.parse(localStorage.getItem("geoloc"));
+        const localData = JSON.parse(localStorage.getItem("data"));
         if (!localData) {
             return;
         }
@@ -30,8 +29,9 @@ const state = {
     },
     async eliminateMascot(callback) {
         const currentState = this.getState();
-        const mascotId = currentState["mascotId"];
-        const objectID = currentState["mascotId"];
+        const { token } = currentState;
+        const { mascotId } = currentState;
+        const { objectID } = currentState;
 
         if (mascotId) {
 
@@ -39,6 +39,7 @@ const state = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `bearer ${token}`,
                 },
                 body: JSON.stringify({ mascotId, objectID }),
             });
@@ -47,8 +48,9 @@ const state = {
     },
     async updateMascotInfo(petName, petPhoto, mascotLocation, callback) {
         const currentState = this.getState();
-        const mascotId = currentState["mascotId"];
-        const objectID = currentState["mascotId"];
+        const { token } = currentState;
+        const { mascotId } = currentState;
+        const { objectID } = currentState;
 
         if (mascotId && mascotLocation && petName && petPhoto) {
 
@@ -56,27 +58,27 @@ const state = {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `bearer ${token}`,
                 },
                 body: JSON.stringify({ mascotId: mascotId, objectID: objectID, petName: petName, petPhoto: petPhoto, mascotLocation: mascotLocation }),
-            })
-            .then(() => {
-                console.log("Se actualizó la info! :D");
             });
+            await console.log("Se actualizó la info! :D");
         }
         callback();
     },
     async sendEmailWithInfo(petName, newLocation, userEmail, numeroDelUsuario) {
+        const currentState = this.getState();
+        const { token } = currentState;
 
         const sendEmailToUser = await fetch(API_BASE_URL + "/send-email-to-user", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `bearer ${token}`,
             },
             body: JSON.stringify({ userEmail, petName, newLocation, numeroDelUsuario }),
         })
-        .then(() => {
-            console.log("Email enviado! :D");
-        });
+        await console.log("Email enviado! :D");
 
     },
     async mascotCloseFrom(callback) {
@@ -86,55 +88,49 @@ const state = {
 
         const mascotsCloseFrom = await fetch(API_BASE_URL + "/mascots-close-from" + "?lat=" + lat + "&lng=" + lng, {
         })
-        .then((res) => { return res.json() })
-        .then((data) => {
-
-            console.log("Esta es la data de mascotas cerca de: ", data);
-            currentState["lostPetsAround"] = data;
-        });
-
+        const data = await mascotsCloseFrom.json();
+        console.log("Esta es la data de mascotas cerca de: ", data);
+        currentState["lostPetsAround"] = data;
         callback();
-
     },
     async reportLostPet(petName, ImageDataURL, _geoloc, callback) {
         const currentState = this.getState();
-        const email = currentState["email"];
+        const { token } = currentState;
+        const { email } = currentState;
         
         const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
            method: 'POST',
            headers: {
             'Content-Type': 'application/json',
+            'Authorization': `bearer ${token}`,
            },
            body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
         })
-        .then(() => {
-
-            console.log("Mascota reportada! :D");
-        });
-
+        await reportedPet.json();
+        await console.log("Mascota reportada! :D");
         callback();
     },
     async allReportedPetsByAUser(callback) {
         const currentState = this.getState();
-        const email = currentState['email'];
+        const { token } = currentState;
+        const { email } = currentState;
 
         if (email) {
 
             const allMascotsByAUser = await fetch(API_BASE_URL + "/user/reported-mascots" + "?email=" + email, {
-            })
-            .then((res) => { return res.json(); })
-            .then((data) => {
-
-                if (data) {
-
-                    console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
-                    currentState["myReportedPets"] = data;
-                    
-                } else {
-                    console.log("No reportaste mascotas");
+                method: 'GET',
+                headers: {
+                    'Authorization': `bearer ${token}`,
                 }
-            });
-            
+            })
+            const data = await allMascotsByAUser.json();
+            if (data) {
+                console.log("Esta es la data de todas las mascotas reportadas por un usuario: ", data);
+                currentState["myReportedPets"] = data;
+
+            } else {
+                console.log("No reportaste mascotas");
+            }
             callback();
 
         } else {
@@ -143,24 +139,23 @@ const state = {
 
     },
     async modifyUserInfo(password) {
+        const currentState = this.getState();
+        const { token } = currentState;
         
-        await fetch(API_BASE_URL + "/user/data", {
+        const updateUserInfo = await fetch(API_BASE_URL + "/user/data", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `bearer ${token}`,
             },
             body: JSON.stringify({ password }),
         })
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            console.log("Esta es la data de modifyUserInfo: " + data);
-        });
+        const data = await updateUserInfo.json();
+        console.log("Esta es la data de modifyUserInfo: " + data);
     },
     async signUpUser(password) {
         const currentState = this.getState();
-        const email = currentState["email"];
+        const { email } = currentState;
 
         if (!email) {
             console.error('falta el email!');
@@ -177,25 +172,20 @@ const state = {
     },
     async checkIfUserExists(callback) {
         const currentState = this.getState();
-        const email = currentState['email'];
+        const { email } = currentState;
 
         if (email) {
 
-            await fetch(API_BASE_URL + "/verify/user", {
-
+            const verifyUser = await fetch(API_BASE_URL + "/verify/user", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email }),
             })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log("User exists: ", data);
-                currentState['userExists'] = data;
-            });
+            const data = await verifyUser.json();
+            console.log("User exists: ", data);
+            currentState['userExists'] = data;
         }
         callback();
     },
@@ -205,19 +195,16 @@ const state = {
 
         if (email && password) {
 
-            await fetch(API_BASE_URL + '/auth/token', {
+            const authToken = await fetch(API_BASE_URL + '/auth/token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
             })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                return data;
-            });
+            const token = await authToken.json();
+            currentState["token"] = token;
+            this.setState(currentState);
 
             callback();
 
@@ -231,7 +218,8 @@ const state = {
         for (const cb of this.listeners) {
             cb();
         }
-        localStorage.setItem("geoloc", JSON.stringify(newState));
+        console.log("Esto es this.data: ", this.data);
+        localStorage.setItem("data", JSON.stringify(newState));
         console.log("Soy el state, he cambiado:", newState);
     },
     suscribe(callback: (any) => any) {

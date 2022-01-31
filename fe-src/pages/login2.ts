@@ -1,10 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
 
-const logo = require("url:../img/logo-pata.png");
-const burgerMenuImg = require("url:../img/burger-menu.png");
-const xButton = require("url:../img/Vector.png");
-
 class Login extends HTMLElement {
 
     shadow: ShadowRoot;
@@ -23,17 +19,6 @@ class Login extends HTMLElement {
         const style = document.createElement('style');
 
         style.innerHTML = `
-        .header {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            background-color: #FF6868;
-            justify-content: space-between;
-        }
-        .menu {
-            width: 40px;
-        }
         .img {
             padding: 0 30px;
         }
@@ -86,10 +71,7 @@ class Login extends HTMLElement {
         `;
 
         divEl.innerHTML = `
-            <header class="header">
-                <img class="img" src="${logo}" alt="logo">
-                <img class="img menu" src="${burgerMenuImg}" alt="menu" >
-            </header>
+            <header-component></header-component>
             <div class="main-body">
                 <h2 class="title"> Ingresar </h2>
                 <form class="form">

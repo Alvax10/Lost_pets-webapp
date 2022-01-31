@@ -18,6 +18,7 @@ export class Header extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
+        const { token } = currentState;
         const menuDiv = document.createElement('div');
             menuDiv.className = 'menu-open';
     
@@ -125,7 +126,7 @@ export class Header extends HTMLElement {
         myData.addEventListener('click',(e) => {
             e.preventDefault();
                     
-            if (currentState["email"] == '') {
+            if (!token) {
 
                 currentState["locationBefore"] = "/mis-datos/registrarse";
                 notificationStyle.innerHTML = `
@@ -173,7 +174,7 @@ export class Header extends HTMLElement {
         myMascotsReported.addEventListener('click',(e) => {
             e.preventDefault();
                     
-            if (currentState["email"] == '') {
+            if (!token) {
 
                 currentState["locationBefore"] = "/mis-mascotas-reportadas";
                 notificationStyle.innerHTML = `
@@ -220,7 +221,7 @@ export class Header extends HTMLElement {
         reportMascot.addEventListener('click',(e) => {
             e.preventDefault();
                     
-            if (currentState["email"] == '') {
+            if (!token) {
 
                 currentState["locationBefore"] = "/reportar-mascota";
                 notificationStyle.innerHTML = `
