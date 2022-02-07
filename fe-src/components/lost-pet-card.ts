@@ -63,7 +63,7 @@ export class Card extends HTMLElement {
                         </label>
                         <label class="user-info">
                             <p> ¿Donde lo viste? </p>
-                            <textarea class="input__user-info"> Depositar calle o barrio </textarea>
+                            <textarea class="input__user-info" placeholder="Depositar calle o barrio" ></textarea>
                         </label>
                         <button class="button sendPetInfo"> Enviar </button>
                     </form>

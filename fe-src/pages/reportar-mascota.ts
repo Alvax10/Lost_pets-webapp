@@ -186,8 +186,8 @@ class reportMascot extends HTMLElement {
                     mapboxClient.geocodeForward(
                         locationValue.value,
                         {
-                        autocomplete: true,
-                        language: "es",
+                            autocomplete: true,
+                            language: "es",
                         },
                         function (err, data, res) {
                         // console.log(data);

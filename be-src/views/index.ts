@@ -33,9 +33,6 @@ app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
     const { mascotId, objectID, petName, petPhoto, mascotLocation } = req.body;
 
     const dataUpdated = await updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation)
-    .then((resp) => {
-        console.log(resp);
-    })
     .catch((err) => {
         console.log(err);
     });
