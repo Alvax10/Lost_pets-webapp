@@ -85,6 +85,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
                 _geoloc: _geoloc,
                 ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
+                id: Mascot["id"],
                 objectID: mascotCreatedInAlgolia["objectID"],
             }
         })
