@@ -147,12 +147,12 @@ app.get("/mascots", async(req, res) => {
 // Shows the info of a user
 app.get("/me", checkBody, verifyAuth , async (req, res) => {
 
-    // const data = req._user;
-    // const userData = await User.findByPk(data['id']);
-    // await res.json({
-    //     id: userData['id'],
-    //     email: userData['email'],
-    // });
+    const data = req._user;
+    const userData = await User.findByPk(data['id']);
+    await res.json({
+        id: userData['id'],
+        email: userData['email'],
+    });
 });
 
 const relativeRoute = path.resolve(__dirname + "../../../dist");

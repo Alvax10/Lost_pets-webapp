@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-import * as Dropzone from "dropzone";
+import Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
@@ -186,6 +186,7 @@ class reportMascot extends HTMLElement {
                     mapboxClient.geocodeForward(
                         locationValue.value,
                         {
+                            country: 'ar',
                             autocomplete: true,
                             language: "es",
                         },

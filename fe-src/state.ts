@@ -35,7 +35,7 @@ const state = {
 
         if (mascotId) {
 
-            const eliminatePet = fetch(API_BASE_URL + "/eliminate-mascot", {
+            const eliminatePet = await fetch(API_BASE_URL + "/eliminate-mascot", {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,13 +99,13 @@ const state = {
         const { email } = currentState;
         
         const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
-           method: 'POST',
-           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `bearer ${token}`,
-           },
-           body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
-        })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${token}`,
+            },
+            body: JSON.stringify({ petName, _geoloc, ImageDataURL, email }),
+        });
         await reportedPet.json();
         await console.log("Mascota reportada! :D");
         callback();

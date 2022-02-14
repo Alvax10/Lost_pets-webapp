@@ -11,14 +11,13 @@ export class MyLostPets extends HTMLElement {
     petId;
     objectID;
     constructor() {
-
-      super();
-      this.shadow = this.attachShadow({ mode: 'open' });
-      this.petName = this.getAttribute("pet-name");
-      this.petId = this.getAttribute("pet-id");
-      this.objectID = this.getAttribute("object-id");
-      this.petPhoto = this.getAttribute("pet-photo");
-      this.petLocationName = this.getAttribute("pet-location-name");
+        super();
+        this.shadow = this.attachShadow({ mode: 'open' });
+        this.petName = this.getAttribute("pet-name");
+        this.petId = this.getAttribute("pet-id");
+        this.objectID = this.getAttribute("object-id");
+        this.petPhoto = this.getAttribute("pet-photo");
+        this.petLocationName = this.getAttribute("pet-location-name");
     }
     connectedCallback() {
         this.render();
