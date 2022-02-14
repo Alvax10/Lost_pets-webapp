@@ -72,6 +72,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
         const mascotCreatedInAlgolia = await index.saveObject({
             petName: petName,
             _geoloc: _geoloc,
+            id: Mascot["id"],
             ImageDataURL: imagen["secure_url"],
             userId: userFounded["id"],
         }, {

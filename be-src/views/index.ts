@@ -145,7 +145,7 @@ app.get("/mascots", async(req, res) => {
 });
 
 // Shows the info of a user
-app.get("/me", checkBody, verifyAuth , async (req, res) => {
+app.get("/me", checkBody, cors(), verifyAuth , async (req, res) => {
 
     const data = req._user;
     const userData = await User.findByPk(data['id']);
