@@ -38,7 +38,7 @@ const state = {
             const eliminatePet = await fetch(API_BASE_URL + "/eliminate-mascot", {
                 method: 'DELETE',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Content-Type': 'application/json',
                     'Authorization': `bearer ${token}`,
                 },
@@ -58,7 +58,7 @@ const state = {
             const updatedData = await fetch(API_BASE_URL + "/update-mascot-info", {
                 method: 'PATCH',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Content-Type': 'application/json',
                     'Authorization': `bearer ${token}`,
                 },
@@ -75,7 +75,7 @@ const state = {
         const sendEmailToUser = await fetch(API_BASE_URL + "/send-email-to-user", {
             method: 'POST',
             headers: {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://localhost:1234',
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${token}`,
             },
@@ -104,7 +104,7 @@ const state = {
         const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
             method: 'POST',
             headers: {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://localhost:1234',
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${token}`,
             },
@@ -124,7 +124,7 @@ const state = {
             const allMascotsByAUser = await fetch(API_BASE_URL + "/user/reported-mascots" + "?email=" + email, {
                 method: 'GET',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Authorization': `bearer ${token}`,
                 }
             })
@@ -150,7 +150,7 @@ const state = {
         const updateUserInfo = await fetch(API_BASE_URL + "/user/data", {
             method: 'PUT',
             headers: {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://localhost:1234',
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${token}`,
             },
@@ -170,7 +170,7 @@ const state = {
             await fetch(API_BASE_URL + '/auth', {
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
@@ -186,7 +186,7 @@ const state = {
             const verifyUser = await fetch(API_BASE_URL + "/verify/user", {
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email }),
@@ -206,7 +206,7 @@ const state = {
             const authToken = await fetch(API_BASE_URL + '/auth/token', {
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
@@ -229,7 +229,7 @@ const state = {
         if (token) {
             const res = await fetch(API_BASE_URL + "/me", {
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:1234',
                     'Authorizaton': `bearer ${token}`,
                     'Content-type': 'application/json',
                 }
