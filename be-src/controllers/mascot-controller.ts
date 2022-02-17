@@ -54,49 +54,53 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 
     if (ImageDataURL && email) {
         
-        const userFounded = await User.findOne({
-            where: { email: email },
-        });
-
-        const imagen = await cloudinary.uploader.upload(ImageDataURL, {
-
-            resource_type: 'image',
-            discard_original_filename: true,
-            width: 200,
-            hegiht: 100,
-        })
-        // .catch((err) => {
-        //     console.log("Esto contiene el error: ", err)
-        // });
-        
-        const mascotCreatedInAlgolia = await index.saveObject({
-            petName: petName,
-            _geoloc: _geoloc,
-            id: Mascot["id"],
-            ImageDataURL: imagen["secure_url"],
-            userId: userFounded["id"],
-        }, {
-            autoGenerateObjectIDIfNotExist: true,
-        });
-
-        const mascotFounded = await Mascot.findOrCreate({
-            where: { petName: petName, userId: userFounded["id"] },
-            defaults: {
+        try {
+            const userFounded = await User.findOne({
+                where: { email: email },
+            });
+    
+            const imagen = await cloudinary.uploader.upload(ImageDataURL, {
+    
+                resource_type: 'image',
+                discard_original_filename: true,
+                width: 200,
+                hegiht: 100,
+                timeout:200000,
+            })
+            // .catch((err) => {
+            //     console.log("Esto contiene el error: ", err)
+            // });
+            
+            const mascotCreatedInAlgolia = await index.saveObject({
                 petName: petName,
                 _geoloc: _geoloc,
                 ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
-                id: Mascot["id"],
-                objectID: mascotCreatedInAlgolia["objectID"],
-            }
-        })
-        .catch((err) => {
-            console.log("Error desde el controlador de report mascot: ", err);
-        });
+            }, {
+                autoGenerateObjectIDIfNotExist: true,
+            })
+            // .catch((err) => {
+            //     console.log("Error desde el controlador de report mascot algolia: ", err);
+            // });
+    
+            const mascotFounded = await Mascot.create({
+                defaults: {
+                    petName: petName,
+                    _geoloc: _geoloc,
+                    ImageDataURL: imagen["secure_url"],
+                    userId: userFounded["id"],
+                    objectID: mascotCreatedInAlgolia["objectID"],
+                }
+            })
+            .catch((err) => {
+                console.log("Error desde el controlador de report mascot: ", err);
+            });
 
-        // console.log("Esta es la creación de una Mascota: ", mascotCreated);
-        // console.log("Este es el encuentro de una Mascota: ", mascotFounded);
-        return mascotFounded;
+            return mascotFounded;
+
+        }catch (e) {
+            console.error("Este es el error:", e);
+        }
 
     } else {
         console.error('La imageDataURL no se está pasando bien');
@@ -110,7 +114,8 @@ export async function updateProfile(mascotId, objectID, petName, petPhoto, masco
 
         let image;
         const imagen = await cloudinary.uploader.upload(petPhoto, function (error, result) {
-            image = result.secure_url;
+            image = result.secure_url,
+            { timeout:200000 }
         })
         .catch((err) => {
             console.log("Esto contiene imagen: ", imagen);
