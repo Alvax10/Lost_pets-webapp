@@ -13,7 +13,20 @@ const app = express();
 const port = process.env.PORT || 3011;
 
 app.use(express.json({ limit: "75mb" }));
-app.use(cors());
+
+var whitelist = ['http://localhost3011', 'https://dwf-m8-fe7d6.firebaseapp.com'];
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
+    optionsSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions));
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
