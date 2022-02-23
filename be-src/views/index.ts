@@ -26,7 +26,7 @@ var corsOptions = {
     },
     optionsSuccessStatus: 200,
 }
-app.use(cors());
+app.use(cors(corsOptions));
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
