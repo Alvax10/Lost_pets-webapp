@@ -1,23 +1,24 @@
+import * as path from "path";
+import * as cors from "cors";
+import * as express from "express";
 import { User } from "../models/user-mascot";
 import { Mascot } from "../models/user-mascot";
-import * as express from "express";
-import * as cors from "cors";
-import * as path from "path";
-import { findOrCreateUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
-import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
 import { sendEmailToUser } from "../lib/sendgrid";
 import { checkBody } from "../middleware/checkBody";
 import { verifyAuth } from "../middleware/verifyAuth";
+import { createUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
+import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
 
 const app = express();
 const port = process.env.PORT || 3011;
 
 app.use(express.json({ limit: "75mb" }));
 
-var whitelist = ['http://localhost3011', 'https://dwf-m8-fe7d6.firebaseapp.com'];
+// 'http://127.0.0.1:8080'
+var whitelist = ['https://dwf-m8-fe7d6.firebaseapp.com'];
 var corsOptions = {
     origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
+        if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
@@ -25,8 +26,7 @@ var corsOptions = {
     },
     optionsSuccessStatus: 200,
 }
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
@@ -91,7 +91,6 @@ app.post("/report/mascot", verifyAuth, checkBody, async(req, res) => {
     const { petName, _geoloc, ImageDataURL, email } = req.body;
 
     const reportedPet = await reportLostPet(petName, _geoloc, ImageDataURL, email);
-    await console.log(reportedPet);
     await res.json(reportedPet);
 });
 
@@ -131,7 +130,7 @@ app.post("/auth/token", checkBody, async(req, res) => {
 app.post("/auth", checkBody, async (req, res) => {
     const { email, password } = req.body;
 
-    const response = await findOrCreateUser(email, password);
+    const response = await createUser(email, password);
     await res.json( response );
 });
 

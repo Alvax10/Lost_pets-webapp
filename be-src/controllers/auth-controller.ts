@@ -32,16 +32,14 @@ export async function completeUserData(email, phone_number, username) {
 }
 
 // Sign Up
-export async function findOrCreateUser(email, password ) {
+export async function createUser(email, password ) {
 
-    const [ user, created ] = await User.findOrCreate({
+    const [user, created] = await User.findOrCreate({
         where: { email },
-        defaults: {
-            email,
-        }
+        defaults: { email }
     });
     
-    const [ auth, authCreated ] = await Auth.findOrCreate({
+    const [auth, authCreated] = await Auth.findOrCreate({
         where: { userId: user['id'] },
         defaults: {
             email,
@@ -50,6 +48,7 @@ export async function findOrCreateUser(email, password ) {
         }
         // se recomienda no mostrar el de auth ya que allí está la contraseña encriptada :D
     });
+    console.log(user,auth);
     return authCreated;
 }
 

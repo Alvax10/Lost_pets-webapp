@@ -17,6 +17,7 @@ export async function mascotsCloseFrom(lat, lng) {
 
         const hits = await index.search("", {
             aroundLatLng: [lat, lng].join(','),
+            aroundRadius: 100000,
         });
 
         return hits["hits"];
@@ -52,54 +53,44 @@ export async function allReportedPetsByAUser(email) {
 // Report a lost pet
 export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 
+    console.log(petName, _geoloc, email);
+
     if (ImageDataURL && email) {
         
+        const userFounded = await User.findOne({
+            where: { email: email },
+        });
+
         try {
-            const userFounded = await User.findOne({
-                where: { email: email },
-            });
-    
-            const imagen = await cloudinary.uploader.upload(ImageDataURL, {
-    
-                resource_type: 'image',
-                discard_original_filename: true,
-                width: 200,
-                hegiht: 100,
-                timeout:200000,
-            })
-            // .catch((err) => {
-            //     console.log("Esto contiene el error: ", err)
-            // });
+            
+            const imagen = await cloudinary.uploader.upload(ImageDataURL,
+                {
+                    resource_type: "image",
+                    discard_original_filename: true,
+                    timeout: 1500000,
+                }
+            );
             
             const mascotCreatedInAlgolia = await index.saveObject({
                 petName: petName,
                 _geoloc: _geoloc,
-                ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
             }, {
                 autoGenerateObjectIDIfNotExist: true,
-            })
-            // .catch((err) => {
-            //     console.log("Error desde el controlador de report mascot algolia: ", err);
-            // });
-    
-            const mascotFounded = await Mascot.create({
-                defaults: {
-                    petName: petName,
-                    _geoloc: _geoloc,
-                    ImageDataURL: imagen["secure_url"],
-                    userId: userFounded["id"],
-                    objectID: mascotCreatedInAlgolia["objectID"],
-                }
-            })
-            .catch((err) => {
-                console.log("Error desde el controlador de report mascot: ", err);
             });
 
-            return mascotFounded;
+            const mascot = await Mascot.create({
+                petName: petName,
+                _geoloc: _geoloc,
+                ImageDataURL: imagen["secure_url"],
+                userId: userFounded["id"],
+                objectID: mascotCreatedInAlgolia["objectID"],
+            });
 
-        }catch (e) {
-            console.error("Este es el error:", e);
+            return mascot;
+            
+        } catch(e) {
+            console.log("Este error ocurrió en reportar mascota: ", e);
         }
 
     } else {
@@ -112,35 +103,40 @@ export async function updateProfile(mascotId, objectID, petName, petPhoto, masco
 
     if (mascotId && petName && petPhoto && mascotLocation) {
 
-        let image;
-        const imagen = await cloudinary.uploader.upload(petPhoto, function (error, result) {
-            image = result.secure_url,
-            { timeout:200000 }
-        })
-        .catch((err) => {
-            console.log("Esto contiene imagen: ", imagen);
-            console.log("Esto contiene el error: ", err)
-        });
+        try {
 
-        const allDataComplete = {
-            imageDataURL: image,
-            petName: petName,
-            _geoloc: mascotLocation,
-        }
-
-        const mascotUpdated = await index.partialUpdateObject({
-            objectID: objectID,
-            petName: petName,
-            _geoloc: mascotLocation,
-            ImageDataURL: imagen["secure_url"],
-        });
-        const petUpdated = await Mascot.update(allDataComplete,
-        {
-            where: {
-                id: mascotId,
+            let image;
+            const imagen = await cloudinary.uploader.upload(petPhoto, function (error, result) {
+                image = result.secure_url;
+            })
+            .catch((err) => {
+                // console.log("Esto contiene imagen: ", imagen);
+                console.log("Esto contiene el error: ", err)
+            });
+    
+            const allDataComplete = {
+                imageDataURL: image,
+                petName: petName,
+                _geoloc: mascotLocation,
             }
-        });
+    
+            const mascotUpdated = await index.partialUpdateObject({
+                objectID: objectID,
+                petName: petName,
+                _geoloc: mascotLocation,
+                ImageDataURL: imagen["secure_url"],
+            });
+            const petUpdated = await Mascot.update(allDataComplete,
+            {
+                where: {
+                    id: mascotId,
+                }
+            });
+    
+            return petUpdated;
 
-        return petUpdated;
+        }catch (e) {
+            console.error("No se pudo editar la mascota: ", e);
+        }
     }
 }
