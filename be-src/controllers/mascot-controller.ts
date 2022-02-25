@@ -17,7 +17,6 @@ export async function mascotsCloseFrom(lat, lng) {
 
         const hits = await index.search("", {
             aroundLatLng: [lat, lng].join(','),
-            aroundRadius: 100000,
         });
 
         return hits["hits"];
@@ -105,20 +104,17 @@ export async function updateProfile(mascotId, objectID, petName, petPhoto, masco
 
         try {
 
-            let image;
-            const imagen = await cloudinary.uploader.upload(petPhoto, function (error, result) {
-                image = result.secure_url;
-            })
-            .catch((err) => {
-                // console.log("Esto contiene imagen: ", imagen);
-                console.log("Esto contiene el error: ", err)
-            });
-    
-            const allDataComplete = {
-                imageDataURL: image,
-                petName: petName,
-                _geoloc: mascotLocation,
-            }
+            const imagen = await cloudinary.uploader.upload(petPhoto,
+                {
+                    resource_type: "image",
+                    discard_original_filename: true,
+                    timeout: 1500000,
+                }
+            );
+            // .catch((err) => {
+            //     console.log("Esto contiene imagen: ", imagen);
+            //     console.log("Esto contiene el error: ", err)
+            // });
     
             const mascotUpdated = await index.partialUpdateObject({
                 objectID: objectID,
@@ -126,7 +122,11 @@ export async function updateProfile(mascotId, objectID, petName, petPhoto, masco
                 _geoloc: mascotLocation,
                 ImageDataURL: imagen["secure_url"],
             });
-            const petUpdated = await Mascot.update(allDataComplete,
+            const petUpdated = await Mascot.update({
+                imageDataURL: imagen["secure_url"],
+                petName: petName,
+                _geoloc: mascotLocation,
+            },
             {
                 where: {
                     id: mascotId,
