@@ -8,7 +8,7 @@ export async function eliminateMascot(mascotId, objectID) {
     await mascotFound.destroy();
     await index.deleteObject(objectID);
 
-    return console.log("Mascot eliminated");
+    return true;
 }
 
 export async function mascotsCloseFrom(lat, lng) {
@@ -17,7 +17,10 @@ export async function mascotsCloseFrom(lat, lng) {
 
         const hits = await index.search("", {
             aroundLatLng: [lat, lng].join(','),
-        });
+        })
+        // .catch((err) => {
+        //     console.error("Hay un error en mascotsClose from: ", err);
+        // });
 
         return hits["hits"];
 
@@ -34,13 +37,13 @@ export async function allReportedPetsByAUser(email) {
             where: { email: email },
         });
 
-        console.log(userFounded['id']);
+        // console.log(userFounded['id']);
         const allMascotsReported = await Mascot.findAll({
             where: { userId: userFounded['id'] }
+        })
+        .catch((err) => {
+            console.error("Hay un error en all reported pets by a user: ", err);
         });
-        // .catch((err) => {
-        //     console.error("Si hay un error en el controller es este: ", err);
-        // });
 
         return allMascotsReported;
 
@@ -52,7 +55,7 @@ export async function allReportedPetsByAUser(email) {
 // Report a lost pet
 export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 
-    console.log(petName, _geoloc, email);
+    // console.log(petName, _geoloc, email);
 
     if (ImageDataURL && email) {
         
@@ -73,6 +76,7 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
             const mascotCreatedInAlgolia = await index.saveObject({
                 petName: petName,
                 _geoloc: _geoloc,
+                ImageDataURL: imagen["secure_url"],
                 userId: userFounded["id"],
             }, {
                 autoGenerateObjectIDIfNotExist: true,
@@ -122,15 +126,15 @@ export async function updateProfile(mascotId, objectID, petName, petPhoto, masco
                 _geoloc: mascotLocation,
                 ImageDataURL: imagen["secure_url"],
             });
+
             const petUpdated = await Mascot.update({
                 imageDataURL: imagen["secure_url"],
                 petName: petName,
                 _geoloc: mascotLocation,
-            },
-            {
+            },  {
                 where: {
                     id: mascotId,
-                }
+                },
             });
     
             return petUpdated;

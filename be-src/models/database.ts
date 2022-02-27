@@ -9,6 +9,12 @@ export const sequelize = new Sequelize({
     port: 5432,
     host: process.env.HOST_POSTGRES,
     ssl: true,
+    pool: {
+        max: 20,
+        min: 0,
+        acquire: 120000,
+        idle: 30000,
+    },
     // Esto es necesario para que corra correctamente
     dialectOptions: {
         ssl: {

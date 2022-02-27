@@ -20,12 +20,13 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
     const { mascotId, objectID } = req.body;
 
     await eliminateMascot(mascotId, objectID)
-    .then((res) => {
-        return res;
+    .then((resp) => {
+        res.status(200).json("Mascota Eliminada");
+        return resp;
     })
-    .catch((err) => {
-        console.log("Este es el error de eliminate mascot: ", err);
-    });
+    // .catch((err) => {
+    //     console.log("Este es el error de eliminate mascot: ", err);
+    // });
 });
 
 // Update mascot info
