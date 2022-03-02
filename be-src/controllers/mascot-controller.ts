@@ -18,9 +18,9 @@ export async function mascotsCloseFrom(lat, lng) {
         const hits = await index.search("", {
             aroundLatLng: [lat, lng].join(','),
         })
-        // .catch((err) => {
-        //     console.error("Hay un error en mascotsClose from: ", err);
-        // });
+        .catch((err) => {
+            console.error("Hay un error en mascotsClose from: ", err);
+        });
 
         return hits["hits"];
 
