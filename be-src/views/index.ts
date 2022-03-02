@@ -13,18 +13,7 @@ const app = express();
 const port = process.env.PORT || 3011;
 
 app.use(express.json({ limit: "75mb" }));
-
-var whitelist = ['http://localhost:3011/',  'https://dwf-m8-fe7d6.firebaseapp.com/', 'https://desafio-final-dwf-m7.herokuapp.com/'];
-var corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
-}
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
