@@ -8,12 +8,15 @@ import { checkBody } from "../middleware/checkBody";
 import { verifyAuth } from "../middleware/verifyAuth";
 import { createUser, authenticateUser, verifyIfUserExists, completeUserData, updateUserData } from "../controllers/auth-controller";
 import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile, eliminateMascot } from "../controllers/mascot-controller";
+const fileupload = require('express-fileupload'); 
 
 const app = express();
 const port = process.env.PORT || 3011;
 
 app.use(express.json({ limit: "75mb" }));
 app.use(cors());
+app.use(fileupload({useTempFiles: true}))
+
 
 //Eliminate mascot
 app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
@@ -23,17 +26,15 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
     .then((resp) => {
         res.status(200).json("Mascota Eliminada");
         return resp;
-    })
-    // .catch((err) => {
-    //     console.log("Este es el error de eliminate mascot: ", err);
-    // });
+    });
+    res.json(true);
 });
 
 // Update mascot info
 app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
-    const { mascotId, objectID, petName, petPhoto, mascotLocation } = req.body;
+    const { userId, mascotId, objectID, petName, ImageDataURL, mascotLocation } = req.body;
 
-    const dataUpdated = await updateProfile(mascotId, objectID, petName, petPhoto, mascotLocation)
+    const dataUpdated = await updateProfile(userId, mascotId, objectID, petName, ImageDataURL, mascotLocation)
     .catch((err) => {
         console.log(err);
     });
