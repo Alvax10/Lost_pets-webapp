@@ -12,31 +12,37 @@ export function getSHA256ofString(text: string) {
 // Update User Data
 export async function updateUserData(oldEmail, newEmail?, newPassword?) {
 
-    const findAuth = await Auth.findOne({
+    console.log({
+        oldEmail: oldEmail,
+        newEmail: newEmail,
+        newPassword: newPassword,
+    });
+
+    const authFounded = await Auth.findOne({
         where: { email: oldEmail }
     });
 
     if (newEmail) {
 
-        await findAuth.update({
+        await authFounded.update({
             email: newEmail,
         });
         
         
     } else if (newPassword) {
-        await findAuth.update({
+        await authFounded.update({
             password: newPassword,
         });
         
         
     } else {
-        await findAuth.update({
+        await authFounded.update({
             email: newEmail,
             password: newPassword,
         });
     }
 
-    await findAuth.save();
+    await authFounded.save();
 }
 
 // Add username y phone number to the user
