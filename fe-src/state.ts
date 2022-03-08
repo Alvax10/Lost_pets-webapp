@@ -143,19 +143,19 @@ const state = {
         }
 
     },
-    async modifyUserInfo(password) {
+    async modifyUserInfo(oldEmail, newEmail?, password?) {
         const currentState = this.getState();
         const { token } = currentState;
         
         const updateUserInfo = await fetch(API_BASE_URL + "/user/data", {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${token}`,
             },
-            body: JSON.stringify({ password }),
-        })
+            body: JSON.stringify({ oldEmail: oldEmail, newEmail: newEmail, newPassword: password }),
+        });
         const data = await updateUserInfo.json();
         console.log("Esta es la data de modifyUserInfo: " + data);
     },

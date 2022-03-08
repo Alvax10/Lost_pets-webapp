@@ -84,6 +84,10 @@ class myData extends HTMLElement {
                         <p class="username"> Tu Nombre </p>
                         <input class="input-username" type="text" placeholder="Tu nombre" />
                     </label>
+                    <label class="email-zone">
+                        <p class="username"> Tu Email </p>
+                        <input class="input-email" type="text" placeholder="Tu email" />
+                    </label>
                     <label class="password-zone">
                         <p class="password"> Tu Contraseña </p>
                         <input class="input-password" type="password" placeholder=" Tu Contraseña" />
@@ -112,14 +116,15 @@ class myData extends HTMLElement {
                 alert('las contraseñas no coinciden');
             } else {
                 // console.log(primerContraseñaInput.value, segundaContraseñaInput.value);
+                const emailInput = (this.shadow.querySelector(".input-email") as HTMLInputElement);
                 const username = (this.shadow.querySelector(".input-username") as HTMLInputElement);
                 currentState['username'] = username.value;
 
                 state.checkIfUserExists(() => {
 
                     if (currentState['userExists'] == true) {
-                        
-                        state.modifyUserInfo(primerContraseñaInput.value);
+
+                        state.modifyUserInfo(currentState["email"], emailInput.value, primerContraseñaInput.value);
                         Router.go("/home");
         
                     } else {

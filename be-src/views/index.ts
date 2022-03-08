@@ -11,7 +11,7 @@ import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile,
 const fileupload = require('express-fileupload'); 
 
 const app = express();
-const port = process.env.PORT || 3011;
+const port = process.env.PORT || 3010;
 
 app.use(express.json({ limit: "75mb" }));
 app.use(cors());
@@ -85,9 +85,9 @@ app.post("/report/mascot", verifyAuth, checkBody, async(req, res) => {
 
 // Update user data
 app.patch("/user/data", checkBody, async(req, res) => {
-    const { email, newPassword } = req.body;
+    const { oldEmail, newEmail, newPassword } = req.body;
 
-    await updateUserData(email, newPassword);
+    await updateUserData(oldEmail, newEmail, newPassword);
     await res.json({ message: 'updated succesfully' });
 })
 
