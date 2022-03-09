@@ -11,7 +11,7 @@ import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile,
 const fileupload = require('express-fileupload'); 
 
 const app = express();
-app.use(cors());
+// app.use(cors());
 
 app.use(express.json({ limit: "75mb" }));
 app.use(fileupload({useTempFiles: true}))
