@@ -12,37 +12,56 @@ export function getSHA256ofString(text: string) {
 // Update User Data
 export async function updateUserData(oldEmail, newEmail?, newPassword?) {
 
-    console.log({
-        oldEmail: oldEmail,
-        newEmail: newEmail,
-        newPassword: newPassword,
-    });
+    try {
 
-    const authFounded = await Auth.findOne({
-        where: { email: oldEmail }
-    });
+        const authFounded = await Auth.findOne({
+            where: { email: oldEmail }
+        });
+        const userFounded = await User.findOne({
+            where: { email: oldEmail }
+        });
 
-    if (newEmail && !newPassword) {
+        if (newEmail && !newPassword) {
 
-        await authFounded.update({
-            email: newEmail,
-        });
-        
-        
-    } else if (newPassword && !newEmail) {
-        await authFounded.update({
-            password: getSHA256ofString(newPassword),
-        });
-        
-        
-    } else {
-        await authFounded.update({
-            email: newEmail,
-            password: getSHA256ofString(newPassword),
-        });
+            console.log("Hay mail");
+            const updatedUser = await userFounded.update({
+                email: newEmail,
+            });
+            const updatedAuth = await authFounded.update({
+                email: newEmail,
+            });
+
+            console.log(updatedUser);
+            return updatedAuth;
+
+        } else if (newPassword && !newEmail) {
+
+            console.log("Hay password");
+            const updatedAuth = await authFounded.update({
+                password: getSHA256ofString(newPassword),
+            });
+
+            console.log(updatedAuth);
+            return updatedAuth;
+
+        } else {
+
+            console.log("Hay mail y password");
+            const updatedUser = await userFounded.update({
+                email: newEmail,
+            });
+            const updatedAuth = await authFounded.update({
+                email: newEmail,
+                password: getSHA256ofString(newPassword),
+            });
+
+            console.log(updatedUser);
+            return updatedAuth;
+        }
+
+    } catch (err) {
+        console.error("Error de updateUser: ", err)
     }
-
-    await authFounded.save();
 }
 
 // Add username y phone number to the user

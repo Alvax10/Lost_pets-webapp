@@ -84,8 +84,8 @@ app.post("/report/mascot", verifyAuth, checkBody, async(req, res) => {
 app.patch("/user/data", checkBody, async(req, res) => {
     const { oldEmail, newEmail, newPassword } = req.body;
 
-    await updateUserData(oldEmail, newEmail, newPassword);
-    await res.json({ message: 'updated succesfully' });
+    const update = await updateUserData(oldEmail, newEmail, newPassword);
+    await res.json({ message: update });
 })
 
 // Complete user Info
