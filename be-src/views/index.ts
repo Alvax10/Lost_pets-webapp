@@ -58,9 +58,6 @@ app.get("/mascots-close-from", checkBody, async(req, res) => {
     const { lat, lng } = req.query;
 
     const hits = await mascotsCloseFrom(lat, lng)
-    // .catch((err) => {
-    //     console.log("Este es el error de mascots close from: ", err);
-    // });
 
     res.json(hits);
     return hits;

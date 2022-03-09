@@ -21,7 +21,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync sequelize :", err);
 // });
 
-// Auth.sequelize.sync()
+// Auth.sequelize.sync({ force: true })
 // .then((res) => {
 //     console.log(res);
 // })
@@ -29,7 +29,7 @@ import { sequelize } from "../models/database";
 //     console.log("Este es el error de sync Auth :", err);
 // });
 
-// User.sequelize.sync()
+// User.sequelize.sync({ force: true })
 // .then((res) => {
 //     console.log(res);
 // })
