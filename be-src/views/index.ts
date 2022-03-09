@@ -11,11 +11,11 @@ import { reportLostPet, allReportedPetsByAUser, mascotsCloseFrom, updateProfile,
 const fileupload = require('express-fileupload'); 
 
 const app = express();
-const port = process.env.PORT || 3010;
+app.use(cors());
 
 app.use(express.json({ limit: "75mb" }));
-app.use(cors());
 app.use(fileupload({useTempFiles: true}))
+const port = process.env.PORT || 3010;
 
 
 //Eliminate mascot
