@@ -22,23 +22,23 @@ export async function updateUserData(oldEmail, newEmail?, newPassword?) {
         where: { email: oldEmail }
     });
 
-    if (newEmail) {
+    if (newEmail && !newPassword) {
 
         await authFounded.update({
             email: newEmail,
         });
         
         
-    } else if (newPassword) {
+    } else if (newPassword && !newEmail) {
         await authFounded.update({
-            password: newPassword,
+            password: getSHA256ofString(newPassword),
         });
         
         
     } else {
         await authFounded.update({
             email: newEmail,
-            password: newPassword,
+            password: getSHA256ofString(newPassword),
         });
     }
 
