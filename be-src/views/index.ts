@@ -27,7 +27,6 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
         res.status(200).json("Mascota Eliminada");
         return resp;
     });
-    res.json(true);
 });
 
 // Update mascot info
