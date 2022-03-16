@@ -122,8 +122,6 @@ export async function updateProfile(userId, mascotId, objectID, petName, ImageDa
         );
 
         const mascotUpdated = await index.partialUpdateObject({
-            userId: userId,
-            objectID: objectID,
             petName: petName,
             _geoloc: mascotLocation,
             ImageDataURL: imagen["secure_url"],
