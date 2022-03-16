@@ -38,15 +38,17 @@ app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
         console.log(err);
     });
     res.json(dataUpdated);
+    return dataUpdated;
 });
-
 
 // Send an email to other user
 app.post("/send-email-to-user", verifyAuth, checkBody, async(req, res) => {
     const { userEmail, petName, newLocation, numeroDelUsuario } = req.body;
 
     try {
-        await sendEmailToUser(userEmail, petName, newLocation, numeroDelUsuario)
+        const emailSended = await sendEmailToUser(userEmail, petName, newLocation, numeroDelUsuario);
+        return emailSended;
+    
     } catch(err) {
         console.log("Este es el error de send email: ", err);
     }
@@ -57,7 +59,6 @@ app.get("/mascots-close-from", checkBody, async(req, res) => {
     const { lat, lng } = req.query;
 
     const hits = await mascotsCloseFrom(lat, lng)
-
     res.json(hits);
     return hits;
 });

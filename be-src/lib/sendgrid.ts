@@ -14,5 +14,6 @@ export async function sendEmailToUser(userEmail, petName, newLocation, numeroDel
     const enviarMail = await sgMail.send(msg)
     .then(() => {
         console.log("Email enviado! :D");
+        return true;
     });
 }
