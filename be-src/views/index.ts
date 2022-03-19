@@ -33,12 +33,12 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
 app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
     const { userId, mascotId, objectID, petName, ImageDataURL, mascotLocation } = req.body;
 
-    const dataUpdated = await updateProfile(userId, mascotId, objectID, petName, ImageDataURL, mascotLocation)
+    await updateProfile(userId, mascotId, objectID, petName, ImageDataURL, mascotLocation)
     .catch((err) => {
         console.log(err);
     });
-    res.json(dataUpdated);
-    return dataUpdated;
+    res.json(true);
+    return true;
 });
 
 // Send an email to other user
