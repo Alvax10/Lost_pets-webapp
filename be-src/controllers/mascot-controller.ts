@@ -123,6 +123,7 @@ export async function updateProfile(userId, mascotId, objectID, petName, ImageDa
 
         const mascotUpdated = await index.partialUpdateObject({
             petName: petName,
+            objectID: objectID,
             _geoloc: mascotLocation,
             ImageDataURL: imagen["secure_url"],
         });
@@ -131,6 +132,7 @@ export async function updateProfile(userId, mascotId, objectID, petName, ImageDa
         const petUpdated = await petFounded.update({
             ImageDataURL: imagen["secure_url"],
             petName: petName,
+            objectID: objectID,
             _geoloc: mascotLocation,
             userId: userId,
         });
