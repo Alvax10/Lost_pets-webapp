@@ -31,9 +31,9 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
 
 // Update mascot info
 app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
-    const { userId, mascotId, objectID, petName, ImageDataURL, mascotLocation } = req.body;
+    const { userId, mascotId, objectID, petName, ImageDataURL } = req.body;
 
-    await updateProfile(userId, mascotId, objectID, petName, ImageDataURL, mascotLocation)
+    await updateProfile(userId, mascotId, objectID, petName, ImageDataURL)
     .catch((err) => {
         console.log(err);
     });
