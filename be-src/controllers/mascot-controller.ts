@@ -109,38 +109,48 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 }
 
 // update profile
-export async function updateProfile(userId, mascotId, objectID, petName, ImageDataURL, mascotLocation) {
+export async function updateProfile(mascotId, objectID, petName, ImageDataURL, mascotLocation) {
 
-    try {
+    if (mascotId && objectID) {
 
-        const imagen = await cloudinary.uploader.upload(ImageDataURL,
-            {
-                resource_type: "image",
-                discard_original_filename: true,
-                timeout: 1500000,
-            }
-        );
-
-        const mascotUpdated = await index.partialUpdateObject({
-            petName: petName,
+        console.log({
+            mascotId: mascotId,
             objectID: objectID,
-            _geoloc: mascotLocation,
-            ImageDataURL: imagen["secure_url"],
+            mascotLocation: mascotLocation,
+            petName: petName,
         });
 
-        const petFounded = await Mascot.findByPk(mascotId);
-        const petUpdated = await petFounded.update({
-            ImageDataURL: imagen["secure_url"],
-            petName: petName,
-            objectID: objectID,
-            _geoloc: mascotLocation,
-            userId: userId,
-        });
-
-        console.log("Mascota updateada: ",petUpdated);
-        return true;
-
-    } catch (e) {
-        console.error("No se pudo editar la mascota: ", e);
+        try {
+    
+            const imagen = await cloudinary.uploader.upload(ImageDataURL,
+                {
+                    resource_type: "image",
+                    discard_original_filename: true,
+                    timeout: 1500000,
+                }
+            );
+    
+            const mascotUpdated = await index.partialUpdateObject({
+                petName: petName,
+                objectID: objectID,
+                _geoloc: mascotLocation,
+                ImageDataURL: imagen["secure_url"],
+            });
+    
+            const petFounded = await Mascot.findByPk(mascotId);
+            const petUpdated = await petFounded.update({
+                ImageDataURL: imagen["secure_url"],
+                petName: petName,
+                objectID: objectID,
+                _geoloc: mascotLocation,
+            });
+    
+            console.log("Mascota updateada: ",petUpdated);
+    
+            return true;
+    
+        } catch (e) {
+            console.error("No se pudo editar la mascota: ", e);
+        }
     }
 }
