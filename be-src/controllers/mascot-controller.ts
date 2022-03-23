@@ -111,15 +111,15 @@ export async function reportLostPet(petName, _geoloc, ImageDataURL, email) {
 // update profile
 export async function updateProfile(mascotId, objectID, petName, ImageDataURL, mascotLocation) {
 
+    console.log({
+        mascotId: mascotId,
+        objectID: objectID,
+        mascotLocation: mascotLocation,
+        // ImageDataURL: ImageDataURL,
+        petName: petName,
+    });
+    
     if (mascotId && objectID) {
-
-        console.log({
-            mascotId: mascotId,
-            objectID: objectID,
-            mascotLocation: mascotLocation,
-            petName: petName,
-        });
-
         try {
     
             const imagen = await cloudinary.uploader.upload(ImageDataURL,
@@ -147,10 +147,11 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
     
             console.log("Mascota updateada: ",petUpdated);
     
-            return true;
+            if (petUpdated) { return true } else { return false };
     
         } catch (e) {
             console.error("No se pudo editar la mascota: ", e);
+            return false;
         }
     }
 }

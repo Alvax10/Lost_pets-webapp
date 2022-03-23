@@ -31,11 +31,12 @@ app.delete("/eliminate-mascot", verifyAuth, checkBody, async(req, res) => {
 
 // Update mascot info
 app.patch("/update-mascot-info", verifyAuth, checkBody, async(req, res) => {
-    const { userId, mascotId, objectID, petName, ImageDataURL } = req.body;
+    const { mascotId, objectID, petName, ImageDataURL, mascotLocation } = req.body;
 
-    await updateProfile(userId, mascotId, objectID, petName, ImageDataURL)
+    await updateProfile(mascotId, objectID, petName, ImageDataURL, mascotLocation)
     .catch((err) => {
         console.log(err);
+        return false;
     });
     res.json(true);
     return true;
