@@ -116,6 +116,7 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
             
             const petFounded = await Mascot.findByPk(mascotId);
             if (ImageDataURL != null) {
+                console.log("La imagen no es null");
 
                 const imagen = await cloudinary.uploader.upload(ImageDataURL,
                     {
@@ -126,44 +127,50 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                 );
                 
                 const mascotUpdated = await index.partialUpdateObject({
-                objectID: objectID,
-                ImageDataURL: imagen["secure_url"],
-            });
-            
+                    objectID: objectID,
+                    petName: petName,
+                    _geoloc: mascotLocation,
+                    ImageDataURL: imagen["secure_url"],
+                });
+
                 const petUpdated = await petFounded.update({
                     ImageDataURL: imagen["secure_url"],
                     objectID: objectID,
-                });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
-            }
-            
-            if (petName != null) {
-                const mascotUpdated = await index.partialUpdateObject({
                     petName: petName,
-                    objectID: objectID,
+                    _geoloc: mascotLocation,
                 });
-                const petUpdated = await petFounded.update({
-                    petName: petName,
-                    objectID: objectID,
-                });
-
-                if (petUpdated) { return true } else { return false };
             }
 
+            console.log("MascotLocation: ", mascotLocation);
             if (mascotLocation != {name: null, lat: null, lng: null}) {
+
                 const mascotUpdated = await index.partialUpdateObject({
-                    _geoloc: mascotLocation,
                     objectID: objectID,
-                });
-                const petUpdated = await petFounded.update({
                     _geoloc: mascotLocation,
-                    objectID: objectID,
                 });
 
-                if (petUpdated) { return true } else { return false };
+                const petUpdated = await petFounded.update({
+                    objectID: objectID,
+                    _geoloc: mascotLocation,
+                });
             }
+
+            console.log("PetName: ", petName);
+            if (mascotLocation != {name: null, lat: null, lng: null}) {
+
+                const mascotUpdated = await index.partialUpdateObject({
+                    objectID: objectID,
+                    petName: petName,
+                });
+
+                const petUpdated = await petFounded.update({
+                    objectID: objectID,
+                    petName: petName,
+                });
+            }
+
+            console.log("Mascota updateada");
+            return true;
     
         } catch (e) {
             console.error("No se pudo editar la mascota: ", e);
