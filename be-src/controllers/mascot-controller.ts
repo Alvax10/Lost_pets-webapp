@@ -117,7 +117,6 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
             const petFounded = await Mascot.findByPk(mascotId);
 
             if (ImageDataURL !== null) {
-                console.log("La imagen no es null");
 
                 const imagen = await cloudinary.uploader.upload(ImageDataURL,
                     {
@@ -141,8 +140,8 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                 if (petUpdated) { return true } else { return false };
             }
             
-            console.log("MascotLocation: ", mascotLocation);
             if (mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null) {
+                console.log("MascotLocation: ", mascotLocation);
 
                 const mascotUpdated = await index.partialUpdateObject({
                     objectID: objectID,
