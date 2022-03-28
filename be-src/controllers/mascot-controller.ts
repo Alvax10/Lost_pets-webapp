@@ -128,18 +128,18 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                 
                 const mascotUpdated = await index.partialUpdateObject({
                     objectID: objectID,
-                    _geolco: mascotLocation,
+                    _geoloc: mascotLocation,
                     petName: petName,
                     ImageDataURL: imagen["secure_url"],
                 });
 
                 const petUpdated = await petFounded.update({
                     ImageDataURL: imagen["secure_url"],
-                    _geolco: mascotLocation,
+                    _geoloc: mascotLocation,
                     petName: petName,
                     objectID: objectID,
                 });
-                
+
                 console.log("Mascota updateada");
                 if (petUpdated) { return true } else { return false };
             }
