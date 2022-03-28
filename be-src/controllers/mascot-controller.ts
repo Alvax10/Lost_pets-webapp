@@ -115,7 +115,8 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
         try {
             
             const petFounded = await Mascot.findByPk(mascotId);
-            if (ImageDataURL != null) {
+
+            if (ImageDataURL !== null) {
                 console.log("La imagen no es null");
 
                 const imagen = await cloudinary.uploader.upload(ImageDataURL,
@@ -139,10 +140,13 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     petName: petName,
                     _geoloc: mascotLocation,
                 });
+
+                console.log("Mascota updateada");
+                if (petUpdated) { return true } else { return false };
             }
 
             console.log("MascotLocation: ", mascotLocation);
-            if (mascotLocation != null) {
+            if (mascotLocation !== null) {
 
                 const mascotUpdated = await index.partialUpdateObject({
                     objectID: objectID,
@@ -153,10 +157,13 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     objectID: objectID,
                     _geoloc: mascotLocation,
                 });
+
+                console.log("Mascota updateada");
+                if (petUpdated) { return true } else { return false };
             }
 
             console.log("PetName: ", petName);
-            if (petName != null) {
+            if (petName !== null) {
 
                 const mascotUpdated = await index.partialUpdateObject({
                     objectID: objectID,
@@ -167,10 +174,10 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     objectID: objectID,
                     petName: petName,
                 });
-            }
 
-            console.log("Mascota updateada");
-            return true;
+                console.log("Mascota updateada");
+                if (petUpdated) { return true } else { return false };
+            }
     
         } catch (e) {
             console.error("No se pudo editar la mascota: ", e);
