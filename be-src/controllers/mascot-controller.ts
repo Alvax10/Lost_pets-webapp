@@ -142,7 +142,7 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
             }
             
             console.log("MascotLocation: ", mascotLocation);
-            if (mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null || mascotLocation !== null) {
+            if (mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null) {
 
                 const mascotUpdated = await index.partialUpdateObject({
                     objectID: objectID,
