@@ -139,9 +139,6 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     petName: petName,
                     objectID: objectID,
                 });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
             }
 
             if (ImageDataURL !== null && mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null) {
@@ -165,9 +162,6 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     _geoloc: mascotLocation,
                     objectID: objectID,
                 });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
             }
 
             if (ImageDataURL !== null) {
@@ -189,9 +183,6 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     ImageDataURL: imagen["secure_url"],
                     objectID: objectID,
                 });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
             }
             
             if (mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null) {
@@ -206,9 +197,6 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     objectID: objectID,
                     _geoloc: mascotLocation,
                 });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
             }
 
             console.log("PetName: ", petName);
@@ -223,10 +211,10 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
                     objectID: objectID,
                     petName: petName,
                 });
-
-                console.log("Mascota updateada");
-                if (petUpdated) { return true } else { return false };
             }
+
+            console.log("Mascota updateada");
+            return true;
     
         } catch (e) {
             console.error("No se pudo editar la mascota: ", e);
