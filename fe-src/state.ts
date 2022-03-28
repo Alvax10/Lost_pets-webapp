@@ -47,7 +47,7 @@ const state = {
         }
         callback();
     },
-    async updateMascotInfo(petName, petPhoto, mascotLocation, callback) {
+    async updateMascotInfo(callback, petName?, petPhoto?, mascotLocation?) {
         const currentState = this.getState();
         const { token } = currentState;
         const { mascotId } = currentState;
