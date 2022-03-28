@@ -116,6 +116,60 @@ export async function updateProfile(mascotId, objectID, petName, ImageDataURL, m
             
             const petFounded = await Mascot.findByPk(mascotId);
 
+            if (ImageDataURL !== null && mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null && petName !== null) {
+
+                const imagen = await cloudinary.uploader.upload(ImageDataURL,
+                    {
+                        resource_type: "image",
+                        discard_original_filename: true,
+                        timeout: 1500000,
+                    }
+                );
+                
+                const mascotUpdated = await index.partialUpdateObject({
+                    objectID: objectID,
+                    _geolco: mascotLocation,
+                    petName: petName,
+                    ImageDataURL: imagen["secure_url"],
+                });
+
+                const petUpdated = await petFounded.update({
+                    ImageDataURL: imagen["secure_url"],
+                    _geolco: mascotLocation,
+                    petName: petName,
+                    objectID: objectID,
+                });
+                
+                console.log("Mascota updateada");
+                if (petUpdated) { return true } else { return false };
+            }
+
+            if (ImageDataURL !== null && mascotLocation["name"] !== null && mascotLocation["lat"] !== null && mascotLocation["lng"] !== null) {
+
+                const imagen = await cloudinary.uploader.upload(ImageDataURL,
+                    {
+                        resource_type: "image",
+                        discard_original_filename: true,
+                        timeout: 1500000,
+                    }
+                );
+                
+                const mascotUpdated = await index.partialUpdateObject({
+                    objectID: objectID,
+                    _geoloc: mascotLocation,
+                    ImageDataURL: imagen["secure_url"],
+                });
+
+                const petUpdated = await petFounded.update({
+                    ImageDataURL: imagen["secure_url"],
+                    _geoloc: mascotLocation,
+                    objectID: objectID,
+                });
+
+                console.log("Mascota updateada");
+                if (petUpdated) { return true } else { return false };
+            }
+
             if (ImageDataURL !== null) {
 
                 const imagen = await cloudinary.uploader.upload(ImageDataURL,
