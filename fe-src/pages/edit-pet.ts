@@ -2,6 +2,7 @@ import { state } from "../state";
 import { Router } from "@vaadin/router";
 import * as Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
 
@@ -10,7 +11,7 @@ class EditPet extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -36,7 +37,7 @@ class EditPet extends HTMLElement {
             ImageDataURL = file;
             // console.log(file.dataURL);
         });
-    
+
         function initMap() {
             mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
             return new mapboxgl.Map({
@@ -44,20 +45,20 @@ class EditPet extends HTMLElement {
                 style: 'mapbox://styles/mapbox/streets-v11',
             });
         }
-    
+
         function initSearchForm(callback) {
             sendLocButton.addEventListener('click', (e) => {
                 e.preventDefault();
-    
+
                 mapboxClient.geocodeForward(
                     locationValue.value,
                     {
-                    autocomplete: true,
-                    language: "es",
+                        autocomplete: true,
+                        language: "es",
                     },
                     function (err, data, res) {
-                    // console.log(data);
-                    if (!err) callback(data.features);
+                        // console.log(data);
+                        if (!err) callback(data.features);
                     }
                 );
             });
@@ -89,11 +90,11 @@ class EditPet extends HTMLElement {
                     //     _geoloc: mascotLocation,
                     //     ImageDataURL: petPhoto
                     // });
-                        
+
                     console.log("Clickeaste en editar mascota");
                     // ACA SE TIENE QUE ACTUALIZAR LA MASCOTA
                     state.updateMascotInfo(petName.value, petPhoto, mascotLocation, () => {
-                        
+
                         console.log("Editaste la mascota");
                         Router.go("/home");
                     });
@@ -107,7 +108,7 @@ class EditPet extends HTMLElement {
 
             // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
             state.eliminateMascot(() => {
-                
+
                 console.log("Eliminaste la mascota");
                 Router.go("/mis-mascotas-reportadas");
             });
@@ -119,14 +120,14 @@ class EditPet extends HTMLElement {
 
             // ACA SE TIENE QUE ELIMINAR TODA LA DATA DE LA MASCOTA
             state.eliminateMascot(() => {
-                
+
                 console.log("Eliminaste la mascota");
                 Router.go("/mis-mascotas-reportadas");
             });
         });
     }
     render() {
-            
+
         const divEl = document.createElement('div');
         divEl.className = 'general-container';
         const style = document.createElement('style');

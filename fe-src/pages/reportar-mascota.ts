@@ -2,6 +2,7 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 import Dropzone from "dropzone";
 import * as mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 const MapboxClient = require("mapbox");
 const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
 
@@ -10,7 +11,7 @@ class reportMascot extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -19,9 +20,9 @@ class reportMascot extends HTMLElement {
 
         const currentState = state.getState();
         const { token } = currentState;
-        const divEl = document.createElement('div');
+        const divEl = document.createElement('div') as any;
         divEl.className = 'general-container';
-        const style = document.createElement('style');
+        const style = document.createElement('style') as any;
 
         style.innerHTML = `
         .main-body {
@@ -44,8 +45,8 @@ class reportMascot extends HTMLElement {
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
 
-        const reportedMascots = this.shadow.querySelector(".reported-mascots");
-        const reportedMascotsStyle = document.createElement("style");
+        const reportedMascots = this.shadow.querySelector(".reported-mascots") as any;
+        const reportedMascotsStyle = document.createElement("style") as any;
 
         reportedMascots.innerHTML = `
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
@@ -153,8 +154,8 @@ class reportMascot extends HTMLElement {
 
             let ImageDataURL;
             const map = this.shadow.getElementById('map');
-            const sendLocButton = this.shadow.querySelector(".button");
-            const reportPetForm = this.shadow.querySelector(".form");
+            const sendLocButton = this.shadow.querySelector(".button") as any;
+            const reportPetForm = this.shadow.querySelector(".form") as any;
             const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
             const petNameInput = (this.shadow.querySelector(".pet-name-input") as HTMLInputElement);
 
@@ -170,7 +171,7 @@ class reportMascot extends HTMLElement {
                 ImageDataURL = file;
                 // console.log(file.dataURL);
             });
-    
+
             function initMap() {
                 mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
                 return new mapboxgl.Map({
@@ -178,11 +179,11 @@ class reportMascot extends HTMLElement {
                     style: 'mapbox://styles/mapbox/streets-v11',
                 });
             }
-    
+
             function initSearchForm(callback) {
                 sendLocButton.addEventListener('click', (e) => {
                     e.preventDefault();
-    
+
                     mapboxClient.geocodeForward(
                         locationValue.value,
                         {
@@ -191,8 +192,8 @@ class reportMascot extends HTMLElement {
                             language: "es",
                         },
                         function (err, data, res) {
-                        // console.log(data);
-                        if (!err) callback(data.features);
+                            // console.log(data);
+                            if (!err) callback(data.features);
                         }
                     );
                 });
@@ -224,10 +225,10 @@ class reportMascot extends HTMLElement {
                         //     _geoloc: mascotLocation,
                         //     ImageDataURL: petPhoto
                         // });
-                        
+
                         console.log("Clickeaste en reportar mascota");
                         state.reportLostPet(petNameInput.value, petPhoto, mascotLocation, () => {
-        
+
                             console.log("Reportaste la mascota");
                             Router.go("/home");
                         });

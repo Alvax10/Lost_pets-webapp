@@ -6,7 +6,7 @@ class myReportedMascots extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -15,12 +15,12 @@ class myReportedMascots extends HTMLElement {
 
         const currentState = state.getState();
         const { token } = currentState;
-        const reportedMascots = this.shadow.querySelector(".reported-mascots");
-        const reportedMascotsStyle = document.createElement("style");
+        const reportedMascots = this.shadow.querySelector(".reported-mascots") as any;
+        const reportedMascotsStyle = document.createElement("style") as any;
         state.allReportedPetsByAUser(() => {
 
             if (currentState["myReportedPets"].length == 0) {
-    
+
                 reportedMascots.innerHTML = `
     
                     <h2 class="title-mascots"> No tienes mascotas reportadas </h2>
@@ -44,7 +44,7 @@ class myReportedMascots extends HTMLElement {
                         background-color: #FF9DF5;
                     }
                 `;
-                const reportButton = this.shadow.querySelector(".button");
+                const reportButton = this.shadow.querySelector(".button") as any;
                 reportButton.addEventListener('click', (e) => {
                     e.preventDefault();
 
@@ -55,11 +55,11 @@ class myReportedMascots extends HTMLElement {
                         Router.go("/reportar-mascota")
                     }
                 })
-    
+
             } else {
-                
+
                 reportedMascots.innerHTML = `  
-                    ${currentState["myReportedPets"].map((pet) => 
+                    ${currentState["myReportedPets"].map((pet) =>
 
                     `<my-lost-pets pet-id=${pet['id']} class="pet" object-id=${pet["objectID"]} pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></my-lost-pets>`
                 ).join("")}`;

@@ -29,6 +29,7 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.9.0",
+    "sweetalert": "^2.1.2",
     "ts-node": "^10.4.0",
     "tsc": "^2.0.3",
     "typescript": "^4.5.4"

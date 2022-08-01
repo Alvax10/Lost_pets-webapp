@@ -14,19 +14,19 @@ class Home extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
-        const lostPets = this.shadow.querySelector(".lost-pets");
+        const lostPets = this.shadow.querySelector(".lost-pets") as any;
         const lostPetsStyle = document.createElement("style");
 
         state.mascotCloseFrom(() => {
 
             if (currentState["lostPetsAround"].length == 0) {
-            
+
                 lostPets.innerHTML = `
                 
                     <h2 class="title-mascots"> No hay mascotas reportadas cerca tuyo </h2>
                     <button class="button"> Reportar mascota </button>
                 `;
-        
+
                 lostPetsStyle.innerHTML = `
                     .lost-pets {
                         display: flex;
@@ -45,23 +45,23 @@ class Home extends HTMLElement {
                         background-color: #FF9DF5;
                     }
                 `;
-            
-                const reportButton = this.shadow.querySelector(".button");
+
+                const reportButton = this.shadow.querySelector(".button") as any;
                 reportButton.addEventListener('click', (e) => {
                     e.preventDefault();
-        
+
                     Router.go("/reportar-mascota");
                 });
-            
+
             } else {
-            
+
                 lostPets.innerHTML = `
-                    ${currentState["lostPetsAround"].map((pet) => 
-                
+                    ${currentState["lostPetsAround"].map((pet) =>
+
                     `<lost-pet-card class="pet" pet-location-name=${pet["_geoloc"]["name"]} pet-photo="${pet["ImageDataURL"]}" pet-name=${pet["petName"]}></lost-pet-card>`
 
-                    ).join("")}`;
-        
+                ).join("")}`;
+
                 lostPetsStyle.innerHTML = `
                     .lost-pets {
                         display: flex;
@@ -127,6 +127,9 @@ class Home extends HTMLElement {
         this.shadow.appendChild(lostPetsStyle);
     }
     render() {
+
+        const userExists = state.getState().userExists;
+        console.log("Esto es userExist: ", userExists);
 
         const divEl = document.createElement('div');
         divEl.className = 'general-container';
