@@ -20,8 +20,8 @@ class EditPet extends HTMLElement {
 
         let ImageDataURL;
         const map = this.shadow.getElementById('map');
-        const reportPetForm = this.shadow.querySelector(".form");
-        const sendLocButton = this.shadow.querySelector(".button");
+        const reportPetForm = this.shadow.querySelector(".form") as HTMLFormElement;
+        const sendLocButton = this.shadow.querySelector(".button") as HTMLButtonElement;
         const petName = (this.shadow.querySelector(".input-petname") as HTMLInputElement);
         const locationValue = (this.shadow.querySelector(".search") as HTMLInputElement);
 
@@ -102,7 +102,7 @@ class EditPet extends HTMLElement {
             });
         })();
 
-        const reportFoundButton = this.shadow.querySelector(".button-found");
+        const reportFoundButton = this.shadow.querySelector(".button-found") as HTMLButtonElement;
         reportFoundButton.addEventListener("click", (e) => {
             e.preventDefault();
 
@@ -114,7 +114,7 @@ class EditPet extends HTMLElement {
             });
         });
 
-        const eliminatePetButton = this.shadow.querySelector(".despublicar");
+        const eliminatePetButton = this.shadow.querySelector(".despublicar") as HTMLButtonElement;
         eliminatePetButton.addEventListener("click", (e) => {
             e.preventDefault();
 

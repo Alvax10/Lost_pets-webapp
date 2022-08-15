@@ -5,16 +5,17 @@ class giveLocation extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
         const currentState = state.getState();
 
-        const buttonEl = this.shadow.querySelector('.button');
+        const buttonEl = this.shadow.querySelector('.button') as HTMLButtonElement;
         buttonEl.addEventListener('click', () => {
 
-            if (currentState["location"] == {'':''}) {
+
+            if (currentState["_geoloc"]["lat"] != 0 && currentState["_geoloc"]["lng"] != 0) {
                 Router.go("/home");
             } else {
 
@@ -25,14 +26,14 @@ class giveLocation extends HTMLElement {
                 }
                 function success(position) {
                     var coord = position.coords;
-    
+
                     // console.log('Your current position is:');
                     // console.log('Latitude : ' + coord.latitude);
                     // console.log('Longitude: ' + coord.longitude);
                     // console.log('More or less ' + coord.accuracy + ' meters.');
                     currentState["_geoloc"]["lat"] = coord.latitude;
                     currentState["_geoloc"]["lng"] = coord.longitude;
-                    
+
                     state.setState(currentState);
                 }
                 function error(err) {

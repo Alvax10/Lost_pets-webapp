@@ -63,11 +63,23 @@ class Home extends HTMLElement {
                 ).join("")}`;
 
                 lostPetsStyle.innerHTML = `
+
                     .lost-pets {
                         display: flex;
-                        flex-direction: column;
                         align-items: center;
+                        padding-bottom: 30px;
+                        flex-direction: column;
                     }
+
+                    @media(min-width: 600px) {
+                        .lost-pets {
+                            display: grid;
+                            align-items: center;
+                            justify-items: center;
+                            grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+                        }
+                    }
+
                     .reported-mascots {
                         display: flex;
                         flex-direction: column;
@@ -77,47 +89,6 @@ class Home extends HTMLElement {
                         display: flex;
                         flex-direction: row;
                         justify-content: center;
-                    }
-                    .lost-pet {
-                        width: 330px;
-                        height: 230px;
-                        display: grid;
-                        margin-top: 20px;
-                        border-radius: 4px;
-                        border: 2px solid #000000;
-                        grid-template-columns: 240px 90px;
-                        grid-template-rows: 150px 80px;
-                    }
-                    .pet-photo {
-                        width: 325px;
-                        border: none;
-                        height: 150px;
-                        border-radius: 4px;
-                    }
-                    .pet-name {
-                        font-size: 18px;
-                        font-weight: 400;
-                        padding-left: 10px;
-                        grid-column-start: 1;
-                        grid-column-end: 2;
-                        grid-row-start: 2;
-                        grid-row-end: 3;
-                    }
-                    .pet-location {
-                        padding-left: 10px;
-                        grid-column-start: 1;
-                        grid-column-end: 2;
-                        grid-row-start: 2;
-                        grid-row-end: 3;
-                        margin-top: 55px;
-                    }
-                    .pet-seen {
-                        margin-right: 20px;
-                        color: #3E91DD;
-                        margin-top: 35px;
-                        grid-row-start: 2;
-                        grid-row-end: 3;
-                        text-decoration: underline;
                     }
                 `;
             }

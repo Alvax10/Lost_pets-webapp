@@ -65,11 +65,23 @@ class myReportedMascots extends HTMLElement {
                 ).join("")}`;
 
                 reportedMascotsStyle.innerHTML = `
+                    
                     .reported-mascots {
                         display: flex;
-                        flex-direction: column;
                         align-items: center;
+                        padding-bottom: 30px;
+                        flex-direction: column;
                     }
+
+                    @media(min-width: 600px) {
+                        .reported-mascots {
+                            display: grid;
+                            align-items: center;
+                            justify-items: center;
+                            grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+                        }
+                    }
+
                     .pets-reported {
                         display: flex;
                         flex-direction: row;

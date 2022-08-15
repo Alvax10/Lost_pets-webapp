@@ -18,7 +18,7 @@ const state = {
     },
     listeners: [],
     init() {
-        const localData = JSON.parse(localStorage.getItem("data"));
+        const localData = JSON.parse(localStorage.getItem("data") as string);
         if (!localData) {
             return;
         }
@@ -100,7 +100,7 @@ const state = {
         const currentState = this.getState();
         const { token } = currentState;
         const { email } = currentState;
-        
+
         const reportedPet = await fetch(API_BASE_URL + "/report/mascot", {
             method: 'POST',
             headers: {
@@ -146,7 +146,7 @@ const state = {
     async modifyUserInfo(oldEmail, newEmail?, password?) {
         const currentState = this.getState();
         const { token } = currentState;
-        
+
         const updateUserInfo = await fetch(API_BASE_URL + "/user/data", {
             method: 'PATCH',
             headers: {

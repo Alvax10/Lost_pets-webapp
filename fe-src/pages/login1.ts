@@ -6,7 +6,7 @@ class Login extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -14,7 +14,7 @@ class Login extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
-        const formEl = this.shadow.querySelector('.form');
+        const formEl = this.shadow.querySelector('.form') as HTMLFormElement;
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -22,10 +22,10 @@ class Login extends HTMLElement {
             currentState["email"] = emailInput.value;
 
             state.checkIfUserExists(() => {
-                
+
                 if (currentState['userExists'] == true) {
                     Router.go("/login-2");
-                    
+
                 } else {
                     Router.go("/mis-datos/registrarse");
                 }
@@ -85,7 +85,7 @@ class Login extends HTMLElement {
         `;
 
         divEl.innerHTML = `
-           <header-component></header-component>
+            <header-component></header-component>
             <div class="main-body">
                 <h2 class="title"> Ingresar </h2>
                 <form class="form">

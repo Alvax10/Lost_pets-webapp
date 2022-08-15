@@ -3,7 +3,7 @@ import { state } from "../state";
 const lapizEdit = require("url:../img/lapiz-edit.png");
 
 export class MyLostPets extends HTMLElement {
-    
+
     shadow: ShadowRoot;
     petName;
     petPhoto;
@@ -25,23 +25,23 @@ export class MyLostPets extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
-        const editPetInfo = this.shadow.querySelector(".edit-pet").addEventListener('click', () => {
+        (this.shadow.querySelector(".edit-pet") as HTMLButtonElement).addEventListener('click', () => {
 
             const customPetEvent = new CustomEvent('edit', {
-            detail: {
-                petName: this.petName,
-                petPhoto: this.petPhoto,
-                petLocationName: this.petLocationName,
-                petId: this.petId,
-                objectID: this.objectID,
-            },
-            bubbles: true
-            // esto hace que el evento pueda
-            // ser escuchado desde un elemento
-            // que está más "arriba" en el arbol
+                detail: {
+                    petName: this.petName,
+                    petPhoto: this.petPhoto,
+                    petLocationName: this.petLocationName,
+                    petId: this.petId,
+                    objectID: this.objectID,
+                },
+                bubbles: true
+                // esto hace que el evento pueda
+                // ser escuchado desde un elemento
+                // que está más "arriba" en el arbol
             });
 
-            const editPet = this.shadow.querySelector(".edit-pet")
+            const editPet = this.shadow.querySelector(".edit-pet") as HTMLElement;
             editPet.addEventListener('edit', (e) => {
                 e.preventDefault();
 
@@ -81,6 +81,7 @@ export class MyLostPets extends HTMLElement {
                 margin-top: 20px;
                 border-radius: 4px;
                 border: 2px solid #000000;
+                box-shadow: 5px 5px peachpuff;
                 grid-template-columns: 240px 90px;
                 grid-template-rows: 150px 80px;
             }

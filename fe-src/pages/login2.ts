@@ -6,7 +6,7 @@ class Login extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -88,7 +88,7 @@ class Login extends HTMLElement {
         this.shadow.appendChild(divEl);
         this.shadow.appendChild(style);
 
-        const formEl = this.shadow.querySelector('.form');
+        const formEl = this.shadow.querySelector('.form') as HTMLFormElement;
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -97,10 +97,10 @@ class Login extends HTMLElement {
 
                 Router.go(`${currentState['locationBefore']}`);
             });
-            
+
         });
 
-        const contraseñaOlvidada = this.shadow.querySelector('.contraseña-olvidada');
+        const contraseñaOlvidada = this.shadow.querySelector('.contraseña-olvidada') as HTMLButtonElement;
         contraseñaOlvidada.addEventListener('click', (e) => {
             e.preventDefault();
             Router.go('/recuperar-contraseña');

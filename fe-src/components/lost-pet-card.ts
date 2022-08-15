@@ -3,18 +3,18 @@ import { state } from "../state";
 const xButton = require("url:../img/Vector.png");
 
 export class Card extends HTMLElement {
-    
+
     shadow: ShadowRoot;
     petName;
     petPhoto;
     petLocationName;
     constructor() {
 
-      super();
-      this.shadow = this.attachShadow({ mode: 'open' });
-      this.petName = this.getAttribute("pet-name");
-      this.petPhoto = this.getAttribute("pet-photo");
-      this.petLocationName = this.getAttribute("pet-location-name");
+        super();
+        this.shadow = this.attachShadow({ mode: 'open' });
+        this.petName = this.getAttribute("pet-name");
+        this.petPhoto = this.getAttribute("pet-photo");
+        this.petLocationName = this.getAttribute("pet-location-name");
     }
     connectedCallback() {
         this.render();
@@ -22,34 +22,34 @@ export class Card extends HTMLElement {
     listeners() {
 
         const currentState = state.getState();
-        const  { token } = currentState;
+        const { token } = currentState;
         const reportNotification = document.createElement("div");
         reportNotification.className = "notification-pet-seen"
         const reportNotificationStyle = document.createElement("style");
 
-        const reportPetSeen = this.shadow.querySelector(".pet-seen").addEventListener('click', () => {
+        (this.shadow.querySelector(".pet-seen") as HTMLButtonElement).addEventListener('click', () => {
 
             const CustomPetEvent = new CustomEvent('report', {
-            detail: {
-                petName: this.petName,
-                petPhoto: this.petPhoto,
-                petLocationName: this.petLocationName,
-                email: currentState["email"],
-            },
-            bubbles: true
-            // esto hace que el evento pueda
-            // ser escuchado desde un elemento
-            // que está más "arriba" en el arbol
+                detail: {
+                    petName: this.petName,
+                    petPhoto: this.petPhoto,
+                    petLocationName: this.petLocationName,
+                    email: currentState["email"],
+                },
+                bubbles: true
+                // esto hace que el evento pueda
+                // ser escuchado desde un elemento
+                // que está más "arriba" en el arbol
             });
 
             const lostPets = this.shadow.querySelectorAll(".lost-pet");
             lostPets.forEach((lostPet) => {
 
-            const petSeen = lostPet.querySelector(".pet-seen")
-            petSeen.addEventListener('report', (e) => {
-                e.preventDefault();
+                const petSeen = lostPet.querySelector(".pet-seen") as HTMLButtonElement;
+                petSeen.addEventListener('report', (e) => {
+                    e.preventDefault();
 
-                reportNotification.innerHTML = `
+                    reportNotification.innerHTML = `
                     <img src=${xButton} class="close-button" alt="cierre-menu" />
                     <h2 class="title"> Reportar info de ${e["detail"]["petName"]}</h2>
                     <form class="form">
@@ -69,7 +69,7 @@ export class Card extends HTMLElement {
                     </form>
                 `;
 
-                reportNotificationStyle.innerHTML = `
+                    reportNotificationStyle.innerHTML = `
                     .notification-pet-seen {
                         top: 20%;
                         left: 30%;
@@ -122,37 +122,37 @@ export class Card extends HTMLElement {
                     }
                 `;
 
-                this.shadow.appendChild(reportNotification);
-                this.shadow.appendChild(reportNotificationStyle);
+                    this.shadow.appendChild(reportNotification);
+                    this.shadow.appendChild(reportNotificationStyle);
 
-                const closeButton = this.shadow.querySelector(".close-button");
-                closeButton.addEventListener('click', (e) => {
-                    e.preventDefault();
+                    const closeButton = this.shadow.querySelector(".close-button") as HTMLButtonElement;
+                    closeButton.addEventListener('click', (e) => {
+                        e.preventDefault();
 
-                    reportNotificationStyle.innerHTML = `
+                        reportNotificationStyle.innerHTML = `
                         .notification-pet-seen {
                             display: none;
                         }
                     `;
-                });
+                    });
 
-                const numeroDelUsuario = (this.shadow.querySelector(".input__user-phone") as HTMLInputElement);
-                const newLocation = (this.shadow.querySelector(".input__user-info") as HTMLInputElement);
-                const sendPetSeenInfo = this.shadow.querySelector(".form");
-                const divNotification = document.createElement('div');
-                divNotification.className = 'notification';
-                const notificationStyle = document.createElement('style');
-                                    
+                    const numeroDelUsuario = (this.shadow.querySelector(".input__user-phone") as HTMLInputElement);
+                    const newLocation = (this.shadow.querySelector(".input__user-info") as HTMLInputElement);
+                    const sendPetSeenInfo = this.shadow.querySelector(".form") as HTMLFormElement;
+                    const divNotification = document.createElement('div');
+                    divNotification.className = 'notification';
+                    const notificationStyle = document.createElement('style');
+
                     sendPetSeenInfo.addEventListener('submit', (ev) => {
                         ev.preventDefault();
 
                         if (!token) {
-    
+
                             divNotification.innerHTML = `
                                 <h3 class="alert"> Necesitas estar logeado para acceder a estos features! </h3>
                                 <button class="login-button"> Loguearme </button>
-                            `;  
-        
+                            `;
+
                             this.shadow.appendChild(divNotification);
                             this.shadow.appendChild(notificationStyle);
 
@@ -190,18 +190,18 @@ export class Card extends HTMLElement {
                                     }
                                 }
                             `;
-        
-                            const loginButton = this.shadow.querySelector('.login-button');
+
+                            const loginButton = this.shadow.querySelector('.login-button') as HTMLButtonElement;
                             loginButton.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 currentState["locationBefore"] = "/home";
                                 Router.go("/login-1");
-                            });                      
+                            });
 
                         } else {
-                            
+
                             // console.log(newLocation.value, OtherUserEmail.value, e["detail"]["petName"], currentState["email"], numeroDelUsuario.value);
-                            
+
                             state.sendEmailWithInfo(e["detail"]["petName"], newLocation.value, currentState["email"], numeroDelUsuario.value);
                             console.log("Email enviado! :D");
                             reportNotificationStyle.innerHTML = `
@@ -217,7 +217,7 @@ export class Card extends HTMLElement {
         });
     }
     render() {
-        
+
         const divEl = document.createElement("div");
         const divStyle = document.createElement("style");
         divEl.innerHTML = `
@@ -243,8 +243,9 @@ export class Card extends HTMLElement {
                 margin-top: 20px;
                 border-radius: 4px;
                 border: 2px solid #000000;
-                grid-template-columns: 240px 90px;
+                box-shadow: 5px 5px peachpuff;
                 grid-template-rows: 150px 80px;
+                grid-template-columns: 240px 90px;
             }
             .pet-photo {
                 width: 330px;

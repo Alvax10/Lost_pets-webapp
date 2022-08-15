@@ -6,7 +6,7 @@ class myData extends HTMLElement {
     shadow: ShadowRoot;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open'});
+        this.shadow = this.attachShadow({ mode: 'open' });
     }
     connectedCallback() {
         this.render();
@@ -106,13 +106,13 @@ class myData extends HTMLElement {
 
         const primerContraseñaInput = (this.shadow.querySelector(".input-password") as HTMLInputElement);
         const segundaContraseñaInput = (this.shadow.querySelector(".input-password-2") as HTMLInputElement);
-        
-        const formEl = this.shadow.querySelector('.form');
+
+        const formEl = this.shadow.querySelector('.form') as HTMLFormElement;
         formEl.addEventListener('submit', (e) => {
             e.preventDefault();
 
             if (primerContraseñaInput.value == '' || segundaContraseñaInput.value == '') {
-    
+
                 alert('las contraseñas no coinciden');
             } else {
                 // console.log(primerContraseñaInput.value, segundaContraseñaInput.value);
@@ -126,7 +126,7 @@ class myData extends HTMLElement {
 
                         state.modifyUserInfo(currentState["email"], emailInput.value, primerContraseñaInput.value);
                         Router.go("/home");
-        
+
                     } else {
 
                         state.signUpUser(primerContraseñaInput.value);

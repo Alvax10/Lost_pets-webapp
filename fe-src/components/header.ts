@@ -51,59 +51,74 @@ export class Header extends HTMLElement {
             ev.preventDefault();
 
             menuStyle.innerHTML = `
-            .menu-open {
-                top: 0%;
-                left: 0%;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                position: absolute;
-                flex-direction: column;
-                background-color: #8AF1FF;
-            }
-            .close-button {
-                width: 30px;
-                height: 30px;
-                padding: 20px;
-                cursor: pointer;
-                align-self: flex-end;
-            }
-            .opciones {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-self: center;
-                justify-content: center;
-            }
-            .mis-datos {
-                padding-left: 6px;
-            }
-            .reportar-mascotas {
-                padding-left: 30px;
-            }
-            .sesion {
-                display: flex;
-                padding-top: 200px;
-                flex-direction: column;
-                justify-content: center;
-            }
-            .email {
-                margin: 0px;
-                align-self: center;
-                justify-content: center;
-            }
-            .cerrar-sesion {
-                color: #C6558B;
-                cursor: pointer;
-                align-self: center;
-                justify-content: center;
-                text-decoration-line: underline;
-            }
-            @media (min-width: 900px) {
-                .sesion {
-                    padding-top: 300px;
+
+                .menu-open {
+                    top: 0%;
+                    left: 0%;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    position: absolute;
+                    flex-direction: column;
+                    background-color: #8AF1FF;
                 }
-            }
+
+                .close-button {
+                    width: 30px;
+                    height: 30px;
+                    padding: 20px;
+                    cursor: pointer;
+                    align-self: flex-end;
+                }
+
+                .opciones {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    align-self: center;
+                    justify-content: center;
+                }
+
+                .mis-datos {
+                    cursor: pointer;
+                    padding-left: 6px;
+                }
+
+                .mis-mascotas-reportadas {
+                    cursor: pointer;
+                }
+
+                .reportar-mascotas {
+                    cursor: pointer;
+                    padding-left: 30px;
+                }
+
+                .sesion {
+                    display: flex;
+                    padding-top: 200px;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+                .email {
+                    margin: 0px;
+                    align-self: center;
+                    justify-content: center;
+                }
+
+                .cerrar-sesion {
+                    color: #C6558B;
+                    cursor: pointer;
+                    align-self: center;
+                    justify-content: center;
+                    text-decoration-line: underline;
+                }
+
+                @media (min-width: 900px) {
+                    .sesion {
+                        padding-top: 300px;
+                    }
+                }
             `;
 
         });
